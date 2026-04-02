@@ -212,19 +212,60 @@ def build_rag_config(settings: DemoSettings, working_dir: str | None = None) -> 
         parser_output_dir=settings.output_dir,
         parser=settings.parser,
         parse_method=settings.parse_method,
-        enable_image_processing=True,
-        enable_table_processing=True,
-        enable_equation_processing=True,
+        enable_image_processing=_parse_bool_env_alias(
+            "ENABLE_IMAGE_PROCESSING",
+            "KNOWLEDGE_ENABLE_IMAGE_PROCESSING",
+            True,
+        ),
+        enable_table_processing=_parse_bool_env_alias(
+            "ENABLE_TABLE_PROCESSING",
+            "KNOWLEDGE_ENABLE_TABLE_PROCESSING",
+            True,
+        ),
+        enable_equation_processing=_parse_bool_env_alias(
+            "ENABLE_EQUATION_PROCESSING",
+            "KNOWLEDGE_ENABLE_EQUATION_PROCESSING",
+            True,
+        ),
     )
 
 
-def build_raganything(working_dir: str | None = None) -> RAGAnything:
+def _parse_bool_env(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _parse_bool_env_alias(primary: str, fallback: str, default: bool) -> bool:
+    primary_value = os.getenv(primary)
+    if primary_value is not None:
+        return _parse_bool_env(primary, default)
+    return _parse_bool_env(fallback, default)
+
+
+def build_raganything(
+    working_dir: str | None = None,
+    *,
+    lightrag: LightRAG | None = None,
+    enable_image_processing: bool | None = None,
+    enable_table_processing: bool | None = None,
+    enable_equation_processing: bool | None = None,
+) -> RAGAnything:
     settings = load_settings()
     llm_model_func = build_llm_model_func(settings)
     vision_model_func = build_vision_model_func(settings, llm_model_func)
     embedding_func = build_embedding_func(settings)
+    config = build_rag_config(settings, working_dir=working_dir)
+    if enable_image_processing is not None:
+        config.enable_image_processing = enable_image_processing
+    if enable_table_processing is not None:
+        config.enable_table_processing = enable_table_processing
+    if enable_equation_processing is not None:
+        config.enable_equation_processing = enable_equation_processing
     return RAGAnything(
-        config=build_rag_config(settings, working_dir=working_dir),
+        lightrag=lightrag,
+        config=config,
         llm_model_func=llm_model_func,
         vision_model_func=vision_model_func,
         embedding_func=embedding_func,

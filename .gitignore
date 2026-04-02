@@ -26,4 +26,5 @@ rag_storage/
 existing_lightrag_storage/
 rag_storage_content_list/
 rag_storage_multimodal/
+knowledge_data/
 *.log

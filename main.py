@@ -1,5 +1,4 @@
-def main():
-    print("Hello from light-anything-test!")
+from src.cli import main
 
 
 if __name__ == "__main__":

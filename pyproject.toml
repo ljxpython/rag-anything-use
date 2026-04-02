@@ -6,9 +6,15 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "docling>=2.83.0",
+    "fastmcp>=3.2.0",
     "lightrag-hku>=1.4.12",
     "numpy>=2.4.4",
     "pillow>=12.2.0",
     "python-dotenv>=1.2.2",
     "raganything>=1.2.10",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.3",
 ]

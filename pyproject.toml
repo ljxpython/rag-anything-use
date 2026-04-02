@@ -1,0 +1,14 @@
+[project]
+name = "light-anything-test"
+version = "0.1.0"
+description = "RAG-Anything usage examples with docling-based ingestion and env-driven model configuration"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "docling>=2.83.0",
+    "lightrag-hku>=1.4.12",
+    "numpy>=2.4.4",
+    "pillow>=12.2.0",
+    "python-dotenv>=1.2.2",
+    "raganything>=1.2.10",
+]

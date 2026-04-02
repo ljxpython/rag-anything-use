@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+
+# IDE and OS files
+.idea/
+.DS_Store
+
+# Local configuration
+.env
+.env.*
+
+# Runtime outputs
+output/
+rag_storage/
+existing_lightrag_storage/
+rag_storage_content_list/
+rag_storage_multimodal/
+*.log

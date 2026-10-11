@@ -7,6 +7,7 @@ from src.knowledge.content_normalizer import normalize_content_list
 from src.knowledge.document_registry import KnowledgeDocumentRegistry
 from src.knowledge.parser_adapter import DoclingParserAdapter
 from src.knowledge.project_paths import build_knowledge_project_paths
+from src.knowledge.publication import namespace_lock
 from src.knowledge.rag_engine import ProjectRAGEngine
 from src.knowledge.schemas import KnowledgeDocumentRecord, KnowledgeOperationResult
 
@@ -21,6 +22,15 @@ class KnowledgeIngestService:
         project_id: str,
         file_path: str,
         source_type: str = "local_file",
+    ) -> KnowledgeOperationResult:
+        paths = build_knowledge_project_paths(project_id, self.rag_engine.config)
+        with namespace_lock(paths, write=True):
+            if (paths.manifest_dir / "publication.json").exists():
+                raise ValueError("published_namespace_immutable")
+            return await self._ingest_document(project_id, file_path, source_type)
+
+    async def _ingest_document(
+        self, project_id: str, file_path: str, source_type: str
     ) -> KnowledgeOperationResult:
         path = Path(file_path).expanduser().resolve()
         if not path.exists():
@@ -43,28 +53,40 @@ class KnowledgeIngestService:
         paths = build_knowledge_project_paths(project_id, self.rag_engine.config)
         registry = KnowledgeDocumentRegistry(paths)
         registry.register_document(record)
-        rag = await self.rag_engine.get_rag(project_id)
-        parser = DoclingParserAdapter(rag=rag, parser_name=record.parser_name)
         try:
-            parsed = await parser.parse_file(path)
-            normalized_content = normalize_content_list(
-                parsed.content_list,
-                document_id=document_id,
-                filename=record.filename,
-            )
-            await self.rag_engine.ingest_content_list(
-                project_id=project_id,
-                document_id=document_id,
-                content_list=normalized_content,
-                file_path=str(path),
-            )
+            if path.suffix.lower() in {".txt", ".md"}:
+                text = path.read_text(encoding="utf-8").strip()
+                if not text:
+                    raise ValueError("empty_knowledge_document")
+                await self.rag_engine.ingest_text(project_id, document_id, text)
+                page_count, chunk_count = None, None
+            else:
+                rag = await self.rag_engine.get_rag(project_id)
+                parser = DoclingParserAdapter(rag=rag, parser_name=record.parser_name)
+                parsed = await parser.parse_file(path)
+                normalized_content = normalize_content_list(
+                    parsed.content_list,
+                    document_id=document_id,
+                    filename=record.filename,
+                )
+                if not normalized_content:
+                    raise ValueError("empty_knowledge_document")
+                await self.rag_engine.ingest_content_list(
+                    project_id=project_id,
+                    document_id=document_id,
+                    content_list=normalized_content,
+                )
+                page_count, chunk_count = (
+                    parsed.metadata.get("page_count"),
+                    len(normalized_content),
+                )
             updated = record.model_copy(
                 update={
                     "parse_status": "parsed",
                     "index_status": "ready",
                     "overall_status": "ready",
-                    "page_count": parsed.metadata.get("page_count"),
-                    "chunk_count": len(normalized_content),
+                    "page_count": page_count,
+                    "chunk_count": chunk_count,
                 }
             )
             registry.update_document(updated)
@@ -76,7 +98,7 @@ class KnowledgeIngestService:
                 status="ingested",
                 message="document_ingested",
             )
-        except Exception as exc:
+        except BaseException as exc:
             failed = record.model_copy(
                 update={
                     "parse_status": "failed",
@@ -86,6 +108,8 @@ class KnowledgeIngestService:
                 }
             )
             registry.update_document(failed)
+            if not isinstance(exc, Exception):
+                raise
             return KnowledgeOperationResult(
                 accepted=False,
                 project_id=project_id,

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
+import re
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
-from src.knowledge.schemas import KnowledgeDocumentRecord
-from src.knowledge.schemas import CitationRecord
+from src.knowledge.schemas import CitationRecord, KnowledgeDocumentRecord
 
 
 def build_citations(chunks: Iterable[dict[str, Any]]) -> list[CitationRecord]:
@@ -41,6 +43,8 @@ def build_query_result_artifacts(
     chunks = data.get("chunks")
     chunks = chunks if isinstance(chunks, list) else []
 
+    documents = list(documents)
+    document_map = {r.document_id: r for r in documents}
     source_uri_map: dict[str, KnowledgeDocumentRecord] = {}
     filename_map: dict[str, KnowledgeDocumentRecord] = {}
     for record in documents:
@@ -59,7 +63,11 @@ def build_query_result_artifacts(
             continue
         file_path = str(chunk.get("file_path") or "").strip()
         chunk_id = chunk.get("chunk_id")
-        record = source_uri_map.get(file_path) or filename_map.get(Path(file_path).name)
+        record = (
+            document_map.get(file_path)
+            or source_uri_map.get(file_path)
+            or filename_map.get(Path(file_path).name)
+        )
         document_id = record.document_id if record else ""
         if not document_id:
             continue
@@ -101,3 +109,57 @@ def _truncate_text(text: str, limit: int = 280) -> str:
     if len(text) <= limit:
         return text
     return text[: limit - 3].rstrip() + "..."
+
+
+def build_retrieval_sources(
+    query_data: dict, documents: Iterable[KnowledgeDocumentRecord], top_k: int
+) -> dict:
+    """Use the opaque locator written during ingest; never guess from filenames."""
+    if query_data.get("status") != "success":
+        if query_data.get("metadata", {}).get("failure_reason") == "no_results":
+            return {"status": "no_hit", "sources": []}
+        raise ValueError("knowledge_retrieval_failed")
+    chunks = query_data.get("data", {}).get("chunks", [])
+    if not isinstance(chunks, list):
+        raise TypeError("invalid_knowledge_chunks")
+    records = {r.document_id: r for r in documents if r.overall_status == "ready"}
+    sources = []
+    seen = set()
+    retrieval_id = uuid4().hex
+    for chunk in chunks:
+        if not isinstance(chunk, dict):
+            raise TypeError("invalid_knowledge_chunk")
+        record = records.get(chunk.get("file_path"))
+        chunk_id = chunk.get("chunk_id")
+        text = chunk.get("content")
+        if (
+            record is None
+            or not isinstance(chunk_id, str)
+            or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,128}", chunk_id)
+        ):
+            raise ValueError("unknown_knowledge_locator")
+        if not isinstance(text, str) or not text.strip():
+            continue
+        key = (record.document_id, chunk_id)
+        if key in seen:
+            continue
+        seen.add(key)
+        sources.append(
+            {
+                "source_id": f"{retrieval_id}-{len(sources) + 1}",
+                "document_id": record.document_id,
+                "chunk_id": chunk_id,
+                "title": f"[{len(sources) + 1}] {Path(record.filename).name[:160]}",
+                "kind": "knowledge",
+                "preview": text.strip()[:800],
+                "truncated": len(text.strip()) > 800,
+            }
+        )
+        if len(sources) >= top_k:
+            break
+    result = {"status": "ok" if sources else "no_hit", "sources": sources}
+    while len(json.dumps(result, ensure_ascii=False).encode()) > 12 * 1024:
+        largest = max(sources, key=lambda s: len(s["preview"].encode()))
+        largest["preview"] = largest["preview"][: max(1, len(largest["preview"]) // 2)]
+        largest["truncated"] = True
+    return result

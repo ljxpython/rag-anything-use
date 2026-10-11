@@ -1,426 +1,95 @@
 # RAG-Anything Use
 
-这个仓库不是 `RAG-Anything` 源码本体，而是一个基于 `RAG-Anything` 的使用与联调工程。
+项目资料的离线入库与只读 MCP 查询服务。文本索引使用 LightRAG；Docling / RAGAnything 作为可选文档解析依赖。查询服务不生成最终答案，由消费方 Agent 根据返回片段回答。
 
-当前目标：
+## 安装与边界
 
-- 用 `docling` 作为主解析器
-- 用 `.env` 管理模型与运行配置
-- 跑通官方示例的核心能力
-- 基于 `RAGAnything` 封装可复用的知识库 CLI 与 MCP 服务
-- 为后续业务开发做抽象与封装铺垫
-
-当前已经验证过的一组联调模型组合：
-
-- Text LLM: `kimi-k2`
-- Vision LLM: `qwen3-vl-plus`
-- Embedding: `nomic-embed-text`
-- Parser: `docling`
-
-同时保留了上线备用模型配置：
-
-- Text LLM: `deepseek-chat`
-- Vision LLM: `doubao-seed-1-6-251015`
-
-## 目录说明
-
-- `examples/`
-  RAG-Anything 示例代码，已改造成通过 `.env` 读取配置
-
-- `src/demo_support.py`
-  示例公共 helper，负责读取环境变量并构造：
-  - `RAGAnything`
-  - `LightRAG`
-  - `llm_model_func`
-  - `vision_model_func`
-  - `embedding_func`
-
-- `docs/`
-  当前项目的分析文档与联调总结
-
-- `src/knowledge/`
-  当前业务封装层，负责项目级知识库的 ingest、query、registry 和配置管理
-
-- `src/cli.py`
-  当前知识库命令行入口
-
-- `src/mcp_server.py`
-  基于 `fastmcp` 的 MCP server，只暴露查询和文档状态相关工具
-
-- `test_data/`
-  本地测试文件
-
-- `env.example`
-  脱敏环境变量模板
-
-## 环境要求
-
-### 1. Python
-
-当前项目要求：
-
-```bash
-python >= 3.13
-```
-
-### 2. uv
-
-先安装 `uv`：
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-确认版本：
-
-```bash
-uv --version
-```
-
-### 3. 外部服务
-
-这仓库虽然可以通过 `uv sync` 安装 Python 依赖，但还有几样东西不是 `uv` 自动帮你变出来的：
-
-- 一个可用的文本推理模型接口
-- 一个可用的多模态视觉模型接口
-- 一个可用的 embedding 服务
-- 测试文档和测试图片
-
-当前默认配置下，外部依赖是：
-
-- `https://apis.iflow.cn/v1`
-  - `kimi-k2`
-  - `qwen3-vl-plus`
-
-- `http://<your-ollama-host>:11434`
-  - `nomic-embed-text`
-
-### 4. docling
-
-`docling` 已经写入 `pyproject.toml` 依赖中，`uv sync` 会自动安装其 Python 包和命令行工具。
-
-安装完成后可以验证：
-
-```bash
-uv run docling --version
-```
-
-## 安装步骤
-
-### 1. 克隆仓库
-
-```bash
-git clone <your-repo-url>
-cd rag-anything-use
-```
-
-### 2. 复制环境变量模板
-
-```bash
-cp env.example .env
-```
-
-### 3. 修改 `.env`
-
-至少要确认这些字段：
-
-- `LLM_BASE_URL`
-- `LLM_MODEL`
-- `LLM_API_KEY`
-- `VISION_BASE_URL`
-- `VISION_MODEL`
-- `VISION_API_KEY`
-- `EMBEDDING_BASE_URL`
-- `EMBEDDING_MODEL`
-- `TEST_DOCUMENT_PATH`
-- `TEST_IMAGE_PATH`
-
-### 4. 安装依赖
-
-如果你希望严格按锁文件安装：
+Python >=3.13、uv；查询/UTF-8 Markdown 和 TXT 入库：
 
 ```bash
 uv sync --frozen --group dev
+cp "env.example" ".env"
 ```
 
-如果只是正常同步依赖：
+PDF/Office 入库或运行多模态 examples 另外安装：
 
 ```bash
-uv sync --group dev
+uv sync --frozen --extra documents --group dev
 ```
 
-## 使用 uv sync 时你需要知道的事
+锁定 FastMCP 3.2.0、LightRAG 1.4.12。Intel macOS 无锁定 Torch 2.11 wheel：文本模式可用，documents extra 需 ARM Mac 或受支持的 Linux；当前发布锁使用POSIX flock。不要将未验证的解析格式标为已支持。首版本地验证组合为 miaomiaoai `deepseek-v4.1-flash`、独立 Ollama `nomic-embed-text` / 768维。
 
-这个项目现在已经补齐了：
+## 最少配置
 
-- `pyproject.toml`
-- `uv.lock`
+填写 `LLM_BASE_URL/LLM_MODEL/LLM_API_KEY`、`EMBEDDING_BASE_URL/EMBEDDING_MODEL/EMBEDDING_DIM`、绝对 `KNOWLEDGE_ROOT_DIR`。文本查询不需要 TEST_DOCUMENT_PATH / TEST_IMAGE_PATH / VISION_*。
 
-所以别人第一次拉代码后，可以直接：
+本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，确保有正文可解析；新版本资料已实测入库成功。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
 
-```bash
-uv sync --frozen --group dev
+HTTP 还需服务端 Bearer → scope 映射。token 至少32字符；项目为 UUID，租户为 UUID 或平台已有的 `__default`。namespace 是本地不可变索引版本，允许单段字母、数字、下划线、短横线（最多96字符），不可共享给不同项目。
+
+```dotenv
+KNOWLEDGE_MCP_TOKEN_SCOPES_JSON={"replace-with-a-random-token-at-least-32-characters":{"tenant_id":"__default","project_id":"11111111-1111-4111-8111-111111111111","namespace":"project_a_v1"}}
+MCP_TRANSPORT=http
+MCP_HOST=127.0.0.1
+MCP_PORT=8000
+MCP_PATH=/mcp
 ```
 
-但这不代表就一定能立刻跑通，因为还有下面这些外部前提：
+凭据只写私有环境文件，不进入源码、模型参数或浏览器。文件权限600。以上 token 仅是占位，不可用于实际部署。
 
-1. `.env` 必须填好
-2. 你的模型接口必须可用
-3. 你的 embedding 模型必须已经在服务端部署好
-4. `test_data/` 里的路径必须真实存在
+## 离线入库与发布
 
-也就是说：
-
-`uv sync` 解决的是 Python 依赖问题，不解决外部模型服务问题。
-
-另外这一句别漏了：
-
-- 如果你要跑 `pytest`、做 MCP 协议验证，应该用 `uv sync --group dev`
-- 如果只跑 examples，`uv sync` 也能用，但现在仓库默认建议直接带上 `--group dev`
-
-## 环境变量说明
-
-当前 `.env` 里有两组和“多模态开关”相关的变量：
-
-- `KNOWLEDGE_ENABLE_*`
-  当前知识库封装层使用，默认建议全部设为 `false`，保证联调稳态
-
-- `ENABLE_*`
-  官方 examples 使用；如果你没单独设置，代码会自动回退读取 `KNOWLEDGE_ENABLE_*`
-
-所以现在推荐的联调稳态就是：
+`--project-id` 是管理员 CLI 的索引 namespace，**不是网络工具参数**。当前文本资料以 UTF-8 保存。
 
 ```bash
-KNOWLEDGE_ENABLE_IMAGE_PROCESSING=false
-KNOWLEDGE_ENABLE_TABLE_PROCESSING=false
-KNOWLEDGE_ENABLE_EQUATION_PROCESSING=false
-
-ENABLE_IMAGE_PROCESSING=false
-ENABLE_TABLE_PROCESSING=false
-ENABLE_EQUATION_PROCESSING=false
+uv run --frozen --env-file ".env" python "main.py" ingest --project-id project_a_v1 --file "资料/规范.md"
+uv run --frozen --env-file ".env" python "main.py" list-docs --project-id project_a_v1
+uv run --frozen --env-file ".env" python "main.py" publish --project-id project_a_v1
+uv run --frozen --env-file ".env" python "src/mcp_server.py"
 ```
 
-## 运行示例
+只有全部 ready 且模型/Embedding签名匹配的 namespace 才可服务。发布后冻结；失败或取消入库保留失败状态、不能发布；MCP运行时持有读锁，CLI不能同时写同一 namespace。更新资料需要新建 `project_a_v2`，完整导入、发布，再切换 token 配置并重启MCP；失败回到旧已发布版本，不删除目录。不要修改已有模型/维度后继续复用旧索引。
 
-推荐使用 `uv run`，不用手动激活虚拟环境。
+CLI `query` 和 `debug-retrieve` 是管理员诊断：可生成答案/输出内部路径和 raw_data。它们不通过MCP暴露，也不作为平台来源契约。
 
-### 1. 端到端文档处理与查询
+## MCP 契约
 
-```bash
-uv run python examples/1_end_to_end.py
-```
+默认 Streamable HTTP `/mcp`，Bearer必需。stdio仅保留显式管理员模式，必须设置有效 `KNOWLEDGE_STDIO_TOKEN`。无匿名、公共库或未知范围回退。
 
-这个示例会做：
+- `mcp_query_project_knowledge(query, top_k=8)`：query去首尾空白后1–2000字符，top_k严格整数1–8，固定hybrid；只调用一次 `aquery_data`，不调用生成式 `aquery`。
+- `list_project_knowledge_documents(limit=20)`：当前凭据范围的安全名称/状态，limit1–100。
+- `get_project_knowledge_document_status(document_id)`：同一范围，opaque `kd_` ID。
 
-1. 用 `docling` 解析测试 PDF
-2. 用 `RAGAnything` 完成文本入库与多模态处理
-3. 执行一次文本查询
-4. 执行一次带外部 equation 的多模态查询
+查询返回同值JSON文本与structuredContent：`{"status":"ok","sources":[...]}`，无命中为 `{"status":"no_hit","sources":[]}`；服务失败为 MCP `isError=true`，不是no_hit。来源字段为 source_id / document_id / chunk_id / title / kind=knowledge / preview / truncated。最多8条、每片段800字符、JSON UTF-8最多12KiB；映射精确依据入库时的document_id，支持同名文件；不返回宿主路径、下载URL、页码、raw_data、凭据。供应商取消传播，单次检索60秒deadline。
 
-### 2. 独立模态处理
+所有网络工具为readOnly，不暴露上传/修改/删除接口。LightRAG hybrid可能调用关键词LLM与Embedding，外部调用费用需单独观察，不能把“无答案生成”理解为“无模型请求”。
 
-```bash
-uv run python examples/2_multimodal_content_processing.py
-```
-
-这个示例会验证：
-
-- 图片处理
-- 表格处理
-- 对应的实体/关系抽取
-
-### 3. 基于已有 LightRAG 实例继续处理
-
-```bash
-uv run python examples/3_loading_existing_lightRAG_instance.py
-```
-
-这个示例适合验证：
-
-- 已有工作目录复用
-- 基于已有 `LightRAG` 实例继续处理文档
-
-### 4. 直接插入 content_list
-
-```bash
-uv run python examples/4_direct_content_list_insertion.py
-```
-
-这个示例适合验证：
-
-- 跳过解析
-- 直接插入标准化 `content_list`
-- 追加多份内容再查询
-
-## 知识库 CLI
-
-当前仓库已经补了一层项目级知识库 CLI，适合后续业务封装和手工联调。
-
-### 1. 导入文档
-
-```bash
-uv run python main.py ingest --project-id demo-project --file "test_data/接口文档.pdf"
-```
-
-### 2. 查询知识库
-
-```bash
-uv run python main.py query --project-id demo-project --query "客户登录接口使用什么方法？" --mode hybrid --top-k 8
-```
-
-### 3. 查看检索上下文
-
-```bash
-uv run python main.py debug-retrieve --project-id demo-project --query "客户登录接口使用什么方法？" --mode hybrid --top-k 8
-```
-
-### 4. 查看已导入文档
-
-```bash
-uv run python main.py list-docs --project-id demo-project
-```
-
-### 5. 查看单文档状态
-
-```bash
-uv run python main.py doc-status --project-id demo-project --document-id "<document-id>"
-```
-
-当前 `query` 命令已经补齐：
-
-- `top_k` 真正传到底层检索
-- `citations`
-- `matched_document_ids`
-- 可选 `debug_chunks`
-
-## MCP 服务
-
-当前仓库已经提供 `fastmcp` server，后续别的系统只需要把这个 MCP 服务挂进去即可。
-
-当前 transport 策略：
-
-- 正式远程接入推荐 `SSE`
-- 本地联调保留 `stdio`
-
-### 1. 本地 `stdio` 启动
-
-```bash
-uv run python src/mcp_server.py
-```
-
-### 2. 正式推荐的 `SSE` 启动
-
-```bash
-MCP_TRANSPORT=sse \
-MCP_HOST=0.0.0.0 \
-MCP_PORT=8000 \
-MCP_PATH=/sse \
-MCP_MESSAGE_PATH=/messages/ \
-uv run python src/mcp_server.py
-```
-
-### 3. 当前暴露的工具
-
-- `query_project_knowledge`
-- `list_project_knowledge_documents`
-- `get_project_knowledge_document_status`
-
-### 4. 本地协议验证示例
-
-```bash
-uv run python - <<'PY'
+```python
 import asyncio
-from pathlib import Path
+import os
 from fastmcp import Client
 
 async def main():
-    async with Client(Path("src/mcp_server.py")) as client:
-        tools = await client.list_tools()
-        print([tool.name for tool in tools])
-        result = await client.call_tool(
-            "list_project_knowledge_documents",
-            {"project_id": "demo-project"},
-        )
-        print(result.data)
+    async with Client("http://127.0.0.1:8000/mcp", auth=os.environ["KNOWLEDGE_CLIENT_TOKEN"]) as client:
+        result = await client.call_tool("mcp_query_project_knowledge", {"query": "登录凭证有效期？"})
+        print(result.structured_content)
 
 asyncio.run(main())
-PY
 ```
 
-## 测试
-
-### 1. 跑单测
+## 验证与交接
 
 ```bash
-uv run python -m pytest tests -q
+uv run --frozen --group dev python -m pytest "tests" -q
 ```
 
-### 2. 当前已验证过的真实链路
+2026-10-11 本工程完整测试24项通过（10.42秒），包含HTTP/stdio、范围安全、初始化失败/取消、清理失败保留原异常及全部engine关闭。协议测试使用合成隔离样本，不自动调用真实模型。
 
-```bash
-uv run python main.py ingest --project-id real-pdf-demo-v4 --file "test_data/接口文档.pdf"
-uv run python main.py list-docs --project-id real-pdf-demo-v4
-uv run python main.py query --project-id real-pdf-demo-v4 --query "这份接口文档主要描述了什么内容？" --mode hybrid
-```
+独立本地服务另外完成两namespace真实入库/发布、两凭据HTTP检索、平台两主图真实Worker/DeepSeek链路；平台11项真实验收通过，含授权/撤权、Stop、fork和历史。读锁拒写、失败索引拒发布、新版本独立凭据、保留旧索引和MCP/Embedding重启也有证据。3份Markdown的30题合成检索验收：20题有答案Recall@8=100%，跨项目来源0；这不代表PDF或业务corpus准确率。PDF/Office Docling在Intel本机阻塞。
 
-## 常见问题
+- [消费方接入契约](docs/mcp_receiver_integration_guide.md)
+- [运行与更新](docs/rag_system_usage_guide.md)
+- [当前能力与限制](docs/rag_system_current_progress.md)
+- [Docling设计说明](docs/raganything_docling_guide.md)
 
-### 1. 为什么 `uv sync` 完了还是跑不起来？
-
-最常见原因不是 Python 依赖，而是这些外部条件没满足：
-
-- `.env` 没填
-- API key 无效
-- embedding 服务不可用
-- `docling` 可以执行但测试文件路径不对
-
-### 2. 为什么多模态表格处理偶尔会报 `Invalid response from OpenAI API`？
-
-当前联调阶段使用的是免费模型组合。真实联调里观察到：
-
-- `kimi-k2` 在某些结构化抽取 prompt 下偶发返回格式不稳定
-- `RAG-Anything` 通常会 fallback 到逐条处理
-
-这不影响我们当前把主链路跑通，但后面如果要上生产，建议：
-
-- 加强响应清洗
-- 或者为结构化抽取切换更稳定的模型
-
-### 3. 为什么 `.env` 里有两套模型配置？
-
-因为当前联调用的是免费模型，目的是省成本；上线时计划切回：
-
-- `deepseek-chat`
-- `doubao-seed-1-6-251015`
-
-所以把这组配置保留成了备注，后续切换时不用再翻聊天记录。
-
-## 已有文档
-
-- [docs/raganything_docling_guide.md](./docs/raganything_docling_guide.md)
-  RAG-Anything 使用说明与 `docling` 方案解读
-
-- [docs/raganything_examples_validation.md](./docs/raganything_examples_validation.md)
-  示例联调总结、踩坑记录和后续抽象建议
-
-- [docs/rag_system_current_progress.md](./docs/rag_system_current_progress.md)
-  当前知识库封装、CLI、MCP 和真实验证进度
-
-- [docs/rag_system_usage_guide.md](./docs/rag_system_usage_guide.md)
-  从本地 CLI 到 MCP 调用的完整使用说明
-
-- [docs/mcp_receiver_integration_guide.md](./docs/mcp_receiver_integration_guide.md)
-  从接收方视角说明为什么正式推荐 SSE，以及应该如何接入
-
-## 后续方向
-
-接下来这个仓库更适合往“业务封装层”演进，而不是继续堆示例。
-
-建议优先抽象：
-
-- 文档摄入服务
-- 查询服务
-- 模型适配层
-- 配置层
-
-这样后面再做 API、任务队列和正式产品能力时，不会跟示例代码死绑在一起。
+`examples/` 为独立多模态实验，需documents extra、视觉模型与对应测试文件；示例历史记录不能代替当前服务验收。

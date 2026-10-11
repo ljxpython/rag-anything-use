@@ -8,11 +8,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.cli import build_parser
-from src.knowledge import build_knowledge_service_config, ProjectRAGEngine
+from src.knowledge import ProjectRAGEngine, build_knowledge_service_config
 from src.knowledge.citations import build_citations, build_query_result_artifacts
 from src.knowledge.content_normalizer import normalize_content_list
 from src.knowledge.schemas import KnowledgeDocumentRecord
-from src.mcp_server import build_server_run_settings, mcp
+from src.mcp_server import build_server_run_settings, create_server
 
 
 def test_build_knowledge_service_config_defaults() -> None:
@@ -31,12 +31,27 @@ def test_build_parser_has_expected_commands() -> None:
         "doc-status",
         "ingest",
         "list-docs",
+        "publish",
         "query",
     ]
 
 
-def test_mcp_server_created() -> None:
-    assert type(mcp).__name__ == "FastMCP"
+def test_mcp_server_created(monkeypatch) -> None:
+    import json
+
+    monkeypatch.setenv(
+        "KNOWLEDGE_MCP_TOKEN_SCOPES_JSON",
+        json.dumps(
+            {
+                "a" * 32: {
+                    "tenant_id": "__default",
+                    "project_id": "00000000-0000-0000-0000-000000000001",
+                    "namespace": "test",
+                }
+            }
+        ),
+    )
+    assert type(create_server()).__name__ == "FastMCP"
 
 
 def test_build_server_run_settings_defaults(monkeypatch) -> None:
@@ -52,8 +67,11 @@ def test_build_server_run_settings_defaults(monkeypatch) -> None:
         monkeypatch.delenv(name, raising=False)
     settings = build_server_run_settings()
     assert settings == {
-        "transport": "stdio",
+        "transport": "http",
         "show_banner": False,
+        "host": "127.0.0.1",
+        "port": 8000,
+        "path": "/mcp",
     }
 
 

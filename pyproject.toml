@@ -5,14 +5,17 @@ description = "RAG-Anything usage examples with docling-based ingestion and env-
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "docling>=2.83.0",
     "fastmcp>=3.2.0",
     "lightrag-hku>=1.4.12",
     "numpy>=2.4.4",
     "pillow>=12.2.0",
     "python-dotenv>=1.2.2",
-    "raganything>=1.2.10",
+    "openai>=2.32.0",
 ]
+
+[project.optional-dependencies]
+# Query serving and UTF-8 text ingestion do not need the Torch parser stack.
+documents = ["docling>=2.83.0", "raganything>=1.2.10"]
 
 [dependency-groups]
 dev = [

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class KnowledgeDocumentRecord(BaseModel):
@@ -40,6 +40,23 @@ class ProjectKnowledgeQueryRequest(BaseModel):
     document_ids: list[str] = Field(default_factory=list)
     include_citations: bool = True
     include_debug_chunks: bool = False
+
+    @field_validator("document_ids")
+    @classmethod
+    def reject_document_filter(cls, value: list[str]) -> list[str]:
+        if value:
+            raise ValueError("document_filter_not_supported")
+        return value
+
+
+class KnowledgeRetrievalRequest(BaseModel):
+    query: str = Field(min_length=1, max_length=2000)
+    top_k: int = Field(default=8, ge=1, le=8, strict=True)
+
+    @field_validator("query", mode="before")
+    @classmethod
+    def trim_query(cls, value: Any) -> Any:
+        return value.strip() if isinstance(value, str) else value
 
 
 class ProjectKnowledgeQueryResponse(BaseModel):

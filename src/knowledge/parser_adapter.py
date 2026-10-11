@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from raganything import RAGAnything
+if TYPE_CHECKING:
+    from raganything import RAGAnything
 
 
 @dataclass(frozen=True)
@@ -33,7 +34,9 @@ class DoclingParserAdapter:
         elif isinstance(parse_result, list):
             content_list = list(parse_result)
         else:
-            raise RuntimeError(f"unexpected_parse_result_type:{type(parse_result).__name__}")
+            raise TypeError(
+                f"unexpected_parse_result_type:{type(parse_result).__name__}"
+            )
         return ParsedKnowledgeDocument(
             parser_name=self.parser_name,
             source_path=path,

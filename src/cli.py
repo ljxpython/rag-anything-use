@@ -11,6 +11,12 @@ from src.knowledge import (
     ProjectRAGEngine,
     build_knowledge_service_config,
 )
+from src.knowledge.document_registry import KnowledgeDocumentRegistry
+from src.knowledge.publication import (
+    model_signature,
+    namespace_lock,
+    validate_publication,
+)
 from src.knowledge.schemas import ProjectKnowledgeQueryRequest
 
 
@@ -21,6 +27,11 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_parser = subparsers.add_parser("ingest", help="导入知识文档")
     ingest_parser.add_argument("--project-id", required=True)
     ingest_parser.add_argument("--file", required=True)
+
+    publish_parser = subparsers.add_parser(
+        "publish", help="发布离线索引；之后仅可查询，新资料必须建新 namespace"
+    )
+    publish_parser.add_argument("--project-id", required=True)
 
     query_parser = subparsers.add_parser("query", help="查询项目知识库")
     query_parser.add_argument("--project-id", required=True)
@@ -52,6 +63,13 @@ def build_parser() -> argparse.ArgumentParser:
 async def _main_async(args: argparse.Namespace) -> int:
     config = build_knowledge_service_config()
     rag_engine = ProjectRAGEngine(config)
+    try:
+        return await _execute(args, rag_engine)
+    finally:
+        await rag_engine.close()
+
+
+async def _execute(args: argparse.Namespace, rag_engine: ProjectRAGEngine) -> int:
     ingest_service = KnowledgeIngestService(rag_engine=rag_engine)
     query_service = KnowledgeQueryService(rag_engine=rag_engine)
     admin_service = KnowledgeAdminService(rag_engine=rag_engine)
@@ -61,6 +79,26 @@ async def _main_async(args: argparse.Namespace) -> int:
             project_id=args.project_id,
             file_path=args.file,
         )
+    elif args.command == "publish":
+        paths = rag_engine.get_project_paths(args.project_id)
+        with namespace_lock(paths, write=True):
+            records = KnowledgeDocumentRegistry(paths).list_documents(limit=10000)
+            if (
+                not paths.rag_workdir.is_dir()
+                or not records
+                or any(
+                    r.overall_status != "ready" or r.index_status != "ready"
+                    for r in records
+                )
+            ):
+                raise ValueError("knowledge_index_not_ready")
+            marker = paths.manifest_dir / "publication.json"
+            if marker.exists():
+                validate_publication(paths)
+            else:
+                with marker.open("x", encoding="utf-8") as handle:
+                    json.dump(model_signature(), handle)
+            result = {"status": "published", "document_count": len(records)}
     elif args.command == "query":
         result = await query_service.query_project_knowledge(
             ProjectKnowledgeQueryRequest(
@@ -100,7 +138,7 @@ async def _main_async(args: argparse.Namespace) -> int:
         print(result.model_dump_json(indent=2, ensure_ascii=False))
     else:
         print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 0
+    return 1 if getattr(result, "accepted", True) is False else 0
 
 
 def main() -> int:

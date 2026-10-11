@@ -1,31 +1,45 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from lightrag import QueryParam
-from raganything import RAGAnything
+from lightrag import LightRAG, QueryParam
+
+if TYPE_CHECKING:
+    from raganything import RAGAnything
 from lightrag.kg.shared_storage import initialize_pipeline_status
 
 from src.demo_support import build_lightrag, build_raganything
-from src.knowledge.citations import build_query_result_artifacts
+from src.knowledge.citations import (
+    build_query_result_artifacts,
+    build_retrieval_sources,
+)
 from src.knowledge.config import KnowledgeServiceConfig
 from src.knowledge.document_registry import KnowledgeDocumentRegistry
 from src.knowledge.project_paths import (
     KnowledgeProjectPaths,
     build_knowledge_project_paths,
 )
+from src.knowledge.publication import validate_publication
 from src.knowledge.schemas import (
     CitationRecord,
+    KnowledgeRetrievalRequest,
     ProjectKnowledgeQueryRequest,
     ProjectKnowledgeQueryResponse,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ProjectRAGEngine:
     def __init__(self, config: KnowledgeServiceConfig) -> None:
         self.config = config
         self._rag_cache: dict[str, RAGAnything] = {}
+        self._lightrag_cache: dict[str, LightRAG] = {}
+        self._init_lock = asyncio.Lock()
 
     def get_project_paths(self, project_id: str) -> KnowledgeProjectPaths:
         return build_knowledge_project_paths(project_id, self.config)
@@ -44,10 +58,8 @@ class ProjectRAGEngine:
         cached = self._rag_cache.get(project_id)
         if cached is not None:
             return cached
-        paths = await self.ensure_project_dirs(project_id)
-        lightrag = build_lightrag(str(paths.rag_workdir))
-        await lightrag.initialize_storages()
-        await initialize_pipeline_status()
+        paths = self.get_project_paths(project_id)
+        lightrag = await self.get_lightrag(project_id)
         rag = build_raganything(
             working_dir=str(paths.rag_workdir),
             lightrag=lightrag,
@@ -57,6 +69,65 @@ class ProjectRAGEngine:
         )
         self._rag_cache[project_id] = rag
         return rag
+
+    async def get_lightrag(self, project_id: str) -> LightRAG:
+        async with self._init_lock:
+            if project_id in self._lightrag_cache:
+                return self._lightrag_cache[project_id]
+            paths = await self.ensure_project_dirs(project_id)
+            workspace = (
+                "kb_" + hashlib.sha256(str(paths.project_dir).encode()).hexdigest()[:24]
+            )
+            rag = build_lightrag(str(paths.rag_workdir), workspace=workspace)
+            try:
+                async with asyncio.timeout(60):
+                    await rag.initialize_storages()
+                    await initialize_pipeline_status(workspace=workspace)
+            except BaseException:
+                try:
+                    await self._close_lightrag(rag)
+                except Exception as cleanup_error:  # noqa: BLE001 - preserve the initialization failure
+                    logger.warning(
+                        "knowledge_engine_cleanup_failed: %s",
+                        type(cleanup_error).__name__,
+                    )
+                raise
+            self._lightrag_cache[project_id] = rag
+            return rag
+
+    async def close(self) -> None:
+        results = await asyncio.gather(
+            *(self._close_lightrag(rag) for rag in self._lightrag_cache.values()),
+            return_exceptions=True,
+        )
+        self._lightrag_cache.clear()
+        self._rag_cache.clear()
+        for result in results:
+            if isinstance(result, BaseException):
+                raise result
+
+    @staticmethod
+    async def _close_lightrag(rag: LightRAG) -> None:
+        async with asyncio.timeout(30):
+            await rag.finalize_storages()
+
+    async def retrieve(
+        self, namespace: str, request: KnowledgeRetrievalRequest
+    ) -> dict:
+        documents = validate_publication(self.get_project_paths(namespace))
+        rag = await self.get_lightrag(namespace)
+        async with asyncio.timeout(60):
+            data = await rag.aquery_data(
+                request.query,
+                param=QueryParam(
+                    mode="hybrid",
+                    top_k=request.top_k,
+                    chunk_top_k=request.top_k,
+                    include_references=True,
+                    enable_rerank=False,
+                ),
+            )
+        return build_retrieval_sources(data, documents, request.top_k)
 
     async def ingest_content_list(
         self,
@@ -70,9 +141,10 @@ class ProjectRAGEngine:
         rag = await self.get_rag(project_id)
         await rag.insert_content_list(
             content_list=content_list,
-            file_path=file_path or document_id,
+            file_path=document_id,
             doc_id=document_id,
         )
+        await self.assert_document_ready(project_id, document_id)
         return {
             "project_id": project_id,
             "document_id": document_id,
@@ -81,31 +153,38 @@ class ProjectRAGEngine:
             "status": "ingested",
         }
 
+    async def ingest_text(self, project_id: str, document_id: str, text: str) -> None:
+        rag = await self.get_lightrag(project_id)
+        await rag.ainsert(text, ids=document_id, file_paths=document_id)
+        await self.assert_document_ready(project_id, document_id)
+
+    async def assert_document_ready(self, project_id: str, document_id: str) -> None:
+        rag = await self.get_lightrag(project_id)
+        record = await rag.doc_status.get_by_id(document_id)
+        if not isinstance(record, dict) or record.get("status") != "processed":
+            raise ValueError("knowledge_document_index_failed")
+
     async def query(
         self, request: ProjectKnowledgeQueryRequest
     ) -> ProjectKnowledgeQueryResponse:
-        rag = await self.get_rag(request.project_id)
+        rag = await self.get_lightrag(request.project_id)
         query_mode = request.mode or self.config.query_default_mode
         query_top_k = request.top_k or self.config.query_default_top_k
         query_param = QueryParam(
             mode=query_mode,
             top_k=query_top_k,
             chunk_top_k=query_top_k,
-            include_references=request.include_citations or request.include_debug_chunks,
+            include_references=request.include_citations
+            or request.include_debug_chunks,
             enable_rerank=False,
         )
-        retrieval_data = await rag.lightrag.aquery_data(
+        retrieval_data = await rag.aquery_data(
             request.query,
             param=query_param,
         )
         answer = await rag.aquery(
             request.query,
-            mode=query_mode,
-            top_k=query_top_k,
-            chunk_top_k=query_top_k,
-            include_references=request.include_citations,
-            enable_rerank=False,
-            vlm_enhanced=False,
+            param=query_param,
         )
         citations: list[CitationRecord] = []
         matched_document_ids: list[str] = []
@@ -115,9 +194,11 @@ class ProjectRAGEngine:
                 build_knowledge_project_paths(request.project_id, self.config)
             )
             documents = registry.list_documents(limit=10_000)
-            citations, matched_document_ids, debug_chunks = build_query_result_artifacts(
-                retrieval_data,
-                documents=documents,
+            citations, matched_document_ids, debug_chunks = (
+                build_query_result_artifacts(
+                    retrieval_data,
+                    documents=documents,
+                )
             )
         return ProjectKnowledgeQueryResponse(
             project_id=request.project_id,
@@ -133,10 +214,10 @@ class ProjectRAGEngine:
         self, request: ProjectKnowledgeQueryRequest
     ) -> dict[str, object]:
         paths = await self.ensure_project_dirs(request.project_id)
-        rag = await self.get_rag(request.project_id)
+        rag = await self.get_lightrag(request.project_id)
         query_mode = request.mode or self.config.query_default_mode
         query_top_k = request.top_k or self.config.query_default_top_k
-        query_data = await rag.lightrag.aquery_data(
+        query_data = await rag.aquery_data(
             request.query,
             param=QueryParam(
                 mode=query_mode,

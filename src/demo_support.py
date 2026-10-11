@@ -6,7 +6,7 @@ import json
 from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib import request
 
 import numpy as np
@@ -14,10 +14,11 @@ from dotenv import load_dotenv
 from lightrag import LightRAG
 from lightrag.llm.openai import openai_complete_if_cache
 from lightrag.utils import EmbeddingFunc
-from raganything import RAGAnything, RAGAnythingConfig
+
+if TYPE_CHECKING:
+    from raganything import RAGAnything, RAGAnythingConfig
 
 import os
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(PROJECT_ROOT / ".env", override=False)
@@ -58,15 +59,15 @@ def load_settings() -> DemoSettings:
         parse_method=os.getenv("PARSE_METHOD", "auto"),
         working_dir=os.getenv("WORKING_DIR", "./rag_storage"),
         output_dir=os.getenv("OUTPUT_DIR", "./output"),
-        test_document_path=_require_env("TEST_DOCUMENT_PATH"),
-        test_image_path=_require_env("TEST_IMAGE_PATH"),
+        test_document_path=os.getenv("TEST_DOCUMENT_PATH", ""),
+        test_image_path=os.getenv("TEST_IMAGE_PATH", ""),
         llm_base_url=_require_env("LLM_BASE_URL"),
         llm_model=_require_env("LLM_MODEL"),
         llm_api_key=_require_env("LLM_API_KEY"),
         llm_max_tokens=int(os.getenv("LLM_MAX_TOKENS", "2048")),
-        vision_base_url=_require_env("VISION_BASE_URL"),
-        vision_model=_require_env("VISION_MODEL"),
-        vision_api_key=_require_env("VISION_API_KEY"),
+        vision_base_url=os.getenv("VISION_BASE_URL", ""),
+        vision_model=os.getenv("VISION_MODEL", ""),
+        vision_api_key=os.getenv("VISION_API_KEY", ""),
         vision_max_tokens=int(os.getenv("VISION_MAX_TOKENS", "2048")),
         embedding_base_url=_require_env("EMBEDDING_BASE_URL"),
         embedding_model=_require_env("EMBEDDING_MODEL"),
@@ -83,20 +84,24 @@ def _resolve_path(path_str: str) -> Path:
 
 
 def get_test_document_path() -> Path:
-    path = _resolve_path(load_settings().test_document_path)
+    path = _resolve_path(_require_env("TEST_DOCUMENT_PATH"))
     if not path.exists():
         raise FileNotFoundError(f"测试文档不存在: {path}")
     return path
 
 
 def get_test_image_path() -> Path:
-    path = _resolve_path(load_settings().test_image_path)
+    path = _resolve_path(_require_env("TEST_IMAGE_PATH"))
     if not path.exists():
         raise FileNotFoundError(f"测试图片不存在: {path}")
     return path
 
 
 def build_llm_model_func(settings: DemoSettings):
+    extra_body = json.loads(os.getenv("LLM_EXTRA_BODY_JSON", "{}"))
+    if not isinstance(extra_body, dict):
+        raise TypeError("invalid_llm_extra_body")
+
     def llm_model_func(
         prompt: str,
         system_prompt: str | None = None,
@@ -111,6 +116,7 @@ def build_llm_model_func(settings: DemoSettings):
             api_key=settings.llm_api_key,
             base_url=settings.llm_base_url,
             max_tokens=kwargs.pop("max_tokens", settings.llm_max_tokens),
+            extra_body=kwargs.pop("extra_body", extra_body),
             **kwargs,
         )
 
@@ -141,16 +147,16 @@ def build_vision_model_func(settings: DemoSettings, llm_model_func):
 
         if image_data:
             multimodal_messages = [
-                {"role": "system", "content": system_prompt}
-                if system_prompt
-                else None,
+                {"role": "system", "content": system_prompt} if system_prompt else None,
                 {
                     "role": "user",
                     "content": [
                         {"type": "text", "text": prompt},
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{image_data}"},
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{image_data}"
+                            },
                         },
                     ],
                 },
@@ -191,7 +197,13 @@ def _ollama_embed_sync(texts: list[str], settings: DemoSettings) -> np.ndarray:
     )
     with request.urlopen(req, timeout=60) as response:
         data = json.load(response)
-    return np.array(data["embeddings"], dtype=np.float32)
+    vectors = np.array(data["embeddings"], dtype=np.float32)
+    if (
+        vectors.shape != (len(texts), settings.embedding_dim)
+        or not np.isfinite(vectors).all()
+    ):
+        raise ValueError("invalid_embedding_dimensions")
+    return vectors
 
 
 async def _ollama_embed(texts: list[str], settings: DemoSettings) -> np.ndarray:
@@ -206,7 +218,11 @@ def build_embedding_func(settings: DemoSettings) -> EmbeddingFunc:
     )
 
 
-def build_rag_config(settings: DemoSettings, working_dir: str | None = None) -> RAGAnythingConfig:
+def build_rag_config(
+    settings: DemoSettings, working_dir: str | None = None
+) -> RAGAnythingConfig:
+    from raganything import RAGAnythingConfig
+
     return RAGAnythingConfig(
         working_dir=working_dir or settings.working_dir,
         parser_output_dir=settings.output_dir,
@@ -252,6 +268,8 @@ def build_raganything(
     enable_table_processing: bool | None = None,
     enable_equation_processing: bool | None = None,
 ) -> RAGAnything:
+    from raganything import RAGAnything
+
     settings = load_settings()
     llm_model_func = build_llm_model_func(settings)
     vision_model_func = build_vision_model_func(settings, llm_model_func)
@@ -263,6 +281,16 @@ def build_raganything(
         config.enable_table_processing = enable_table_processing
     if enable_equation_processing is not None:
         config.enable_equation_processing = enable_equation_processing
+    if any(
+        (
+            config.enable_image_processing,
+            config.enable_table_processing,
+            config.enable_equation_processing,
+        )
+    ) and not all(
+        (settings.vision_base_url, settings.vision_model, settings.vision_api_key)
+    ):
+        raise RuntimeError("vision_configuration_required")
     return RAGAnything(
         lightrag=lightrag,
         config=config,
@@ -272,12 +300,13 @@ def build_raganything(
     )
 
 
-def build_lightrag(working_dir: str) -> LightRAG:
+def build_lightrag(working_dir: str, *, workspace: str = "") -> LightRAG:
     settings = load_settings()
     llm_model_func = build_llm_model_func(settings)
     embedding_func = build_embedding_func(settings)
     return LightRAG(
         working_dir=working_dir,
+        workspace=workspace,
         llm_model_func=llm_model_func,
         embedding_func=embedding_func,
     )

@@ -23,6 +23,32 @@ class KnowledgeServiceConfig:
     enable_image_processing: bool = False
     enable_table_processing: bool = False
     enable_equation_processing: bool = False
+    online_enabled: bool = False
+    authorize_url: str = ""
+    authorization_key_id: str = ""
+    authorization_secret: str = ""
+    max_file_bytes: int = 20 * 1024 * 1024
+    max_project_documents: int = 100
+    max_project_original_bytes: int = 100 * 1024 * 1024
+    max_project_disk_bytes: int = 2 * 1024 * 1024 * 1024
+    max_disk_bytes: int = 10 * 1024 * 1024 * 1024
+    max_project_jobs: int = 10
+    max_jobs: int = 100
+    job_timeout_seconds: int = 1800
+
+    def __post_init__(self):
+        for name in (
+            "max_file_bytes",
+            "max_project_documents",
+            "max_project_original_bytes",
+            "max_project_disk_bytes",
+            "max_disk_bytes",
+            "max_project_jobs",
+            "max_jobs",
+            "job_timeout_seconds",
+        ):
+            if getattr(self, name) <= 0:
+                raise ValueError("invalid_knowledge_limits")
 
 
 def _parse_bool(value: str | None, default: bool) -> bool:
@@ -49,7 +75,9 @@ def build_knowledge_service_config() -> KnowledgeServiceConfig:
         root_dir=root_dir,
         parser_name=os.getenv("PARSER", DEFAULT_KNOWLEDGE_PARSER),
         parse_method=os.getenv("PARSE_METHOD", "auto"),
-        query_default_mode=os.getenv("KNOWLEDGE_QUERY_MODE", DEFAULT_KNOWLEDGE_QUERY_MODE),
+        query_default_mode=os.getenv(
+            "KNOWLEDGE_QUERY_MODE", DEFAULT_KNOWLEDGE_QUERY_MODE
+        ),
         query_default_top_k=_parse_int(
             os.getenv("KNOWLEDGE_TOP_K"), DEFAULT_KNOWLEDGE_TOP_K
         ),
@@ -69,4 +97,12 @@ def build_knowledge_service_config() -> KnowledgeServiceConfig:
             os.getenv("KNOWLEDGE_ENABLE_EQUATION_PROCESSING"),
             False,
         ),
+        online_enabled=_parse_bool(os.getenv("KNOWLEDGE_ONLINE_ENABLED"), False),
+        authorize_url=os.getenv("KNOWLEDGE_AUTHORIZE_URL", "").strip(),
+        authorization_key_id=os.getenv("KNOWLEDGE_AUTHORIZATION_KEY_ID", "").strip(),
+        authorization_secret=os.getenv("KNOWLEDGE_AUTHORIZATION_SECRET", ""),
+        max_project_disk_bytes=_parse_int(
+            os.getenv("KNOWLEDGE_MAX_PROJECT_DISK_BYTES"), 2 * 1024**3
+        ),
+        max_disk_bytes=_parse_int(os.getenv("KNOWLEDGE_MAX_DISK_BYTES"), 10 * 1024**3),
     )

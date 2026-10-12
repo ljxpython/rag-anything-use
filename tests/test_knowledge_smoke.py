@@ -27,10 +27,13 @@ def test_build_parser_has_expected_commands() -> None:
     parser = build_parser()
     subcommands = parser._subparsers._group_actions[0].choices
     assert sorted(subcommands.keys()) == [
+        "activate-knowledge-generation",
         "debug-retrieve",
         "doc-status",
         "ingest",
+        "init-project-knowledge",
         "list-docs",
+        "migrate-project-knowledge",
         "publish",
         "query",
     ]

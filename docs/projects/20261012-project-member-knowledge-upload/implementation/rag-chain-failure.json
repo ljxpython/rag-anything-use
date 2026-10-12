@@ -1,0 +1,43 @@
+{
+  "receipt": {
+    "version": 1,
+    "job_id": "kj_918bd177a3134032ab4b27ea0aa72f3c",
+    "document_id": "kd_8d5e4f59cd694fecb1ae884aec5a6c17",
+    "file_name": "fixture-A.md",
+    "status": "failed",
+    "searchable": false,
+    "error_code": "knowledge_processing_failed",
+    "created_at": "2026-10-12T10:39:21.038004Z",
+    "updated_at": "2026-10-12T10:39:26.035228Z"
+  },
+  "usage": [
+    {
+      "stage": "parsing",
+      "kind": "parse",
+      "status": "complete",
+      "input_count": 0,
+      "provider_usage": null,
+      "usage_source": "unknown"
+    },
+    {
+      "stage": "new_chunks",
+      "kind": "embedding",
+      "status": "complete",
+      "input_count": 1,
+      "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+      "usage_source": "provider"
+    },
+    {
+      "stage": "indexing",
+      "kind": "llm_cache_miss",
+      "status": "complete",
+      "input_count": 0,
+      "provider_usage": null,
+      "usage_source": "unknown"
+    }
+  ],
+  "builder_errors": [
+    "ValueError"
+  ],
+  "note": "后一次失败的安全类型记录；首次HTTP client重试失败未单独落盘，修复说明见rag-evidence.md。"
+}

@@ -1,8 +1,18 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+class KnowledgeFileRef(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    version: Literal[1]
+    path: str = Field(max_length=128)
+    file_name: str = Field(min_length=1, max_length=200)
+    mime_type: str = Field(max_length=128)
+    size_bytes: int = Field(gt=0, le=20 * 1024 * 1024)
+    sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
 
 
 class KnowledgeDocumentRecord(BaseModel):

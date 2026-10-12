@@ -1,6 +1,6 @@
 # RAG-Anything Use 开发规范
 
-单服务知识库 MCP 系统。离线入库（CLI）+ 只读查询（MCP）。
+单服务知识库 MCP 系统。离线管理（CLI）+ 只读查询（MCP）+ 平台精确授权的受管附件异步入库（online默认关闭，首版MD/TXT）。
 
 ## 会话初始化
 
@@ -32,10 +32,10 @@
 
 | 模块 | 职责 |
 |---|---|
-| `src/mcp_server.py` | MCP 服务入口；只对外暴露 3 个只读 tool |
-| `src/cli.py` | 管理员 CLI（ingest / publish / list-docs / query / debug-retrieve）；不经 MCP 暴露 |
-| `src/knowledge/` | 核心引擎；CLI 和 MCP 共用 |
-| `tests/` | 测试套件；目前 24 项覆盖协议、安全、生命周期 |
+| `src/mcp_server.py` | 3个原只读tool；online逻辑库仅新增约定submit/status，写需平台grant＋票据；内部HTTP显式鉴权 |
+| `src/cli.py` | 管理员CLI及注册/迁移/回退；不经MCP暴露 |
+| `src/knowledge/` | 共用引擎、持久任务/受管原件、独立候选构建/原子激活/读lease；不持平台权限副本 |
+| `tests/` | 67项覆盖协议、安全、生命周期、增量/计数、迁移/故障/回退 |
 
 ## 验证
 
@@ -62,3 +62,5 @@ uv run --frozen --env-file ".env" pytest tests/ -q
 - ❌ 不得修改已发布（published）namespace 的内容
 - ❌ 不得在模型/Embedding 配置变更后复用旧索引（必须新建 namespace）
 - ❌ 不得在接口/架构改动未建项目文档的情况下开始写代码
+- ❌ 不得在active索引直接增量写；只恢复完整已校验冻结快照到独立候选，旧原件不重复入库；签名/快照不兼容时拒绝，不自动全量重建
+- ❌ 不得把平台授权桩/本机MD证据当作真实IAM、Agent、前端或Linux PDF/Office验收；接口与回执见当前专项交接

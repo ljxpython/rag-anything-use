@@ -10,7 +10,13 @@ from uuid import UUID
 from fastmcp.exceptions import ToolError
 from fastmcp.server.auth import AccessToken, TokenVerifier
 from fastmcp.server.dependencies import get_access_token
-from pydantic import BaseModel, ConfigDict, ValidationInfo, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 from src.knowledge.config import KnowledgeServiceConfig
 from src.knowledge.project_paths import build_knowledge_project_paths
@@ -20,7 +26,19 @@ class KnowledgeScope(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     tenant_id: str
     project_id: str
-    namespace: str
+    namespace: str | None = None
+    knowledge_base_id: str | None = None
+
+    @model_validator(mode="after")
+    def select_mode(self):
+        if (self.namespace is None) == (self.knowledge_base_id is None):
+            raise ValueError("knowledge_scope_mode_required")
+        if self.knowledge_base_id is not None:
+            import re
+
+            if not re.fullmatch(r"kb_[a-f0-9]{32}", self.knowledge_base_id):
+                raise ValueError("invalid_knowledge_base_id")
+        return self
 
     @field_validator("tenant_id", "project_id")
     @classmethod
@@ -44,11 +62,22 @@ class KnowledgeTokenVerifier(TokenVerifier):
             if not isinstance(token, str) or len(token) < 32 or token != token.strip():
                 raise ValueError("invalid_knowledge_token")
             scope = KnowledgeScope.model_validate(value)
-            build_knowledge_project_paths(scope.namespace, config)
+            if scope.namespace is not None:
+                build_knowledge_project_paths(scope.namespace, config)
+            else:
+                from src.knowledge.jobs import KnowledgeJobStore
+
+                project = KnowledgeJobStore(config).project(scope.knowledge_base_id)
+                if (project["tenant_id"], project["project_id"]) != (
+                    scope.tenant_id,
+                    scope.project_id,
+                ):
+                    raise ValueError("knowledge_scope_denied")
             owner = (scope.tenant_id, scope.project_id)
-            if scope.namespace in owners and owners[scope.namespace] != owner:
+            resource = scope.namespace or scope.knowledge_base_id
+            if resource in owners and owners[resource] != owner:
                 raise ValueError("knowledge_namespace_scope_conflict")
-            owners[scope.namespace] = owner
+            owners[resource] = owner
             self.token_scopes[token] = scope
 
     async def verify_token(self, token: str) -> AccessToken | None:

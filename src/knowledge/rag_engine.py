@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import logging
+from contextvars import ContextVar
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -32,11 +33,45 @@ from src.knowledge.schemas import (
 )
 
 logger = logging.getLogger(__name__)
+CHUNK_DOCUMENT = ContextVar("knowledge_chunk_document", default=None)
+
+
+def install_document_chunk_ids():
+    from lightrag import lightrag as native
+
+    if getattr(native.compute_mdhash_id, "_knowledge_document_scoped", False):
+        return
+    original = native.compute_mdhash_id
+
+    def scoped(content, prefix=""):
+        document = CHUNK_DOCUMENT.get()
+        return original(
+            document + "\n" + content if prefix == "chunk-" and document else content,
+            prefix=prefix,
+        )
+
+    scoped._knowledge_document_scoped = True
+    native.compute_mdhash_id = scoped
+
+
+def storage_workspace(paths: KnowledgeProjectPaths) -> str:
+    return "kb_" + hashlib.sha256(str(paths.project_dir).encode()).hexdigest()[:24]
+
+
+async def storage_io(function, *args, **kwargs):
+    task = asyncio.create_task(asyncio.to_thread(function, *args, **kwargs))
+    try:
+        return await asyncio.shield(task)
+    except asyncio.CancelledError:
+        # A cancelled to_thread keeps writing; join it before deleting its reader directory.
+        await asyncio.gather(task, return_exceptions=True)
+        raise
 
 
 class ProjectRAGEngine:
-    def __init__(self, config: KnowledgeServiceConfig) -> None:
+    def __init__(self, config: KnowledgeServiceConfig, *, usage=None) -> None:
         self.config = config
+        self.usage = usage
         self._rag_cache: dict[str, RAGAnything] = {}
         self._lightrag_cache: dict[str, LightRAG] = {}
         self._init_lock = asyncio.Lock()
@@ -75,10 +110,11 @@ class ProjectRAGEngine:
             if project_id in self._lightrag_cache:
                 return self._lightrag_cache[project_id]
             paths = await self.ensure_project_dirs(project_id)
-            workspace = (
-                "kb_" + hashlib.sha256(str(paths.project_dir).encode()).hexdigest()[:24]
-            )
-            rag = build_lightrag(str(paths.rag_workdir), workspace=workspace)
+            workspace = storage_workspace(paths)
+            kwargs = {"workspace": workspace}
+            if self.usage is not None:
+                kwargs["usage"] = self.usage
+            rag = await storage_io(build_lightrag, str(paths.rag_workdir), **kwargs)
             try:
                 async with asyncio.timeout(60):
                     await rag.initialize_storages()
@@ -153,9 +189,18 @@ class ProjectRAGEngine:
             "status": "ingested",
         }
 
-    async def ingest_text(self, project_id: str, document_id: str, text: str) -> None:
+    async def ingest_text(
+        self, project_id: str, document_id: str, text: str, *, document_chunks=False
+    ) -> None:
         rag = await self.get_lightrag(project_id)
-        await rag.ainsert(text, ids=document_id, file_paths=document_id)
+        # Native content-only chunk IDs overwrite sources across distinct originals.
+        if document_chunks:
+            install_document_chunk_ids()
+        token = CHUNK_DOCUMENT.set(document_id if document_chunks else None)
+        try:
+            await rag.ainsert(text, ids=document_id, file_paths=document_id)
+        finally:
+            CHUNK_DOCUMENT.reset(token)
         await self.assert_document_ready(project_id, document_id)
 
     async def assert_document_ready(self, project_id: str, document_id: str) -> None:

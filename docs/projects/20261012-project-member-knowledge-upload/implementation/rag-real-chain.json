@@ -1,0 +1,352 @@
+{
+  "platform": "local signed authorization stub, not production IAM",
+  "models": "current .env, real HTTP providers",
+  "processing_signature": "d44ebe1e78254fd6d8c0ab4ff3a360a6167bfaf203ef38216b24254b897f54e8",
+  "checks": {
+    "http_mcp_queued": true,
+    "real_worker_ready": true,
+    "duplicate_zero_new_usage": true,
+    "mcp_old_and_new_sources": true,
+    "rollback_searchable": true,
+    "published_files_unchanged": true
+  },
+  "usage": {
+    "A": {
+      "events": {
+        "parse": 1,
+        "embedding": 12,
+        "llm_cache_miss": 4,
+        "graph_extraction": 2
+      },
+      "rows": [
+        {
+          "stage": "parsing",
+          "kind": "parse",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "new_chunks",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 5964, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 5613}, \"cost\": 0.003619566, \"cost_details\": null, \"gateway_cost\": 0.003619566, \"is_byok\": false, \"market_cost\": 0.003619566, \"prompt_tokens\": 3285, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3072, \"video_tokens\": 0}, \"total_tokens\": 9249}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 8011, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 7964}, \"cost\": 0.0049422, \"cost_details\": null, \"gateway_cost\": 0.0049422, \"is_byok\": false, \"market_cost\": 0.0049422, \"prompt_tokens\": 4040, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3200, \"video_tokens\": 0}, \"total_tokens\": 12051}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 17, \"total_tokens\": 17}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 14, \"total_tokens\": 14}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 21, \"total_tokens\": 21}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 16, \"total_tokens\": 16}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 14, \"total_tokens\": 14}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 22, \"total_tokens\": 22}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 17, \"total_tokens\": 17}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 19, \"total_tokens\": 19}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 24, \"total_tokens\": 24}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 25, \"total_tokens\": 25}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 22, \"total_tokens\": 22}",
+          "usage_source": "provider"
+        }
+      ]
+    },
+    "B": {
+      "events": {
+        "parse": 1,
+        "embedding": 10,
+        "llm_cache_miss": 4,
+        "graph_extraction": 2
+      },
+      "rows": [
+        {
+          "stage": "parsing",
+          "kind": "parse",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "new_chunks",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 2152, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 1801}, \"cost\": 0.001332366, \"cost_details\": null, \"gateway_cost\": 0.001332366, \"is_byok\": false, \"market_cost\": 0.001332366, \"prompt_tokens\": 3285, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3072, \"video_tokens\": 0}, \"total_tokens\": 5437}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 2647, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 2639}, \"cost\": 0.0017238, \"cost_details\": null, \"gateway_cost\": 0.0017238, \"is_byok\": false, \"market_cost\": 0.0017238, \"prompt_tokens\": 4040, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3200, \"video_tokens\": 0}, \"total_tokens\": 6687}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "affected_graph_merge",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 31, \"total_tokens\": 31}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 19, \"total_tokens\": 19}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 12, \"total_tokens\": 12}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 20, \"total_tokens\": 20}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 21, \"total_tokens\": 21}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 31, \"total_tokens\": 31}",
+          "usage_source": "provider"
+        }
+      ]
+    }
+  },
+  "receipts": [
+    {
+      "version": 1,
+      "job_id": "kj_62968cb98dc14e54a20ae38d3cc1fca5",
+      "document_id": "kd_2a821494c6054e4092d49e5b31d31816",
+      "file_name": "fixture-A.md",
+      "status": "ready",
+      "searchable": true,
+      "error_code": null,
+      "created_at": "2026-10-12T11:03:14.274256Z",
+      "updated_at": "2026-10-12T11:04:45.509986Z"
+    },
+    {
+      "version": 1,
+      "job_id": "kj_2affc814e4ac432eb504ca34835d1ba7",
+      "document_id": "kd_1bd6e235694a4c788b1c7d4c1edc49e7",
+      "file_name": "fixture-B.md",
+      "status": "ready",
+      "searchable": true,
+      "error_code": null,
+      "created_at": "2026-10-12T11:04:52.180819Z",
+      "updated_at": "2026-10-12T11:05:29.988123Z"
+    }
+  ],
+  "source_ids": [
+    "kd_2a821494c6054e4092d49e5b31d31816",
+    "kd_1bd6e235694a4c788b1c7d4c1edc49e7"
+  ],
+  "amount": null
+}

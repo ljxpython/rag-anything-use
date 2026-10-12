@@ -1,10 +1,10 @@
 # MCP 消费方接入
 
-2026-10-11生效。正式契约为Bearer认证的Streamable HTTP `/mcp`；旧SSE优先与带project_id的query工具说明已被取代。FastMCP 3.2.0，平台锁定langchain-mcp-adapters 0.3.2，不切换beta API。
+2026-10-12生效。正式契约为Bearer认证的Streamable HTTP `/mcp`；旧SSE优先与带project_id的query工具说明已被取代。FastMCP 3.2.0，平台锁定langchain-mcp-adapters 0.3.2，不切换beta API。RAG online 写入仍默认关闭，平台接线须按专项交接启用。
 
 ## 配置与授权
 
-每个项目配置独立长随机token，知识服务端将其绑定tenant/project/namespace。消费方只把Bearer放在HTTP headers；模型输入只有query/top_k，不能选择scope/namespace/URL。接口参数不作为授权边界。未知/失效token HTTP401，无默认corpus回退。
+每个legacy项目配置独立长随机token，知识服务端将其绑定tenant/project/namespace；online逻辑项目绑定 `knowledge_base_id`。消费方只把Bearer放在HTTP headers；查询模型输入只有query/top_k，不能选择scope/namespace/URL。接口参数不作为授权边界。未知/失效token HTTP401，无默认corpus回退。写工具还必须由平台 Runtime 注入 `X-Knowledge-Upload-ID` 与短时 `X-Knowledge-Operation-Grant`，静态 Bearer 不具备写权限。
 
 平台以 `PLATFORM_KNOWLEDGE_MCP_BINDINGS_JSON` 将可信tenant:project映射到resource；Runtime `RUNTIME_MCP_CONNECTIONS_JSON` 保存resource连接、Authorization、scope、allowed_tools。新Thread由平台签发binding，Runtime核对tenant/project/thread和connection.scope后再discovery。MCP配置不能经浏览器Context/metadata/input传入。
 
@@ -20,7 +20,7 @@
 }
 ```
 
-平台仅装配查询工具，管理读工具仍在MCP端同scope，但不进模型allowlist。不同连接允许同名查询；单个连接重复名字、非只读hint、保留名冲突或scope错误拒绝。
+平台 legacy 连接仅装配查询工具，管理读工具仍在MCP端同scope，但不进模型allowlist。online 连接按当前权限/审批精确装配 `mcp_submit_project_knowledge_document`，不能借此放开其它写工具。不同连接允许同名查询；单个连接重复名字、非只读hint、保留名冲突或scope错误拒绝。
 
 ## 输出
 
@@ -32,7 +32,7 @@ Runtime通过官方interceptor在Adapter转换前校验/投影，最多8条/800�
 
 ## 维护与回退
 
-已发布namespace不可追加；新版本完整离线入库+发布后切token→namespace并重启服务。模型名/Embedding模型/维度变更必须重建。启动会校验全部scope的ready状态和签名，失败则整个服务拒绝启动，不能偷偷回到另一项目资料。
+legacy 已发布namespace不可追加；新版本完整离线入库+发布后切token→namespace并重启服务。online 使用完整冻结快照候选＋原子 active 指针，不改 published namespace。模型名/Embedding模型/维度变更必须新建逻辑库/namespace。启动会校验全部scope的ready状态和签名，失败则整个服务拒绝启动，不能偷偷回到另一项目资料。
 
 停用先在平台项目工具策略deny查询，处理在途Run，再撤token、移除新Thread映射或停服务。只移除API映射不会撤销旧Thread binding。保留历史/语料；恢复时用仍获授权的旧namespace/resource，不做数据删除。
 

@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 from urllib import request
 
 import numpy as np
+import httpx
 from dotenv import load_dotenv
 from lightrag import LightRAG
 from lightrag.llm.openai import openai_complete_if_cache
@@ -102,7 +103,7 @@ def get_test_image_path() -> Path:
     return path
 
 
-def build_llm_model_func(settings: DemoSettings):
+def build_llm_model_func(settings: DemoSettings, *, usage=None):
     extra_body = json.loads(os.getenv("LLM_EXTRA_BODY_JSON", "{}"))
     if not isinstance(extra_body, dict):
         raise TypeError("invalid_llm_extra_body")
@@ -113,6 +114,60 @@ def build_llm_model_func(settings: DemoSettings):
         history_messages: list[dict[str, Any]] | None = None,
         **kwargs: Any,
     ) -> str:
+        if usage is not None:
+            kind = "graph_extraction" if system_prompt else "affected_graph_merge"
+
+            async def measured():
+                from tenacity import (
+                    AsyncRetrying,
+                    retry_if_exception_type,
+                    stop_after_attempt,
+                    wait_exponential,
+                )
+                from openai import APIConnectionError, APITimeoutError, RateLimitError
+                from lightrag.llm.openai import InvalidResponseError
+
+                async for attempt in AsyncRetrying(
+                    stop=stop_after_attempt(3),
+                    wait=wait_exponential(min=4, max=10),
+                    retry=retry_if_exception_type(
+                        (
+                            APIConnectionError,
+                            APITimeoutError,
+                            RateLimitError,
+                            InvalidResponseError,
+                        )
+                    ),
+                    reraise=True,
+                ):
+                    with attempt:
+                        async with httpx.AsyncClient(
+                            transport=UsageTransport(usage, kind)
+                        ) as client:
+                            # The upstream helper closes its supplied HTTP client each attempt.
+                            return await openai_complete_if_cache.__wrapped__(
+                                settings.llm_model,
+                                prompt,
+                                system_prompt=system_prompt,
+                                history_messages=history_messages or [],
+                                api_key=settings.llm_api_key,
+                                base_url=settings.llm_base_url,
+                                max_tokens=kwargs.get(
+                                    "max_tokens", settings.llm_max_tokens
+                                ),
+                                extra_body=kwargs.get("extra_body", extra_body),
+                                openai_client_configs={
+                                    "http_client": client,
+                                    "max_retries": 0,
+                                },
+                                **{
+                                    key: value
+                                    for key, value in kwargs.items()
+                                    if key not in {"max_tokens", "extra_body"}
+                                },
+                            )
+
+            return measured()
         return openai_complete_if_cache(
             settings.llm_model,
             prompt,
@@ -215,12 +270,23 @@ async def _ollama_embed(texts: list[str], settings: DemoSettings) -> np.ndarray:
     return await asyncio.to_thread(_ollama_embed_sync, texts, settings)
 
 
-async def _openai_embed(texts: list[str], settings: DemoSettings) -> np.ndarray:
+async def _openai_embed(
+    texts: list[str], settings: DemoSettings, *, usage=None
+) -> np.ndarray:
     async with AsyncOpenAI(
         api_key=settings.embedding_api_key,
         base_url=settings.embedding_base_url,
         timeout=60,
         max_retries=0,
+        **(
+            {
+                "http_client": httpx.AsyncClient(
+                    transport=UsageTransport(usage, "embedding")
+                )
+            }
+            if usage is not None
+            else {}
+        ),
     ) as client:
         response = await client.embeddings.create(
             model=settings.embedding_model,
@@ -240,7 +306,7 @@ async def _openai_embed(texts: list[str], settings: DemoSettings) -> np.ndarray:
     return vectors
 
 
-def build_embedding_func(settings: DemoSettings) -> EmbeddingFunc:
+def build_embedding_func(settings: DemoSettings, *, usage=None) -> EmbeddingFunc:
     if settings.embedding_provider == "ollama":
         embed = _ollama_embed
     elif settings.embedding_provider == "openai":
@@ -249,10 +315,25 @@ def build_embedding_func(settings: DemoSettings) -> EmbeddingFunc:
         embed = _openai_embed
     else:
         raise ValueError("invalid_embedding_provider")
+
+    async def measured_embed(texts):
+        if usage is None:
+            return await embed(texts, settings)
+        if embed is _openai_embed:
+            return await embed(texts, settings, usage=usage)
+        row = usage.begin("embedding", len(texts), stage=usage.embedding_stage(texts))
+        try:
+            result = await embed(texts, settings)
+            usage.finish(row)
+            return result
+        except BaseException:
+            usage.finish(row, status="unknown")
+            raise
+
     return EmbeddingFunc(
         embedding_dim=settings.embedding_dim,
         max_token_size=settings.embedding_max_tokens,
-        func=lambda texts: embed(texts, settings),
+        func=measured_embed,
     )
 
 
@@ -338,16 +419,46 @@ def build_raganything(
     )
 
 
-def build_lightrag(working_dir: str, *, workspace: str = "") -> LightRAG:
+def build_lightrag(working_dir: str, *, workspace: str = "", usage=None) -> LightRAG:
     settings = load_settings()
-    llm_model_func = build_llm_model_func(settings)
-    embedding_func = build_embedding_func(settings)
+    llm_model_func = build_llm_model_func(settings, usage=usage)
+    embedding_func = build_embedding_func(settings, usage=usage)
     return LightRAG(
         working_dir=working_dir,
         workspace=workspace,
         llm_model_func=llm_model_func,
         embedding_func=embedding_func,
     )
+
+
+class UsageTransport(httpx.AsyncBaseTransport):
+    def __init__(self, usage, kind):
+        self.usage, self.kind = usage, kind
+        self.inner = httpx.AsyncHTTPTransport(retries=0)
+
+    async def handle_async_request(self, request):
+        body = json.loads(request.content)
+        inputs = body.get("input", [])
+        if not isinstance(inputs, list):
+            inputs = [inputs]
+        stage = self.usage.embedding_stage(inputs) if self.kind == "embedding" else None
+        row = self.usage.begin(self.kind, len(inputs), stage=stage)
+        try:
+            response = await self.inner.handle_async_request(request)
+            await response.aread()
+            payload = response.json()
+            self.usage.finish(
+                row,
+                payload.get("usage"),
+                status="complete" if response.is_success else "failed",
+            )
+            return response
+        except BaseException:
+            self.usage.finish(row, status="unknown")
+            raise
+
+    async def aclose(self):
+        await self.inner.aclose()
 
 
 def encode_image_file(image_path: Path) -> str:

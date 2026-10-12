@@ -4,7 +4,7 @@
 - **目标：** 普通项目成员在现有 AI 平台上传附件，通过 Agent 的 MCP 工具提交后台入库任务；成功后自动加入项目共享知识库，新旧资料均可检索。
 - **模板类型：** 标准模板
 - **改动级别：** 接口/架构改动；跨平台权限、Runtime 写工具和索引发布的治理改动。
-- **状态：** `partial`；G01、K01–K08 与 RAG 配置的 UTF-8 MD/TXT 范围完成，67项回归与真实RAG worker/HTTP/MCP通过。完整快照恢复、零调用复用、失败隔离及回退证据已落盘；平台权限/可信附件/Runtime、前端、Linux格式/负载与部署仍待对应团队联合验收，online默认关闭。
+- **状态：** `partial`；G01、K01–K08 的MD/TXT范围及provider两项契约修复完成，78项回归、实际Platform API HTTP＋隔离SQL/IAM/Run＋真实模型七检查通过。完整快照增量、失ACK回查、Thread删除继续和撤权拒绝已验；Runtime Agent/可信附件/前端、Linux格式/负载及部署仍待对应团队联合验收，online默认关闭。
 - **协作：** 非前端由后端/Runtime 开发者实施；前端由用户同事接续。
 
 ## 导航
@@ -14,6 +14,7 @@
 3. [验证计划和记录](verification.md)：验证矩阵及真实证据要求。
 4. [前端交接](frontend-handoff.md)：页面范围、接口、任务卡、交接话术。
 5. [RAG接线交接](implementation/rag-handoff.md)：内部headers、专用授权签名、配置、迁移与回退；[实施证据](implementation/rag-evidence.md)。
+6. [平台provider契约修复](../20261012-rag-provider-contract-alignment/README.md)：后台完整来源/文件绑定、新租约、失ACK GET及实际平台HTTP验收。
 
 ## 已确认的需求
 

@@ -50,7 +50,7 @@ async def run():
                     self.rfile.read(int(self.headers["content-length"]))
                 )
                 assert envelope == signed(envelope["values"], config)
-                clock = time.time()
+                clock = int(time.time())
                 values = {
                     **envelope["values"],
                     "issuer": "platform-api",
@@ -95,6 +95,7 @@ async def run():
             principal_type="user",
             credential_id=None,
             resource_id="fixture-resource",
+            graph_id="showcase_demo",
             thread_id="fixture-thread",
             run_id="fixture-run",
             tool_call_id="fixture-call",
@@ -131,7 +132,7 @@ async def run():
                 size_bytes=len(data),
                 sha256=digest,
             )
-            clock = time.time()
+            clock = int(time.time())
             grant = signed(
                 {
                     **scope,
@@ -139,6 +140,8 @@ async def run():
                     "request_id": request_id,
                     "sha256": digest,
                     "size_bytes": len(data),
+                    "file_name": ref["file_name"],
+                    "mime_type": ref["mime_type"],
                     "issuer": "platform-api",
                     "audience": "rag-knowledge",
                     "operation": "upload",

@@ -255,6 +255,8 @@ class KnowledgeUploadService:
                 "request_id": request_id,
                 "sha256": ref["sha256"],
                 "size_bytes": ref["size_bytes"],
+                "file_name": ref["file_name"],
+                "mime_type": ref["mime_type"],
             },
         )
         identity = operation_identity(values)
@@ -372,7 +374,13 @@ class KnowledgeUploadService:
             grant,
             scope,
             "upload",
-            {**identity, "sha256": ref["sha256"], "size_bytes": ref["size_bytes"]},
+            {
+                **identity,
+                "sha256": ref["sha256"],
+                "size_bytes": ref["size_bytes"],
+                "file_name": ref["file_name"],
+                "mime_type": ref["mime_type"],
+            },
         )
         if json.loads(ticket["file_ref"]) != ref:
             raise ValueError("knowledge_content_conflict")
@@ -403,3 +411,17 @@ class KnowledgeUploadService:
         with self.store.connect(write=True) as db:
             db.execute("UPDATE uploads SET consumed=1 WHERE id=?", (upload_id,))
         return receipt
+
+    def lookup_request(self, scope, request_id, grant):
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", request_id):
+            raise ValueError("invalid_file_ref")
+        self.scope_project(scope)
+        values = self.authorizer.verify(
+            grant, scope, "upload", {"request_id": request_id}
+        )
+        return {
+            "request_id": request_id,
+            "receipt": self.store.request_receipt(
+                scope.knowledge_base_id, request_id, operation_identity(values)
+            ),
+        }

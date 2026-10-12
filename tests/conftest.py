@@ -58,6 +58,7 @@ def published_config(tmp_path, monkeypatch):
 @pytest.fixture
 def online_services(published_config, monkeypatch):
     import time
+    from uuid import uuid4
     from dataclasses import replace
     from types import SimpleNamespace
     from lightrag import LightRAG
@@ -110,14 +111,14 @@ def online_services(published_config, monkeypatch):
             return self.grant(scope, operation, {**identity, **expected})
 
         def grant(self, scope, operation, expected):
-            clock = time.time()
+            clock = int(time.time())
             return signed(
                 {
                     "issuer": "platform-api",
                     "audience": "rag-knowledge",
                     "iat": clock,
                     "exp": clock + 30,
-                    "nonce": "n" * 32,
+                    "nonce": uuid4().hex,
                     "operation": operation,
                     "tenant_id": scope.tenant_id,
                     "project_id": scope.project_id,
@@ -134,6 +135,7 @@ def online_services(published_config, monkeypatch):
         principal_type="user",
         credential_id="credential1",
         resource_id="resource1",
+        graph_id="showcase_demo",
         thread_id="thread1",
         run_id="run1",
         tool_call_id="call1",

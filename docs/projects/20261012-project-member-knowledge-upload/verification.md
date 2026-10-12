@@ -182,6 +182,8 @@ uv run --frozen python -m pytest "tests/tools/test_knowledge_upload.py" "tests/t
 
 ## 8. Final 验证记录
 
+后续用户指定平台provider清单两项修复已在 [独立对齐项目](../20261012-rag-provider-contract-alignment/verification.md)验收：78项回归、实际平台授权HTTP＋隔离IAM/Run＋真实模型七检查通过。下文保留最初67项/授权桩验收事实；当前交接以新版 [RAG接线](implementation/rag-handoff.md)为准，不把追加HTTP验收写作Runtime Agent/前端整专项完成。
+
 2026-10-12，按verify-change对**本次授权RAG范围**做Final，未勾平台/前端任务不阻止已授权范围收尾，也不假报整专项done。
 
 ```sh

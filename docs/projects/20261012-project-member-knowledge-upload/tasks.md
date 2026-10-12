@@ -154,7 +154,7 @@ P01–P05只表示规划和方向确认完成，不表示功能done。新增权�
 | G01、K01–K08、RAG配置 | done（UTF-8 MD/TXT）；真实RAG worker/HTTP/MCP通过，默认online关闭 |
 | API/Runtime/平台运维代码 | 平台团队实施；本轮未改该工作区 |
 | 前端业务代码 | 由同事接续，待开始 |
-| 新功能测试/联调/部署 | RAG67项回归/真实小语料通过；平台联合、前端、Linux格式/负载及部署待执行 |
+| 新功能测试/联调/部署 | RAG78项回归、[provider两项修复/实际平台HTTP](../20261012-rag-provider-contract-alignment/README.md)通过；Runtime Agent/可信附件、前端、Linux格式/负载及部署待执行 |
 
 整专项partial。增量底层及RAG文本实现已验证；剩余是平台IAM/可信附件/Runtime、前端、Linux documents与实际负载/部署条件。请求金额缺可确认费率为null；已发送但未知结果不承诺exactly-once计费。只保留完整快照增量单一路线，published不可变；无自动全量重建降级或生产发布。
 

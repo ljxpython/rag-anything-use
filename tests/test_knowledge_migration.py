@@ -45,6 +45,12 @@ def test_migration_preserves_ids_ready_null_receipt_and_no_models(
             and receipt["reused"]
         )
         assert len(s.calls.rows) == before
+        from test_knowledge_upload import fixture
+
+        _, grant = fixture(s, original.read_bytes(), "repeat", "同名.md")
+        lookup = s.uploads.lookup_request(s.scope, "repeat", grant)
+        assert lookup["receipt"] == receipt and lookup["receipt"]["job_id"] is None
+        assert len(s.calls.rows) == before
         await s.generations.close()
 
     asyncio.run(run())

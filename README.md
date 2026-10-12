@@ -49,6 +49,8 @@ uv run --frozen --env-file ".env" python "main.py" activate-knowledge-generation
 
 内部 PUT 只接收 Runtime 传来的实际原字节和六字段 FileRef；MCP 提交工具只接受 `file_ref`，由官方 interceptor 注入短时 grant 与 upload ticket。RAG 使用完整冻结快照恢复到独立候选，只处理新文档，校验后原子激活；不直接改 active namespace，不自动全量重建。详见 [RAG 接线交接](docs/projects/20261012-project-member-knowledge-upload/implementation/rag-handoff.md)。
 
+失 ACK 后使用同 request_id 的内部 GET＋新 upload grant 只读回查，不再次 submit/换 key；后台持久保存原 graph/来源/文件字段并重新申请 start/activate 租约。旧版本任务缺可信字段时不自动补造来源，须重新明确提交合法请求。详见 [平台契约修复与升级](docs/projects/20261012-rag-provider-contract-alignment/README.md)。
+
 ## 离线入库与发布
 
 `--project-id` 是管理员 CLI 的索引 namespace，**不是网络工具参数**。当前文本资料以 UTF-8 保存。
@@ -96,7 +98,7 @@ asyncio.run(main())
 uv run --frozen --group dev python -m pytest "tests" -q
 ```
 
-2026-10-12 RAG范围完整测试67项通过（35.76秒），包含HTTP/stdio、范围安全、持久任务、原件票据、快照增量、调用计数、迁移/回退、故障进程回收及候选缓存回收。另有真实 DeepSeek/Embedding + worker/HTTP/MCP 隔离链路证据；生产IAM、前端、Linux格式和部署尚未联合验收。
+2026-10-12 完整测试78项通过（52.28秒），包含HTTP/stdio、范围安全、持久任务、原件票据、快照增量、调用计数、迁移/回退、故障回收与后台授权/失ACK回查。实际 Platform API HTTP＋隔离 SQL/IAM/Run＋真实 DeepSeek/百炼＋worker/MCP七项检查通过；Runtime Agent、前端、生产IAM、Linux格式和部署尚未联合验收。
 
 独立本地服务另外完成两namespace真实入库/发布、两凭据HTTP检索、平台两主图真实Worker/DeepSeek链路；平台11项真实验收通过，含授权/撤权、Stop、fork和历史。读锁拒写、失败索引拒发布、新版本独立凭据、保留旧索引和MCP/Embedding重启也有证据。3份Markdown的30题合成检索验收：20题有答案Recall@8=100%，跨项目来源0；这不代表PDF或业务corpus准确率。PDF/Office Docling在Intel本机阻塞。
 

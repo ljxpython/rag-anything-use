@@ -30,6 +30,8 @@ def fixture(
             "request_id": request_id,
             "sha256": digest,
             "size_bytes": len(data),
+            "file_name": name,
+            "mime_type": mime,
         },
     )
     return ref, grant
@@ -68,11 +70,48 @@ def test_upload_durable_ticket_idempotency_private_binding(online_services):
                 "request_id": "request",
                 "sha256": ref["sha256"],
                 "size_bytes": ref["size_bytes"],
+                "file_name": ref["file_name"],
+                "mime_type": ref["mime_type"],
             },
         )
         with pytest.raises(ValueError, match="knowledge_authorization_denied"):
             s.uploads.submit_document(s.scope, ticket["upload_id"], ref, forged)
         return ticket
+
+    asyncio.run(run())
+
+
+def test_request_lookup_reuses_receipt_without_enqueue_or_usage(online_services):
+    s = online_services
+    ref, grant = fixture(s)
+
+    async def run():
+        ticket = await s.uploads.stage_upload(
+            s.scope, "request", ref, grant, stream(b"# content")
+        )
+        receipt = s.uploads.submit_document(s.scope, ticket["upload_id"], ref, grant)
+        with s.store.connect() as db:
+            before = (
+                db.execute("SELECT count(*) FROM jobs").fetchone()[0],
+                db.execute("SELECT count(*) FROM usage").fetchone()[0],
+            )
+        looked_up = s.uploads.lookup_request(s.scope, "request", grant)
+        assert looked_up["receipt"]["job_id"] == receipt["job_id"]
+        assert looked_up["receipt"]["reused"] is True
+        s.uploads.config = replace(s.config, online_enabled=False)
+        looked_up_while_write_closed = s.uploads.lookup_request(
+            s.scope, "request", grant
+        )
+        assert looked_up_while_write_closed == looked_up
+        with s.store.connect(write=True) as db:
+            # Acceptance can survive a crash before the upload ticket is marked consumed.
+            db.execute("DELETE FROM uploads WHERE id=?", (ticket["upload_id"],))
+        assert s.uploads.lookup_request(s.scope, "request", grant) == looked_up
+        with s.store.connect() as db:
+            assert (
+                db.execute("SELECT count(*) FROM jobs").fetchone()[0],
+                db.execute("SELECT count(*) FROM usage").fetchone()[0],
+            ) == before
 
     asyncio.run(run())
 
@@ -109,8 +148,8 @@ def test_validation_and_grants_fail_closed(online_services, mutation):
     elif mutation == "signature":
         grant["signature"] = "a" * 64
     else:
-        grant["values"]["iat"] = time.time() - 60
-        grant["values"]["exp"] = time.time() - 30
+        grant["values"]["iat"] = int(time.time()) - 60
+        grant["values"]["exp"] = int(time.time()) - 30
         grant = signed(grant["values"], s.config, grant=True)
     with pytest.raises(ValueError):
         asyncio.run(
@@ -201,6 +240,10 @@ def test_same_bytes_different_text_extensions_share_original_and_job(online_serv
             )
         assert receipts[0]["document_id"] == receipts[1]["document_id"]
         assert receipts[0]["job_id"] == receipts[1]["job_id"] and receipts[1]["reused"]
+        assert (
+            s.uploads.lookup_request(s.scope, "txt", grant)["receipt"]["job_id"]
+            == receipts[0]["job_id"]
+        )
         assert (
             len(
                 list(

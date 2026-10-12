@@ -7,6 +7,7 @@ import hmac
 import json
 import re
 import time
+from uuid import uuid4
 
 import httpx
 
@@ -14,7 +15,13 @@ from src.knowledge.config import KnowledgeServiceConfig
 
 
 def canonical(values):
-    return json.dumps(values, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    return json.dumps(
+        values,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+        allow_nan=False,
+    )
 
 
 def signed(values, config, *, grant=False):
@@ -56,8 +63,11 @@ class KnowledgeOperationAuthorizer:
                 envelope = json.loads(envelope)
             values = envelope["values"]
             if (
-                envelope["version"] != 1
+                set(envelope) != {"version", "key_id", "values", "signature"}
+                or type(envelope["version"]) is not int
+                or envelope["version"] != 1
                 or envelope["key_id"] != self.config.authorization_key_id
+                or not isinstance(values, dict)
             ):
                 raise ValueError
             signature = envelope["signature"]
@@ -77,12 +87,12 @@ class KnowledgeOperationAuthorizer:
                 or values["tenant_id"] != scope.tenant_id
                 or values["project_id"] != scope.project_id
                 or values["knowledge_base_id"] != scope.knowledge_base_id
-                or type(values["iat"]) not in (int, float)
-                or type(values["exp"]) not in (int, float)
+                or type(values["iat"]) is not int
+                or type(values["exp"]) is not int
                 or not clock - 30 <= values["iat"] <= clock
                 or not clock < values["exp"] <= values["iat"] + 30
                 or not isinstance(values["nonce"], str)
-                or not 16 <= len(values["nonce"]) <= 128
+                or not re.fullmatch("[a-f0-9]{32}", values["nonce"])
                 or any(values.get(key) != value for key, value in expected.items())
             ):
                 raise ValueError
@@ -97,11 +107,14 @@ class KnowledgeOperationAuthorizer:
                 and not isinstance(values["credential_id"], str)
             ):
                 raise ValueError
-            if operation == "upload" and any(
+            if any(
                 not isinstance(values.get(key), str) or not values[key]
                 for key in ("thread_id", "run_id", "tool_call_id")
             ):
                 raise ValueError
+            if values.get("graph_id") not in {"dearflow_agent", "showcase_demo"}:
+                raise ValueError
+            operation_identity(values)
             return values
         except (KeyError, TypeError, ValueError):
             raise ValueError("knowledge_authorization_denied") from None
@@ -109,24 +122,30 @@ class KnowledgeOperationAuthorizer:
     async def authorize(self, scope, operation, identity, expected):
         if not self.configured:
             raise ValueError("knowledge_authorization_unavailable")
-        values = {
-            **identity,
-            **expected,
-            "operation": operation,
-            "tenant_id": scope.tenant_id,
-            "project_id": scope.project_id,
-            "knowledge_base_id": scope.knowledge_base_id,
-        }
         try:
+            binding = {**operation_identity(identity), **expected}
+            clock = int(time.time())
+            values = {
+                **binding,
+                "operation": operation,
+                "tenant_id": scope.tenant_id,
+                "project_id": scope.project_id,
+                "knowledge_base_id": scope.knowledge_base_id,
+                "issuer": "rag-anything-use",
+                "audience": "platform-api",
+                "iat": clock,
+                "exp": clock + 30,
+                "nonce": uuid4().hex,
+            }
             async with httpx.AsyncClient(timeout=10, follow_redirects=False) as client:
                 response = await client.post(
                     self.config.authorize_url, json=signed(values, self.config)
                 )
                 response.raise_for_status()
                 envelope = response.json()
-                self.verify(envelope, scope, operation, {**identity, **expected})
+                self.verify(envelope, scope, operation, binding)
                 return envelope
-        except (httpx.HTTPError, ValueError):
+        except (httpx.HTTPError, KeyError, TypeError, ValueError):
             raise ValueError("knowledge_authorization_denied") from None
 
 
@@ -139,9 +158,13 @@ def operation_identity(values):
             "credential_id",
             "resource_id",
             "request_id",
+            "graph_id",
             "thread_id",
             "run_id",
             "tool_call_id",
+            "sha256",
+            "size_bytes",
+            "file_name",
+            "mime_type",
         )
-        if key in values
     }

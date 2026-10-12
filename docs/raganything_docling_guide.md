@@ -1,5 +1,7 @@
 # RAG-Anything 使用说明与二次开发指南
 
+2026-10-12更新：当前锁定RAG-Anything 1.4.2 / Docling 2.84.0 / LightRAG 1.4.12。Docling现走Python API并缓存converter；本项目修复了tuple返回契约、可信prov页码、表格Markdown表示、首解析缓存和多模态workspace/资产路径。以下为设计底稿，实际格式支持与外部视觉限制以[升级专项验证](projects/20261012-rag-optimization/verification.md)为准。
+
 ## 1. 文档目的
 
 这份文档用于给当前项目做技术底稿，目标不是分析 RAG-Anything 源码实现细节本身，而是回答下面几个开发问题：
@@ -618,7 +620,7 @@ await rag.insert_content_list(
 
 ### 9.2 `parse_method` 对 `DoclingParser` 基本没有实际作用
 
-`DoclingParser.parse_pdf()` 保留了 `method` 参数，但内部执行 `docling` CLI 时并没有使用这个参数。
+1.4.2的 `DoclingParser.parse_pdf()` 保留 `method` 参数，内部使用Docling Python API；该参数没有自动成为Docling pipeline的OCR切换开关。CPU/GPU、OCR、表格模式等需根据实际pipeline选项验收。
 
 也就是说：
 
@@ -636,28 +638,13 @@ await rag.insert_content_list(
 
 那这条路不成立，得单独设计图片处理策略。
 
-### 9.4 `DoclingParser` 里页码是估算值
+### 9.4 页码以可信来源为准
 
-当前 `read_from_block()` 里 `page_idx` 使用的是 `cnt // 10` 这种粗略分配方式，不是真正从原始页码精确映射过来的。
-
-这会影响：
-
-- 上下文抽取
-- 多模态内容与页码相关的定位
-- 你后面要做引用高亮或页码跳转
-
-如果你的产品强依赖精确页码，建议后续自己接管 Docling 结果清洗。
+本项目从Docling `prov.page_no`读取合法的一基页码并转为零基；无prov保持未知。正文chunk跨页范围由RAG-Anything回放分块确定；块级跨页锚点不等于精确高亮，总页数不能用最大页码猜测。MCP当前不返回页码，公开定位功能需要消费方契约评审。
 
 ### 9.5 `table_body` 字段质量要自己验证
 
-`DoclingParser` 当前把表格内容直接取自 `block.get("data", [])`。
-
-这意味着：
-
-- 它不一定天然是 markdown 字符串
-- 也不一定是最适合直接喂给下游 LLM 的格式
-
-如果表格分析是你的重点功能，建议在入库前自己做一次标准化。
+上游把Docling表格的完整结构字典放进 `table_body`，曾导致MCP的800字符预览被geometry/字段挤满、关键数值截断。本项目用已有 `TableData.grid` 和RAG-Anything格式函数转为紧凑Markdown行，原件与解析JSON仍保留；合并单元格、复杂表头和长表仍需具体资料验收。
 
 ### 9.6 示例和测试文件存在过时痕迹
 

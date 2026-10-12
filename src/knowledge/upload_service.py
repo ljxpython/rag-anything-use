@@ -12,7 +12,11 @@ import time
 from pathlib import Path
 from uuid import uuid4
 
-from src.knowledge.artifacts import checksum, fsync_directory, processing_signature
+from src.knowledge.artifacts import (
+    checksum,
+    fsync_directory,
+    compatible_processing_signature,
+)
 from src.knowledge.operation_auth import (
     KnowledgeOperationAuthorizer,
     operation_identity,
@@ -105,7 +109,11 @@ class KnowledgeUploadService:
 
     def capabilities(self, scope):
         project = self.scope_project(scope)
-        signature_ok = project["signature"] == processing_signature(self.config)
+        try:
+            compatible_processing_signature(self.config, project["signature"])
+            signature_ok = True
+        except ValueError:
+            signature_ok = False
         enabled = bool(
             self.config.online_enabled
             and self.authorizer.configured
@@ -353,7 +361,7 @@ class KnowledgeUploadService:
 
     def submit_document(self, scope, upload_id, file_ref, grant):
         ref = validate_file_ref(file_ref, self.config.max_file_bytes)
-        self.scope_project(scope)
+        project = self.scope_project(scope)
         if not self.config.online_enabled:
             raise ValueError("knowledge_upload_disabled")
         with self.store.connect() as db:
@@ -398,7 +406,7 @@ class KnowledgeUploadService:
             identity,
             ref,
             str(original),
-            processing_signature(self.config),
+            compatible_processing_signature(self.config, project["signature"]),
         )
         with self.store.connect(write=True) as db:
             db.execute("UPDATE uploads SET consumed=1 WHERE id=?", (upload_id,))

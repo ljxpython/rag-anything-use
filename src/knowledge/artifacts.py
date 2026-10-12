@@ -50,7 +50,7 @@ def fsync_directory(path):
         os.close(fd)
 
 
-def processing_signature(config):
+def _processing_values(config):
     settings = load_settings()
     defaults = {}
     # Capture effective defaults, including environment-derived graph/chunk parameters.
@@ -76,15 +76,12 @@ def processing_signature(config):
                 if field.default is not MISSING
                 else field.default_factory()
             )
-    packages = {}
-    for package in ("lightrag-hku", "raganything", "docling"):
-        try:
-            packages[package] = version(package)
-        except PackageNotFoundError:
-            packages[package] = None
     values = {
         "version": 1,
-        "packages": packages,
+        "packages": {
+            package: _package_version(package)
+            for package in ("lightrag-hku", "raganything", "docling")
+        },
         "normalizer": 1,
         "chunk_identity": "document-v1",
         "parser": config.parser_name,
@@ -115,7 +112,46 @@ def processing_signature(config):
         "lightrag": defaults,
         "prompts": hashlib.sha256(canonical(PROMPTS).encode()).hexdigest(),
     }
+    return values
+
+
+def _package_version(package):
+    try:
+        return version(package)
+    except PackageNotFoundError:
+        return None
+
+
+def processing_signature(config):
+    values = _processing_values(config)
+    values["version"] = 2
+    # The online builder accepts UTF-8 MD/TXT only and never invokes document parsers.
+    values["packages"] = {"lightrag-hku": values["packages"]["lightrag-hku"]}
     return hashlib.sha256(canonical(values).encode()).hexdigest()
+
+
+def compatible_processing_signature(config, expected):
+    """Retain a reviewed v1 text signature without rewriting immutable snapshots."""
+    if expected == processing_signature(config):
+        return expected
+    values = _processing_values(config)
+    packages = values["packages"]
+    if (
+        packages["lightrag-hku"] == "1.4.12"
+        and packages["raganything"] in (None, "1.2.10", "1.4.2")
+        and packages["docling"] in (None, "2.84.0")
+        and not any(values["multimodal"])
+    ):
+        for rag_version in (None, "1.2.10", "1.4.2"):
+            for docling_version in (None, "2.84.0"):
+                values["packages"] = {
+                    "lightrag-hku": "1.4.12",
+                    "raganything": rag_version,
+                    "docling": docling_version,
+                }
+                if expected == hashlib.sha256(canonical(values).encode()).hexdigest():
+                    return expected
+    raise ValueError("knowledge_processing_config_changed")
 
 
 class KnowledgeArtifactStore:

@@ -9,7 +9,12 @@ import tempfile
 from pathlib import Path
 from uuid import uuid4
 
-from src.knowledge.artifacts import checksum, processing_signature, fsync_directory
+from src.knowledge.artifacts import (
+    checksum,
+    processing_signature,
+    compatible_processing_signature,
+    fsync_directory,
+)
 from src.knowledge.auth import KnowledgeScope
 from src.knowledge.document_registry import KnowledgeDocumentRegistry
 from src.knowledge.generations import (
@@ -31,7 +36,16 @@ class KnowledgeProjectAdmin:
         KnowledgeScope(
             tenant_id=tenant_id, project_id=project_id, namespace="validation"
         )
-        signature = processing_signature(self.store.config)
+        with self.store.connect() as db:
+            previous = db.execute(
+                "SELECT signature FROM projects WHERE tenant_id=? AND project_id=?",
+                (tenant_id, project_id),
+            ).fetchone()
+        signature = (
+            compatible_processing_signature(self.store.config, previous["signature"])
+            if previous
+            else processing_signature(self.store.config)
+        )
         project = self.store.register(tenant_id, project_id, signature)
         return {
             "knowledge_base_id": project["id"],
@@ -41,7 +55,9 @@ class KnowledgeProjectAdmin:
 
     async def migrate(self, kb, namespace, confirmed_signature):
         project = self.store.project(kb)
-        signature = processing_signature(self.store.config)
+        signature = compatible_processing_signature(
+            self.store.config, project["signature"]
+        )
         if confirmed_signature != signature or project["signature"] != signature:
             raise ValueError("knowledge_processing_config_changed")
         if project["active_namespace"] or project["enabled"]:

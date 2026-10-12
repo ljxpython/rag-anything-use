@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastmcp>=3.2.0",
-    "lightrag-hku>=1.4.12",
+    "lightrag-hku==1.4.12",
     "numpy>=2.4.4",
     "pillow>=12.2.0",
     "python-dotenv>=1.2.2",
@@ -17,7 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # Query serving and UTF-8 text ingestion do not need the Torch parser stack.
-documents = ["docling>=2.83.0", "raganything>=1.2.10"]
+documents = ["docling>=2.83.0,<3", "raganything==1.4.2", "mineru[core]>=3.4.1,<4"]
 
 [dependency-groups]
 dev = [

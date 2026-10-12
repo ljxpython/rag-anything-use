@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import atexit
 import hashlib
 import logging
 from contextvars import ContextVar
@@ -36,22 +37,31 @@ logger = logging.getLogger(__name__)
 CHUNK_DOCUMENT = ContextVar("knowledge_chunk_document", default=None)
 
 
-def install_document_chunk_ids():
+def install_document_chunk_ids(*, multimodal=False):
     from lightrag import lightrag as native
 
-    if getattr(native.compute_mdhash_id, "_knowledge_document_scoped", False):
-        return
-    original = native.compute_mdhash_id
+    modules = [native]
+    if multimodal:
+        from raganything import modalprocessors, processor
 
-    def scoped(content, prefix=""):
-        document = CHUNK_DOCUMENT.get()
-        return original(
-            document + "\n" + content if prefix == "chunk-" and document else content,
-            prefix=prefix,
-        )
+        # Page replay and multimodal storage must use the same IDs as native text insertion.
+        modules.extend((processor, modalprocessors))
+    for module in modules:
+        if getattr(module.compute_mdhash_id, "_knowledge_document_scoped", False):
+            continue
+        original = module.compute_mdhash_id
 
-    scoped._knowledge_document_scoped = True
-    native.compute_mdhash_id = scoped
+        def scoped(content, prefix="", _original=original):
+            document = CHUNK_DOCUMENT.get()
+            return _original(
+                document + "\n" + content
+                if prefix == "chunk-" and document
+                else content,
+                prefix=prefix,
+            )
+
+        scoped._knowledge_document_scoped = True
+        module.compute_mdhash_id = scoped
 
 
 def storage_workspace(paths: KnowledgeProjectPaths) -> str:
@@ -95,15 +105,19 @@ class ProjectRAGEngine:
             return cached
         paths = self.get_project_paths(project_id)
         lightrag = await self.get_lightrag(project_id)
-        rag = build_raganything(
-            working_dir=str(paths.rag_workdir),
-            lightrag=lightrag,
-            enable_image_processing=self.config.enable_image_processing,
-            enable_table_processing=self.config.enable_table_processing,
-            enable_equation_processing=self.config.enable_equation_processing,
-        )
-        self._rag_cache[project_id] = rag
-        return rag
+        async with self._init_lock:
+            if project_id not in self._rag_cache:
+                self._rag_cache[project_id] = build_raganything(
+                    working_dir=str(paths.rag_workdir),
+                    lightrag=lightrag,
+                    parser_name=self.config.parser_name,
+                    parse_method=self.config.parse_method,
+                    parser_output_dir=str(paths.parser_dir),
+                    enable_image_processing=self.config.enable_image_processing,
+                    enable_table_processing=self.config.enable_table_processing,
+                    enable_equation_processing=self.config.enable_equation_processing,
+                )
+            return self._rag_cache[project_id]
 
     async def get_lightrag(self, project_id: str) -> LightRAG:
         async with self._init_lock:
@@ -132,8 +146,14 @@ class ProjectRAGEngine:
             return rag
 
     async def close(self) -> None:
+        # RAGAnything also owns parse/status caches; finalize it once, before clearing references.
+        for rag in self._rag_cache.values():
+            atexit.unregister(rag.close)
         results = await asyncio.gather(
-            *(self._close_lightrag(rag) for rag in self._lightrag_cache.values()),
+            *(
+                self._close_lightrag(self._rag_cache.get(project_id, rag))
+                for project_id, rag in self._lightrag_cache.items()
+            ),
             return_exceptions=True,
         )
         self._lightrag_cache.clear()
@@ -175,11 +195,16 @@ class ProjectRAGEngine:
     ) -> dict[str, object]:
         paths = await self.ensure_project_dirs(project_id)
         rag = await self.get_rag(project_id)
-        await rag.insert_content_list(
-            content_list=content_list,
-            file_path=document_id,
-            doc_id=document_id,
-        )
+        install_document_chunk_ids(multimodal=True)
+        token = CHUNK_DOCUMENT.set(document_id)
+        try:
+            await rag.insert_content_list(
+                content_list=content_list,
+                file_path=document_id,
+                doc_id=document_id,
+            )
+        finally:
+            CHUNK_DOCUMENT.reset(token)
         await self.assert_document_ready(project_id, document_id)
         return {
             "project_id": project_id,
@@ -190,7 +215,7 @@ class ProjectRAGEngine:
         }
 
     async def ingest_text(
-        self, project_id: str, document_id: str, text: str, *, document_chunks=False
+        self, project_id: str, document_id: str, text: str, *, document_chunks=True
     ) -> None:
         rag = await self.get_lightrag(project_id)
         # Native content-only chunk IDs overwrite sources across distinct originals.

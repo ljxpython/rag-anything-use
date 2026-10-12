@@ -18,8 +18,8 @@ from src.knowledge.artifacts import (
     KnowledgeUsageRecorder,
     atomic_json,
     checksum,
+    compatible_processing_signature,
     fsync_directory,
-    processing_signature,
 )
 from src.knowledge.auth import KnowledgeScope
 from src.knowledge.document_registry import KnowledgeDocumentRegistry
@@ -239,7 +239,7 @@ class KnowledgeGenerationService:
     async def build(self, job_id):
         job = self.store.get_job(job_id)
         project = self.store.project(job["kb"])
-        signature = processing_signature(self.config)
+        signature = compatible_processing_signature(self.config, project["signature"])
         if signature != job["signature"] or signature != project["signature"]:
             raise ValueError("knowledge_processing_config_changed")
         if not project["enabled"]:
@@ -398,7 +398,7 @@ class KnowledgeGenerationService:
     async def activate(self, job_id):
         job = self.store.get_job(job_id)
         project = self.store.project(job["kb"])
-        signature = processing_signature(self.config)
+        signature = compatible_processing_signature(self.config, project["signature"])
         namespace = job["target"]
         if (
             job["status"] != "publishing"
@@ -485,8 +485,7 @@ class KnowledgeGenerationService:
     async def acquire(self, kb):
         project = self.store.project(kb)
         namespace = project["active_namespace"]
-        if project["signature"] != processing_signature(self.config):
-            raise ValueError("knowledge_processing_config_changed")
+        compatible_processing_signature(self.config, project["signature"])
         if namespace is None:
             yield None, None
             return
@@ -523,7 +522,7 @@ class KnowledgeGenerationService:
 
     async def rollback(self, kb, namespace):
         project = self.store.project(kb)
-        signature = processing_signature(self.config)
+        signature = compatible_processing_signature(self.config, project["signature"])
         if signature != project["signature"]:
             raise ValueError("knowledge_processing_config_changed")
         with self.store.connect() as db:

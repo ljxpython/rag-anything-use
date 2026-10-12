@@ -15,10 +15,16 @@ def normalize_content_list(
         current = dict(item)
         metadata = current.get("metadata")
         current["metadata"] = dict(metadata) if isinstance(metadata, dict) else {}
-        current["metadata"].setdefault("document_id", document_id)
-        current["metadata"].setdefault("filename", filename)
-        current["metadata"].setdefault("chunk_id", f"{document_id}:chunk:{index}")
-        if "page_idx" in current and "page_index" not in current["metadata"]:
-            current["metadata"]["page_index"] = current["page_idx"]
+        current["metadata"].update(
+            document_id=document_id,
+            filename=filename,
+            chunk_id=f"{document_id}:chunk:{index}",
+        )
+        current["metadata"].pop("page_index", None)
+        page = current.get("page_idx")
+        if type(page) is int and page >= 0:
+            current["metadata"]["page_index"] = page
+        else:
+            current.pop("page_idx", None)
         normalized.append(current)
     return normalized

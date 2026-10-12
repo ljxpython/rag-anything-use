@@ -33,7 +33,7 @@ from src.mcp_server import create_server
 from scripts.verify_incremental_snapshot import TEXTS
 
 
-async def run():
+async def run(failure_output=None):
     with tempfile.TemporaryDirectory(prefix="rag-online-") as temporary:
         root = Path(temporary)
         config = replace(
@@ -211,9 +211,10 @@ async def run():
                                 (store.path.parent / "builder.log").read_text(),
                             ),
                         }
-                        Path(__file__).resolve().parents[1].joinpath(
-                            "docs/projects/20261012-project-member-knowledge-upload/implementation/rag-chain-failure.json"
-                        ).write_text(json.dumps(failure, ensure_ascii=False, indent=2))
+                        if failure_output is not None:
+                            failure_output.write_text(
+                                json.dumps(failure, ensure_ascii=False, indent=2)
+                            )
                         raise AssertionError(failure)
                     receipts.append(receipt)
                     namespace = store.project(project["id"])["active_namespace"]
@@ -293,6 +294,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = asyncio.run(run())
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    result = asyncio.run(run(args.output.with_name(args.output.stem + "-failure.json")))
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps(result["checks"], ensure_ascii=False))

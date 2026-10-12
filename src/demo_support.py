@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import asyncio
 import base64
+import hashlib
 import json
+from contextvars import ContextVar
 from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
@@ -24,6 +26,7 @@ import os
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(PROJECT_ROOT / ".env", override=False)
+_MULTIMODAL_WORKSPACE = ContextVar("knowledge_multimodal_workspace", default=None)
 
 
 @dataclass(frozen=True)
@@ -383,17 +386,120 @@ def build_raganything(
     working_dir: str | None = None,
     *,
     lightrag: LightRAG | None = None,
+    parser_name: str | None = None,
+    parse_method: str | None = None,
+    parser_output_dir: str | None = None,
     enable_image_processing: bool | None = None,
     enable_table_processing: bool | None = None,
     enable_equation_processing: bool | None = None,
 ) -> RAGAnything:
     from raganything import RAGAnything
+    from raganything import modalprocessors
+    from lightrag.kg import shared_storage
+
+    # shortcut: private hooks target RAG-Anything 1.4.2/LightRAG 1.4.12; reverify on upgrade.
+    if not getattr(shared_storage.get_namespace_data, "_knowledge_workspace", False):
+        namespace_data = shared_storage.get_namespace_data
+        pipeline_lock = shared_storage.get_pipeline_status_lock
+
+        async def scoped_data(namespace, first_init=False, workspace=None):
+            return await namespace_data(
+                namespace,
+                first_init=first_init,
+                workspace=workspace
+                if workspace is not None
+                else _MULTIMODAL_WORKSPACE.get(),
+            )
+
+        def scoped_lock(enable_logging=False, workspace=None):
+            return pipeline_lock(
+                enable_logging=enable_logging,
+                workspace=workspace
+                if workspace is not None
+                else _MULTIMODAL_WORKSPACE.get(),
+            )
+
+        # Upstream multimodal paths omit workspace; resolve it per task, not globally.
+        scoped_data._knowledge_workspace = True
+        shared_storage.get_namespace_data = scoped_data
+        shared_storage.get_pipeline_status_lock = scoped_lock
+        modalprocessors.get_namespace_data = scoped_data
+        modalprocessors.get_pipeline_status_lock = scoped_lock
+
+    asset_keys = ("img_path", "image_path", "table_img_path")
+    asset_paths = ContextVar("knowledge_asset_paths", default=())
+
+    def hide_paths(content, extra=()):
+        for path in (*asset_paths.get(), *extra):
+            if isinstance(path, str) and path:
+                content = content.replace(
+                    path, "asset:" + hashlib.sha256(path.encode()).hexdigest()[:24]
+                )
+        return content
+
+    class KnowledgeRAGAnything(RAGAnything):
+        async def parse_document(self, *args, **kwargs):
+            # Parsing must start after its cache exists, including the first document.
+            initialized = await self._ensure_lightrag_initialized()
+            if not initialized.get("success"):
+                raise RuntimeError("knowledge_parser_initialization_failed")
+            return await super().parse_document(*args, **kwargs)
+
+        async def _process_multimodal_content(self, multimodal_items, *args, **kwargs):
+            initialized = await self._ensure_lightrag_initialized()
+            if not initialized.get("success"):
+                raise RuntimeError("knowledge_multimodal_initialization_failed")
+            token = asset_paths.set(
+                tuple(item.get(key) for item in multimodal_items for key in asset_keys)
+            )
+            workspace_token = _MULTIMODAL_WORKSPACE.set(self.lightrag.workspace)
+            try:
+                return await super()._process_multimodal_content(
+                    multimodal_items, *args, **kwargs
+                )
+            finally:
+                _MULTIMODAL_WORKSPACE.reset(workspace_token)
+                asset_paths.reset(token)
+
+        def _initialize_processors(self):
+            super()._initialize_processors()
+            # Individual fallback bypasses the batch template; scrub before it hashes/stores.
+            for processor in self.modal_processors.values():
+                original = processor._create_entity_and_chunk
+
+                async def create(modal_chunk, *args, _create=original, **kwargs):
+                    return await _create(hide_paths(modal_chunk), *args, **kwargs)
+
+                processor._create_entity_and_chunk = create
+
+        def _apply_chunk_template(self, content_type, original_item, description):
+            # Parser assets are local inputs, not filesystem locators for MCP consumers.
+            return hide_paths(
+                super()._apply_chunk_template(content_type, original_item, description),
+                tuple(original_item.get(key) for key in asset_keys),
+            )
+
+        def _convert_to_lightrag_chunks_type_aware(
+            self, multimodal_data_list, *args, **kwargs
+        ):
+            # Upstream uses page zero for context lookup; stored provenance must remain unknown.
+            for data in multimodal_data_list:
+                data["item_info"]["page_idx"] = data["original_item"].get("page_idx")
+            return super()._convert_to_lightrag_chunks_type_aware(
+                multimodal_data_list, *args, **kwargs
+            )
 
     settings = load_settings()
     llm_model_func = build_llm_model_func(settings)
     vision_model_func = build_vision_model_func(settings, llm_model_func)
     embedding_func = build_embedding_func(settings)
     config = build_rag_config(settings, working_dir=working_dir)
+    if parser_name is not None:
+        config.parser = parser_name
+    if parse_method is not None:
+        config.parse_method = parse_method
+    if parser_output_dir is not None:
+        config.parser_output_dir = parser_output_dir
     if enable_image_processing is not None:
         config.enable_image_processing = enable_image_processing
     if enable_table_processing is not None:
@@ -410,13 +516,18 @@ def build_raganything(
         (settings.vision_base_url, settings.vision_model, settings.vision_api_key)
     ):
         raise RuntimeError("vision_configuration_required")
-    return RAGAnything(
+    rag = KnowledgeRAGAnything(
         lightrag=lightrag,
         config=config,
         llm_model_func=llm_model_func,
         vision_model_func=vision_model_func,
         embedding_func=embedding_func,
     )
+    if config.parser == "docling":
+        from src.knowledge.parser_adapter import build_docling_parser
+
+        rag.doc_parser = build_docling_parser()
+    return rag
 
 
 def build_lightrag(working_dir: str, *, workspace: str = "", usage=None) -> LightRAG:

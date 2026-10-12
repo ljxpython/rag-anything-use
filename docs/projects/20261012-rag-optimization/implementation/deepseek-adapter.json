@@ -1,0 +1,7 @@
+{
+  "adapter": "build_vision_model_func",
+  "provider_model": "deepseek-v4.1-flash",
+  "image_fact_match": true,
+  "configuration_scope": "test process only",
+  "initial_probe_harness_error": "missing await; corrected before the real request"
+}

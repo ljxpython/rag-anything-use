@@ -1,0 +1,376 @@
+{
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.13.16",
+  "packages": {
+    "raganything": "1.4.2",
+    "lightrag-hku": "1.4.12",
+    "docling": "2.84.0",
+    "mineru": "3.4.5"
+  },
+  "models": {
+    "llm": "deepseek-v4.1-flash",
+    "embedding": "text-embedding-v4",
+    "dimensions": 1024,
+    "vision": "qwen3-vl-plus"
+  },
+  "corpus": "generated public format fixtures, no business data",
+  "formats": [
+    {
+      "file": "text.pdf",
+      "sha256": "c252216ea6515641441624571fa509972718ac03dd604a22b68fb0f2fdee738a",
+      "queries": [
+        {
+          "question": "How long is Orion backup retention?",
+          "expected": "35 days",
+          "found": true,
+          "seconds": 3.967,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "8d07c662d71a4670b049659b2023bfa3-1",
+                "document_id": "kd_f10ea5a25a8b4e96adcde34b80cd2ef8",
+                "chunk_id": "chunk-da57d21f83ac70cf4e5f8f1892274936",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "How often are Orion restoration drills held?",
+          "expected": "14 days",
+          "found": true,
+          "seconds": 3.581,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "5e9258fd989c4409a107a4faf24dcf7d-1",
+                "document_id": "kd_f10ea5a25a8b4e96adcde34b80cd2ef8",
+                "chunk_id": "chunk-da57d21f83ac70cf4e5f8f1892274936",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 90.426,
+      "ingest_exit": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_f10ea5a25a8b4e96adcde34b80cd2ef8",
+      "pages": [
+        0
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "scan.pdf",
+      "sha256": "e653c582b57b0f296d3f430b1dc7b74af2db747ecee8af0faf7cb746a2ae4a88",
+      "queries": [
+        {
+          "question": "What is the Orion emergency recovery code?",
+          "expected": "DR-4826",
+          "found": true,
+          "seconds": 4.872,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "8c466d9da37b4a5a95af6925b31071ba-1",
+                "document_id": "kd_b99de3f6b6d7498c96d6538c211c1bcb",
+                "chunk_id": "chunk-392138b3d484c1914955748a911a754e",
+                "title": "[1] scan.pdf",
+                "kind": "knowledge",
+                "preview": "Orion emergency recovery\n\nThe recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 123.085,
+      "ingest_exit": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_b99de3f6b6d7498c96d6538c211c1bcb",
+      "pages": [
+        0
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "mixed.pdf",
+      "sha256": "c942d01f391955a042969f64745795a049b91d31f27367bca4e70ef3e8247113",
+      "queries": [
+        {
+          "question": "What is the Orion capacity reserve?",
+          "expected": "27",
+          "found": true,
+          "seconds": 8.169,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "e6c0e19009084e78b4af758e620fb0ea-1",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-68fa6a303ed220043687e5c2cff7a795",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "e6c0e19009084e78b4af758e620fb0ea-2",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-9872bfe4edf9ab915d6208ed2c034278",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: {'table_cells': [{'bbox': {'l': 50.0, 't': 113.27380000000005, 'r': 90.008, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'Service', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'bbox': {'l': 116.69599999999998, 't': 113.27380000000005, 'r': 190.71199999999996, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 1, 'end_col_offset_idx': 2, 'text': 'Daily capacity', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': Fa",
+                "truncated": true
+              },
+              {
+                "source_id": "e6c0e19009084e78b4af758e620fb0ea-3",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-7683c49e331fa6893d3bd7bdb72a4639",
+                "title": "[3] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: {'table_cells': [{'bbox': {'l': 50.0, 't': 113.27380000000005, 'r': 90.008, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'Service', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'bbox': {'l': 116.69599999999998, 't': 113.27380000000005, 'r': 190.71199999999996, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 1, 'end_col_offset_idx': 2, 'text': 'Daily capacity', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': Fa",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "How many daily requests does Atlas support?",
+          "expected": "840",
+          "found": false,
+          "seconds": 4.233,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "1620ea60e6e64787a3ed54f77e805921-1",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-7683c49e331fa6893d3bd7bdb72a4639",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: {'table_cells': [{'bbox': {'l': 50.0, 't': 113.27380000000005, 'r': 90.008, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'Service', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'bbox': {'l': 116.69599999999998, 't': 113.27380000000005, 'r': 190.71199999999996, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 1, 'end_col_offset_idx': 2, 'text': 'Daily capacity', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': Fa",
+                "truncated": true
+              },
+              {
+                "source_id": "1620ea60e6e64787a3ed54f77e805921-2",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-9872bfe4edf9ab915d6208ed2c034278",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: {'table_cells': [{'bbox': {'l': 50.0, 't': 113.27380000000005, 'r': 90.008, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'Service', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'bbox': {'l': 116.69599999999998, 't': 113.27380000000005, 'r': 190.71199999999996, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 1, 'end_col_offset_idx': 2, 'text': 'Daily capacity', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': Fa",
+                "truncated": true
+              },
+              {
+                "source_id": "1620ea60e6e64787a3ed54f77e805921-3",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-68fa6a303ed220043687e5c2cff7a795",
+                "title": "[3] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the capacity formula?",
+          "expected": "42",
+          "found": true,
+          "seconds": 4.62,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "7a49e0269fe1478894ca3becbc1cae2a-1",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-68fa6a303ed220043687e5c2cff7a795",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "7a49e0269fe1478894ca3becbc1cae2a-2",
+                "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+                "chunk_id": "chunk-7683c49e331fa6893d3bd7bdb72a4639",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: {'table_cells': [{'bbox': {'l': 50.0, 't': 113.27380000000005, 'r': 90.008, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'Service', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'bbox': {'l': 116.69599999999998, 't': 113.27380000000005, 'r': 190.71199999999996, 'b': 124.37380000000007, 'coord_origin': 'TOPLEFT'}, 'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 1, 'end_col_offset_idx': 2, 'text': 'Daily capacity', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': Fa",
+                "truncated": true
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 484.823,
+      "ingest_exit": 0,
+      "page_count": null,
+      "chunk_count": 2,
+      "document_id": "kd_9e32afa555fa49758184d23feaed0f1f",
+      "pages": [
+        0
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "partial"
+    },
+    {
+      "file": "handbook.docx",
+      "sha256": "de2ac154d3166b6bbcca0da095d2ce5f934f2c5de26ba2c095aa68771e0625ca",
+      "queries": [
+        {
+          "question": "How quickly must an Orion production incident be acknowledged?",
+          "expected": "7 minutes",
+          "found": true,
+          "seconds": 4.201,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "6a5b8e0c35744f1cbab34991d6b1bc59-1",
+                "document_id": "kd_277dc42e78e348ffaaeb12f0d9609c8c",
+                "chunk_id": "chunk-b25f85c41f8d015d289d3e1809798055",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "6a5b8e0c35744f1cbab34991d6b1bc59-2",
+                "document_id": "kd_277dc42e78e348ffaaeb12f0d9609c8c",
+                "chunk_id": "chunk-7b988f85835516ff2c5e85879c7538cb",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:0406b2a2e2573da09029dba4\nCaptions: None\nFootnotes: None\n\nVisual Analysis: {'type': 'image', 'img_path': 'asset:0406b2a2e2573da09029dba4', 'image_caption': '', 'image_footnote': '', 'metadata': {'document_id': 'kd_277dc42e78e348ffaaeb12f0d9609c8c', 'filename': 'handbook.docx', 'chunk_id': 'kd_277dc42e78e348ffaaeb12f0d9609c8c:chunk:4'}, '_content_list_index': 3, '_section_path': '', '_neighbor_text': 'Orion service handbook A production incident must be acknowledged within 7 minutes.'}",
+                "truncated": false
+              },
+              {
+                "source_id": "6a5b8e0c35744f1cbab34991d6b1bc59-3",
+                "document_id": "kd_277dc42e78e348ffaaeb12f0d9609c8c",
+                "chunk_id": "chunk-dd2e96a9fe7437399dd643f0800321e1",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: {'table_cells': [{'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'Severity', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 0, 'end_row_offset_idx': 1, 'start_col_offset_idx': 1, 'end_col_offset_idx': 2, 'text': 'Response', 'column_header': True, 'row_header': False, 'row_section': False, 'fillable': False}, {'row_span': 1, 'col_span': 1, 'start_row_offset_idx': 1, 'end_row_offset_idx': 2, 'start_col_offset_idx': 0, 'end_col_offset_idx': 1, 'text': 'P1', 'column_header': False, 'row_header': False, 'row_section': False, 'fillable': False}, {'row_span'",
+                "truncated": true
+              },
+              {
+                "source_id": "6a5b8e0c35744f1cbab34991d6b1bc59-4",
+                "document_id": "kd_277dc42e78e348ffaaeb12f0d9609c8c",
+                "chunk_id": "chunk-cd11a1d296365e62bd302aa385c1a084",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: Mathematically, C = workers * 42 is a linear equation of direct proportionality with zero intercept. The dependent variable C represents a total capacity, coverage, or output metric. The independent variable workers is the number of personnel, typically a nonnegative integer. The constant coefficient 42 is the per-worker capacity contribution, making the equation a scalar multiplication of workforce size by a fixed productivity or availability factor. Its domain is workers ≥ 0, and its range is C ≥ 0. The marginal effect is constant: each additional worker increases C by exactly 42 units, and there are no fixed costs or diminishing returns modeled. In the Orion service handbook context, C lik",
+                "truncated": true
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 238.641,
+      "ingest_exit": 0,
+      "page_count": null,
+      "chunk_count": 4,
+      "document_id": "kd_277dc42e78e348ffaaeb12f0d9609c8c",
+      "pages": [
+        0
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "release.pptx",
+      "sha256": "611cd95b9ce96ef6afeffed79a9f49fa21ed0b9e26699ffae2c5462d8cc2d720",
+      "queries": [
+        {
+          "question": "When do Orion production releases happen?",
+          "expected": "Tuesday",
+          "found": true,
+          "seconds": 5.097,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "fe84372aa53b430787eccbc193759046-1",
+                "document_id": "kd_a13ed775546448f78ff89a76e3ed9462",
+                "chunk_id": "chunk-2f0a939a34d1884374364b48a1a1d065",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "fe84372aa53b430787eccbc193759046-2",
+                "document_id": "kd_a13ed775546448f78ff89a76e3ed9462",
+                "chunk_id": "chunk-8919ff6c44fa13a5dadc81e45e6ed0e9",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:a5f1cf9043e8b9615cd77e9a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: {'type': 'image', 'img_path': 'asset:a5f1cf9043e8b9615cd77e9a', 'image_caption': '', 'image_footnote': '', 'page_idx': 1, 'page_idx_end': 1, 'metadata': {'document_id': 'kd_a13ed775546448f78ff89a76e3ed9462', 'filename': 'release.pptx', 'chunk_id': 'kd_a13ed775546448f78ff89a76e3ed9462:chunk:5', 'page_index': 1}, '_content_list_index': 4, '_section_path': '', '_neighbor_text': 'Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.'}",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "How long is the Orion rollback window?",
+          "expected": "18 minutes",
+          "found": true,
+          "seconds": 4.131,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "1c76d097d34043f5b6782868146c5e3c-1",
+                "document_id": "kd_a13ed775546448f78ff89a76e3ed9462",
+                "chunk_id": "chunk-2f0a939a34d1884374364b48a1a1d065",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "1c76d097d34043f5b6782868146c5e3c-2",
+                "document_id": "kd_a13ed775546448f78ff89a76e3ed9462",
+                "chunk_id": "chunk-8919ff6c44fa13a5dadc81e45e6ed0e9",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:a5f1cf9043e8b9615cd77e9a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: {'type': 'image', 'img_path': 'asset:a5f1cf9043e8b9615cd77e9a', 'image_caption': '', 'image_footnote': '', 'page_idx': 1, 'page_idx_end': 1, 'metadata': {'document_id': 'kd_a13ed775546448f78ff89a76e3ed9462', 'filename': 'release.pptx', 'chunk_id': 'kd_a13ed775546448f78ff89a76e3ed9462:chunk:5', 'page_index': 1}, '_content_list_index': 4, '_section_path': '', '_neighbor_text': 'Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.'}",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 200.6,
+      "ingest_exit": 0,
+      "page_count": null,
+      "chunk_count": 2,
+      "document_id": "kd_a13ed775546448f78ff89a76e3ed9462",
+      "pages": [
+        0,
+        1
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    }
+  ],
+  "amount": null
+}

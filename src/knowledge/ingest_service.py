@@ -59,7 +59,7 @@ class KnowledgeIngestService:
                 if not text:
                     raise ValueError("empty_knowledge_document")
                 await self.rag_engine.ingest_text(project_id, document_id, text)
-                page_count, chunk_count = None, None
+                page_count = None
             else:
                 rag = await self.rag_engine.get_rag(project_id)
                 parser = DoclingParserAdapter(rag=rag, parser_name=record.parser_name)
@@ -76,10 +76,12 @@ class KnowledgeIngestService:
                     document_id=document_id,
                     content_list=normalized_content,
                 )
-                page_count, chunk_count = (
-                    parsed.metadata.get("page_count"),
-                    len(normalized_content),
-                )
+                page_count = parsed.metadata.get("page_count")
+                if type(page_count) is not int or page_count < 1:
+                    page_count = None
+            native = await self.rag_engine.get_lightrag(project_id)
+            indexed = await native.doc_status.get_by_id(document_id)
+            chunk_count = len(set(indexed.get("chunks_list") or []))
             updated = record.model_copy(
                 update={
                     "parse_status": "parsed",

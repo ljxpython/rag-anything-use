@@ -1,6 +1,6 @@
 # RAG-Anything Use
 
-项目资料的离线管理、只读 MCP 查询和平台精确授权的受管附件异步入库服务。在线入库默认关闭，首版能力为 UTF-8 Markdown/TXT；文本索引使用 LightRAG，Docling / RAGAnything 是后置格式能力。查询服务不生成最终答案，由消费方 Agent 根据返回片段回答。
+项目资料的离线管理、只读 MCP 查询和平台精确授权的受管附件异步入库服务。在线入库默认关闭，首版能力为 UTF-8 Markdown/TXT；文本索引使用 LightRAG，Docling / RAGAnything 提供可选文档解析与多模态处理。查询服务不生成最终答案，由消费方 Agent 根据返回片段回答。
 
 ## 安装与边界
 
@@ -17,7 +17,7 @@ PDF/Office 入库或运行多模态 examples 另外安装：
 uv sync --frozen --extra documents --group dev
 ```
 
-锁定 FastMCP 3.2.0、LightRAG 1.4.12、httpx 0.28.1、Starlette 0.52.1。Intel macOS 无锁定 Torch 2.11 wheel：MD/TXT可用，documents extra 需 ARM Mac 或受支持的 Linux；当前发布锁使用POSIX flock。不要将未验证的解析格式标为已支持。本轮真实RAG证据使用 miaomiaoai `deepseek-v4.1-flash`、百炼兼容 `text-embedding-v4` / 1024维；旧Ollama/768索引不可混用。
+锁定 RAG-Anything 1.4.2、MinerU 3.4.5、Docling 2.84.0；FastMCP 3.2.0、LightRAG 1.4.12、httpx 0.28.1、Starlette 0.52.1保留。Intel macOS 无锁定 Torch 2.11 wheel：MD/TXT可用，documents extra 需 ARM Mac 或受支持的 Linux；当前发布锁使用POSIX flock。Ubuntu隔离环境的文本/扫描PDF最新链路通过；混合PDF、Office稳定性与多模态能力仍partial，逐轮结果见[本轮验证](docs/projects/20261012-rag-optimization/verification.md)。真实RAG证据使用 miaomiaoai `deepseek-v4.1-flash`、百炼兼容 `text-embedding-v4` / 1024维；旧Ollama/768索引不可混用。
 
 ## 最少配置
 
@@ -25,7 +25,9 @@ uv sync --frozen --extra documents --group dev
 
 Embedding 默认使用 Ollama（`EMBEDDING_PROVIDER=ollama`）。外部兼容 `/embeddings` 的 API 设置 `EMBEDDING_PROVIDER=openai`、`EMBEDDING_API_KEY` 和对应的兼容接口根地址；例如百炼 `text-embedding-v4` 使用 1024 维。该调用发送 `dimensions` 参数，供应商需要支持指定维度。切换嵌入模型或维度后必须新建索引。
 
-本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，确保有正文可解析；新版本资料已实测入库成功。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
+本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，用于减少推理挤占正文预算；新版本资料有成功入库记录。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
+
+本轮通用资料仍出现输出预算耗尽、空正文和重试；配置这个开关并不保证供应商一定关闭推理或稳定抽取。解析/索引失败需查私有日志并用独立候选复验；旧已发布库不受失败候选影响。
 
 HTTP 还需服务端 Bearer → scope 映射。token 至少32字符；项目为 UUID，租户为 UUID 或平台已有的 `__default`。namespace 是本地不可变索引版本，允许单段字母、数字、下划线、短横线（最多96字符），不可共享给不同项目。
 
@@ -96,14 +98,31 @@ asyncio.run(main())
 uv run --frozen --group dev python -m pytest "tests" -q
 ```
 
-2026-10-12 RAG范围完整测试67项通过（35.76秒），包含HTTP/stdio、范围安全、持久任务、原件票据、快照增量、调用计数、迁移/回退、故障进程回收及候选缓存回收。另有真实 DeepSeek/Embedding + worker/HTTP/MCP 隔离链路证据；生产IAM、前端、Linux格式和部署尚未联合验收。
+测试需要私有 `.env` 中的模型配置；测试替换实际模型调用，不要求发业务资料。无 `.env` 时可用临时假配置执行：
 
-独立本地服务另外完成两namespace真实入库/发布、两凭据HTTP检索、平台两主图真实Worker/DeepSeek链路；平台11项真实验收通过，含授权/撤权、Stop、fork和历史。读锁拒写、失败索引拒发布、新版本独立凭据、保留旧索引和MCP/Embedding重启也有证据。3份Markdown的30题合成检索验收：20题有答案Recall@8=100%，跨项目来源0；这不代表PDF或业务corpus准确率。PDF/Office Docling在Intel本机阻塞。
+```bash
+LLM_BASE_URL=http://127.0.0.1:1 LLM_MODEL=test-llm LLM_API_KEY=test-key EMBEDDING_BASE_URL=http://127.0.0.1:1 EMBEDDING_MODEL=test-embed uv run --frozen pytest "tests" -q
+```
+
+2026-10-12最终完整回归：Ubuntu96项通过（24.92秒），Intel Mac90项通过/6项可选documents跳过（27.79秒），日志见[专项证据](docs/projects/20261012-rag-optimization/implementation/README.md)。真实worker/HTTP/MCP、重复零新增用量、回退和旧checksum不变均通过；平台IAM、前端与生产部署未联合验收。
+
+本轮3份公开合成运维/API/发布资料的19题评测：16题有答案Recall@8与证据完整率100%，跨项目来源0，P50/P95为6.114/15.449秒；3题无答案仍返回相关来源，需要消费方判断证据是否足够。100小文档快照观测使用确定性模型，不能外推生产吞吐或最大容量。旧专项的30题与平台本机联验属于历史证据，均不等于真实业务质量。
+
+可复跑入口（均创建独立临时namespace；前两个使用配置的模型并产生调用费用）：
+
+```bash
+uv run --frozen --env-file ".env" python "scripts/evaluate_knowledge.py" --output "/tmp/rag-evaluation.json"
+uv run --frozen --env-file ".env" python "scripts/verify_document_formats.py" --output "/tmp/rag-formats.json"
+uv run --frozen python "scripts/benchmark_knowledge_snapshots.py" --documents 100 --output "/tmp/rag-capacity.json"
+```
+
+PDF/Office脚本要求已安装documents。最新格式轮文本/扫描PDF通过，混合PDF和DOCX各600秒超时，PPTX实体抽取空正文失败；修正CLI失败退出码与脚本检查后未再运行全格式实模型验证。旧iflow视觉凭据被434拒绝；2026-10-13改用miaomiaoai `deepseek-v4.1-flash` 的过程级配置，两个图片HTTP探针和项目视觉适配器均通过，未修改现役配置。表格/公式/图片的完整文档链仍须各自验收，不能仅凭图片探针或ready状态宣称全部成功。MCP来源预算与字段未扩展，online仍只接收MD/TXT。
 
 - [消费方接入契约](docs/mcp_receiver_integration_guide.md)
 - [运行与更新](docs/rag_system_usage_guide.md)
 - [当前能力与限制](docs/rag_system_current_progress.md)
 - [Docling设计说明](docs/raganything_docling_guide.md)
 - [项目成员 Agent MCP 异步入库](docs/projects/20261012-project-member-knowledge-upload/README.md)（RAG文本范围完成，整专项partial）
+- [项目优化与 RAG-Anything 升级](docs/projects/20261012-rag-optimization/README.md)（done；2026-10-13用户验收本期范围通过，复杂格式/多模态限制与后置项保留）
 
 `examples/` 为独立多模态实验，需documents extra、视觉模型与对应测试文件；示例历史记录不能代替当前服务验收。

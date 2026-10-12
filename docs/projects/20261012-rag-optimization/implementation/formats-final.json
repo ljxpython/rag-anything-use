@@ -1,0 +1,158 @@
+{
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.13.16",
+  "packages": {
+    "raganything": "1.4.2",
+    "lightrag-hku": "1.4.12",
+    "docling": "2.84.0",
+    "mineru": "3.4.5"
+  },
+  "models": {
+    "llm": "deepseek-v4.1-flash",
+    "embedding": "text-embedding-v4",
+    "dimensions": 1024,
+    "vision": "qwen3-vl-plus"
+  },
+  "corpus": "generated public format fixtures, no business data",
+  "formats": [
+    {
+      "file": "text.pdf",
+      "sha256": "144cc8ea174d81d24f992f45395bf55809178d6f58d63bdf90e5547bb114be35",
+      "queries": [
+        {
+          "question": "How long is Orion backup retention?",
+          "expected": "35 days",
+          "found": true,
+          "seconds": 6.257,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "cf464f39b0f64681bb02383a1cdf8550-1",
+                "document_id": "kd_a612ae8050f24959ac2b42c4e031d017",
+                "chunk_id": "chunk-0b65050c3876bfde79080f6cbeda040c",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "How often are Orion restoration drills held?",
+          "expected": "14 days",
+          "found": true,
+          "seconds": 5.094,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "9bfce66cae0944998757db089e7a4ece-1",
+                "document_id": "kd_a612ae8050f24959ac2b42c4e031d017",
+                "chunk_id": "chunk-0b65050c3876bfde79080f6cbeda040c",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 104.616,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_a612ae8050f24959ac2b42c4e031d017",
+      "parsed_blocks": {
+        "text": 2
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": 1,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "scan.pdf",
+      "sha256": "44a3513c6aa79f6e962471932fd832c65016b1144360ca0192de27b6b3a6dd93",
+      "queries": [
+        {
+          "question": "What is the Orion emergency recovery code?",
+          "expected": "DR-4826",
+          "found": true,
+          "seconds": 6.096,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "afda6f4e7f7742e7acaa60842cfab166-1",
+                "document_id": "kd_3b3a834976504810aabd721a17fe2f39",
+                "chunk_id": "chunk-b345d489ef53117fa39edeef078ead95",
+                "title": "[1] scan.pdf",
+                "kind": "knowledge",
+                "preview": "Orion emergency recovery\n\nThe recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 54.274,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_3b3a834976504810aabd721a17fe2f39",
+      "parsed_blocks": {
+        "text": 3
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": null,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "mixed.pdf",
+      "sha256": "81a00f4c882896dbd239dff0c53f2a3c3b2793913247ca1c895ccaaaca48ddec",
+      "queries": [],
+      "status": "failed",
+      "error_type": "TimeoutExpired",
+      "ingest_seconds": 600.185
+    },
+    {
+      "file": "handbook.docx",
+      "sha256": "7c206defebd4cc6b81ee67a93ce28a72b2517daf8b44a68bae38b1210db24cac",
+      "queries": [],
+      "status": "failed",
+      "error_type": "TimeoutExpired",
+      "ingest_seconds": 600.086
+    }
+  ],
+  "amount": null
+}

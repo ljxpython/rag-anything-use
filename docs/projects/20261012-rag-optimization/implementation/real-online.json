@@ -1,0 +1,360 @@
+{
+  "platform": "local signed authorization stub, not production IAM",
+  "models": "current .env, real HTTP providers",
+  "processing_signature": "d6520fb33e78bd232c72c1e591355c59ff65b1f32c330c813e4b7a6a169b7d24",
+  "checks": {
+    "http_mcp_queued": true,
+    "real_worker_ready": true,
+    "duplicate_zero_new_usage": true,
+    "mcp_old_and_new_sources": true,
+    "rollback_searchable": true,
+    "published_files_unchanged": true
+  },
+  "usage": {
+    "A": {
+      "events": {
+        "parse": 1,
+        "embedding": 12,
+        "llm_cache_miss": 4,
+        "graph_extraction": 2
+      },
+      "rows": [
+        {
+          "stage": "parsing",
+          "kind": "parse",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "new_chunks",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 3584, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 3179}, \"cost\": 0.002191566, \"cost_details\": null, \"gateway_cost\": 0.002191566, \"is_byok\": false, \"market_cost\": 0.002191566, \"prompt_tokens\": 3285, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3072, \"video_tokens\": 0}, \"total_tokens\": 6869}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 5994, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 5986}, \"cost\": 0.0037401, \"cost_details\": null, \"gateway_cost\": 0.0037401, \"is_byok\": false, \"market_cost\": 0.0037401, \"prompt_tokens\": 4094, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3200, \"video_tokens\": 0}, \"total_tokens\": 10088}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 19, \"total_tokens\": 19}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 16, \"total_tokens\": 16}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 19, \"total_tokens\": 19}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 17, \"total_tokens\": 17}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 14, \"total_tokens\": 14}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 28, \"total_tokens\": 28}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 20, \"total_tokens\": 20}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 17, \"total_tokens\": 17}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 21, \"total_tokens\": 21}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 22, \"total_tokens\": 22}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 30, \"total_tokens\": 30}",
+          "usage_source": "provider"
+        }
+      ]
+    },
+    "B": {
+      "events": {
+        "parse": 1,
+        "embedding": 10,
+        "llm_cache_miss": 4,
+        "graph_extraction": 3
+      },
+      "rows": [
+        {
+          "stage": "parsing",
+          "kind": "parse",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "new_chunks",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 2055, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 1699}, \"cost\": 0.001274166, \"cost_details\": null, \"gateway_cost\": 0.001274166, \"is_byok\": false, \"market_cost\": 0.001274166, \"prompt_tokens\": 3285, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3072, \"video_tokens\": 0}, \"total_tokens\": 5340}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 8192, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 8192}, \"cost\": 0.005055078, \"cost_details\": null, \"is_byok\": false, \"market_cost\": 0.005055078, \"prompt_tokens\": 4045, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3176, \"video_tokens\": 0}, \"total_tokens\": 12237}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "graph_extraction",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": "{\"cache_creation_input_tokens\": 0, \"completion_tokens\": 4946, \"completion_tokens_details\": {\"image_tokens\": 0, \"reasoning_tokens\": 4937}, \"cost\": 0.002998698, \"cost_details\": null, \"is_byok\": false, \"market_cost\": 0.002998698, \"prompt_tokens\": 4045, \"prompt_tokens_details\": {\"audio_tokens\": 0, \"cached_tokens\": 3916, \"video_tokens\": 0}, \"total_tokens\": 8991}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "indexing",
+          "kind": "llm_cache_miss",
+          "status": "complete",
+          "input_count": 0,
+          "provider_usage": null,
+          "usage_source": "unknown"
+        },
+        {
+          "stage": "affected_graph_merge",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 32, \"total_tokens\": 32}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 33, \"total_tokens\": 33}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 17, \"total_tokens\": 17}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 22, \"total_tokens\": 22}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 22, \"total_tokens\": 22}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 21, \"total_tokens\": 21}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 29, \"total_tokens\": 29}",
+          "usage_source": "provider"
+        },
+        {
+          "stage": "graph_embedding",
+          "kind": "embedding",
+          "status": "complete",
+          "input_count": 1,
+          "provider_usage": "{\"prompt_tokens\": 26, \"total_tokens\": 26}",
+          "usage_source": "provider"
+        }
+      ]
+    }
+  },
+  "receipts": [
+    {
+      "version": 1,
+      "job_id": "kj_91faf4473138461597fb34794c9702b5",
+      "document_id": "kd_3bc75189b7fd405e9007f42259a92188",
+      "file_name": "fixture-A.md",
+      "status": "ready",
+      "searchable": true,
+      "error_code": null,
+      "created_at": "2026-10-12T13:08:51.114831Z",
+      "updated_at": "2026-10-12T13:09:53.637907Z"
+    },
+    {
+      "version": 1,
+      "job_id": "kj_15b7d25b7eee42bea1957a222a43672d",
+      "document_id": "kd_3e62c4e71f66464eaf9087ef8d16e90a",
+      "file_name": "fixture-B.md",
+      "status": "ready",
+      "searchable": true,
+      "error_code": null,
+      "created_at": "2026-10-12T13:09:59.919170Z",
+      "updated_at": "2026-10-12T13:12:52.415893Z"
+    }
+  ],
+  "source_ids": [
+    "kd_3bc75189b7fd405e9007f42259a92188",
+    "kd_3e62c4e71f66464eaf9087ef8d16e90a"
+  ],
+  "amount": null
+}

@@ -1,0 +1,11 @@
+{
+  "source": "real CLI stdout, formats-final run",
+  "receipt": {
+    "accepted": false,
+    "project_id": "format_4",
+    "document_id": "kd_89ecad4f1172476ea38e38b59cbe6dea",
+    "operation": "ingest_document",
+    "status": "failed",
+    "message": "LightRAG failed to process the text of kd_89ecad4f1172476ea38e38b59cbe6dea: RetryError[C[1/1]: chunk-5e6c31849ff7766867de261c92b388ce: <Future at 0x776911c38c30 state=finished raised InvalidResponseError>]"
+  }
+}

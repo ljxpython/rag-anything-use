@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-13",
+  "provider": "miaomiaoai",
+  "model": "deepseek-v4.1-flash",
+  "image": "synthetic shapes; no business documents",
+  "changed_configuration": false,
+  "probes": [
+    {
+      "expected": {
+        "shape": "circle",
+        "color": "green",
+        "count": 3
+      },
+      "status_code": 200,
+      "choices_count": 1,
+      "content": "```json\n{\n  \"shape\": \"circle\",\n  \"color\": \"green\",\n  \"count\": 3\n}\n```",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "completion_tokens": 61,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 33
+        },
+        "cost": 7.635e-05,
+        "cost_details": null,
+        "gateway_cost": 7.635e-05,
+        "is_byok": false,
+        "market_cost": 7.635e-05,
+        "prompt_tokens": 265,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 326
+      },
+      "image_fact_match": true
+    },
+    {
+      "expected": {
+        "shape": "square",
+        "color": "purple",
+        "count": 2
+      },
+      "status_code": 200,
+      "choices_count": 1,
+      "content": "{\"shape\": \"square\", \"color\": \"purple\", \"count\": 2}",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "completion_tokens": 72,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 52
+        },
+        "cost": 8.295e-05,
+        "cost_details": null,
+        "gateway_cost": 8.295e-05,
+        "is_byok": false,
+        "market_cost": 8.295e-05,
+        "prompt_tokens": 265,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 337
+      },
+      "image_fact_match": true
+    }
+  ],
+  "catalog_status": 200,
+  "catalog_models": [
+    {
+      "id": "deepseek-v4.1-flash-fast"
+    },
+    {
+      "id": "deepseek-flash"
+    },
+    {
+      "id": "deepseek-v4.1-flash"
+    },
+    {
+      "id": "deepseek-v4-pro"
+    },
+    {
+      "id": "deepseek-v4-flash"
+    }
+  ],
+  "both_images_verified": true
+}

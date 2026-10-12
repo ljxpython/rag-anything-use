@@ -152,4 +152,5 @@
 - macOS首轮完整测试100 passed、6 skipped、1 failed / 148.23s：worker测试30秒准备不足；实测单个冷导入18.983/19.653s，宿主load约72。改60秒后曾仅在成功重启后的重复进程组清理触发PermissionError；最终以恢复完成标记跳过多余清理，失败场景仍清理，SIGKILL、watchdog、10秒重启、锁释放与状态断言全部保留。业务 `job_worker.py`未修改。
 - Ubuntu单独worker试验曾误导入早期同步遗留的根目录测试副本，缺file_name/MIME导致6项授权拒绝；定位实际模块路径/字段后，把17个旧根目录副本移入隔离归档，当前src/tests未删除。正确集合12项通过（9.85s），纯worker6项通过（5.27s）；这些环境失败不伪造为产品回归通过。
 - 最终冻结锁完整回归：Ubuntu **107 passed / 25.32s**、exit0；Intel Mac **101 passed、6 skipped / 169.36s**、exit0。本机只在测试进程设BLAS线程数1和假模型配置，不修改系统或现役env。证据：[Ubuntu](implementation/merged-tests-ubuntu-20261013.log)、[macOS](implementation/merged-tests-macos-20261013.log)、[首轮失败](implementation/merged-macos-startup-failure-20261013.log)。
-- Ruff F/E9、compileall、冻结锁与diff空白检查通过。主工作区原有3份未跟踪百炼专项文档已保存SHA-256并核对原样；本轮不提交或删除它们。Git收尾使用具名升级分支、正常合并/推送，不force push或重写主线历史。
+- Ruff F/E9、compileall、冻结锁与diff空白检查通过。主工作区原有3份未跟踪百炼专项文档已保存SHA-256并核对原样，按原内容单独提交，不覆盖或改写其历史状态。Git收尾使用具名升级分支、正常合并/推送，不force push或重写主线历史。
+- 升级分支 `codex/rag-optimization-20261013`已推送（2fbf89d）；主工作区从5be564a快进到2fbf89d，确认原3份文档哈希未变后以 `git worktree remove` 清理e5fb，未使用force。后续主线文档提交随main正常推送；新版服务仍停止，未迁移现役数据或开启online。

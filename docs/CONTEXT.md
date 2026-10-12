@@ -2,7 +2,7 @@
 
 ## 最后更新
 
-2026-10-13 | 用户验收RAG-Anything升级与本期优化范围通过，需求done；合并保留主线后台完整绑定/新租约与失ACK回查；登记的本地知识MCP/Embedding已停止，Ubuntu隔离无遗留测试进程。DeepSeek图片HTTP/适配器通过，复杂格式限制保留；online默认关闭，现役数据与新版部署未改
+2026-10-13 | 用户验收RAG-Anything升级与本期优化范围通过，需求done；主线合并2fbf89d保留后台完整绑定/新租约与失ACK回查，升级分支已推送，e5fb worktree已清理；知识MCP/Embedding已停。Ubuntu107项/本机101项通过，DeepSeek图片探针通过，复杂格式限制保留；online默认关闭，现役数据与新版部署未改
 
 ## 系统状态
 

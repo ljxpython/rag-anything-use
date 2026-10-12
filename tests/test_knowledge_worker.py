@@ -127,9 +127,11 @@ asyncio.run(run())
         stderr=log,
     )
     child_pid = None
+    recovered = False
     supervisor = KnowledgeJobSupervisor(s.store, s.generations)
     try:
-        deadline = time.monotonic() + 30
+        # Allow two cold Python imports before exercising the watchdog.
+        deadline = time.monotonic() + 60
         while not marker.exists() and time.monotonic() < deadline:
             assert parent.poll() is None, parent_log.read_text()
             assert s.store.get_job(receipt["job_id"])["status"] != "failed", (
@@ -161,6 +163,7 @@ asyncio.run(run())
             await supervisor.stop()
 
         asyncio.run(restart())
+        recovered = True
     finally:
         if parent.poll() is None:
             parent.kill()
@@ -168,7 +171,7 @@ asyncio.run(run())
         log.close()
         if child_pid is None and marker.with_suffix(".spawned").exists():
             child_pid = int(marker.with_suffix(".spawned").read_text())
-        if child_pid:
+        if child_pid and not recovered:
             try:
                 os.killpg(child_pid, signal.SIGKILL)
             except ProcessLookupError:

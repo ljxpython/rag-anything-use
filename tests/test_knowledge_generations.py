@@ -27,6 +27,8 @@ async def upload(services, text, request_id):
             "request_id": request_id,
             "sha256": digest,
             "size_bytes": len(data),
+            "file_name": ref["file_name"],
+            "mime_type": ref["mime_type"],
         },
     )
 

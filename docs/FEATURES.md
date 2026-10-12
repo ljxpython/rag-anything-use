@@ -17,6 +17,7 @@
 | 功能 | 状态 | 方案 |
 |---|---|---|
 | `mcp_submit_project_knowledge_document(file_ref)` / `mcp_get_project_knowledge_ingest_job(job_id)`、内部安全GET/原字节PUT | ✅ RAG实现及真实worker/HTTP/MCP通过；平台/Runtime/前端接线待联合验收，非线上能力 | [接线交接](projects/20261012-project-member-knowledge-upload/implementation/rag-handoff.md) |
+| 后台精确授权字段/新租约、同request_id失ACK只读GET | ✅ 78项回归及实际平台HTTP/真实模型通过，Thread删除继续/撤权拒绝/新写暂停后回查；旧缺来源任务不自动补造 | [契约修复](projects/20261012-rag-provider-contract-alignment/README.md) |
 | SHA-256原件唯一、持久任务幂等/复用、成果签名、完整快照候选原生增量 | ✅ 恢复/重复0新入库调用；失败隔离/回退/lease及10次mock回收通过 | [G01证据](projects/20261012-project-member-knowledge-upload/implementation/g01-evidence.md) · [实施验收](projects/20261012-project-member-knowledge-upload/implementation/rag-evidence.md) |
 | 格式能力 | UTF-8 MD/TXT；online PDF/Office未开放，CLI验收结果单列 | [项目优化专项](projects/20261012-rag-optimization/README.md) |
 

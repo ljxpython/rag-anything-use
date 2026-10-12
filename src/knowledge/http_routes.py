@@ -71,6 +71,23 @@ def register_knowledge_routes(server, verifier, uploads):
         except Exception as exc:
             return failure(exc)
 
+    @server.custom_route("/internal/knowledge/uploads/{request_id}", methods=["GET"])
+    async def lookup_upload(request):
+        try:
+            scope = await scope_for(request)
+            if request.query_params:
+                raise ValueError("invalid_file_ref")
+            return JSONResponse(
+                await asyncio.to_thread(
+                    uploads.lookup_request,
+                    scope,
+                    request.path_params["request_id"],
+                    request.headers.get("x-knowledge-operation-grant", ""),
+                )
+            )
+        except Exception as exc:
+            return failure(exc)
+
     @server.custom_route("/internal/knowledge/capabilities", methods=["GET"])
     async def capabilities(request):
         try:

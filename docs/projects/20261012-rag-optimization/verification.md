@@ -124,7 +124,7 @@
 - [x] tasks的6个已完成实施Task对应6条Phase，2个Task明确deferred；P01/P02为历史规划记录。10份受影响Markdown的末尾换行/尾空白与53个本地链接检查通过；README/CONTEXT/FEATURES已对齐最终测试数和逐轮格式状态。
 - [x] 平台IAM/Runtime/前端与部署结果继续在原专项跟踪，本轮只报告RAG范围；本机/桩测试不标为联合完成。
 - [x] 2.2在线多模态/平台资产/公开页码、4.1音视频与生产负载明确deferred。
-- [x] 快照/原件未删除，旧checksum与回退可核验；没有Git提交、现役迁移或部署。
+- [x] 10-12快照/原件未删除，旧checksum与回退可核验；当时未Git提交、现役迁移或部署。10-13收尾提交/推送依用户后续授权执行，仍未迁移/部署新版。
 
 ### 最终结论
 
@@ -145,3 +145,11 @@
 - 本地登记的知识MCP/Embedding通过所属平台 `scripts/local-stack.sh knowledge-stop` 正常停止；Ubuntu隔离目录检查未发现遗留解析/MCP/worker进程，不接管其他服务。
 - 原格式失败、模型限制和所有技术证据保持原样；需求状态done仅针对本期选择范围。
 - 根据用户关于maomaoai DeepSeek的提问，使用既有私有LLM配置测试两张合成图片：当前 `deepseek-v4.1-flash`模型ID两次HTTP200/有效choices，形状/颜色/数量均正确；既有 `build_vision_model_func` JPEG路径亦通过。VISION三项仅在探针进程中复用LLM配置，未写现役env，未扩大online格式或重跑全格式。探针用例首次漏await的脚本错误已纠正，未调用模型，不计产品故障。证据见 [HTTP探针](implementation/deepseek-vision-probe.json)、[适配器](implementation/deepseek-adapter.json)。
+
+### 合并保留既有功能（2026-10-13）
+
+- 以原主线 `5be564ae5b28d010cf9beb26bc19ef11e7425cdd` 合并升级提交 `d105a70`，仅三份状态文档有冲突，逐项保留双方结果。后台授权/持久字段/失ACK路由与相关测试同主线字节一致，22个主线专属文件核对无覆盖；`upload_service.py`保留其绑定/GET并加入本轮签名兼容，验证脚本保留完整graph/文件字段与整数租约。
+- macOS首轮完整测试100 passed、6 skipped、1 failed / 148.23s：worker测试30秒准备不足；实测单个冷导入18.983/19.653s，宿主load约72。改60秒后曾仅在成功重启后的重复进程组清理触发PermissionError；最终以恢复完成标记跳过多余清理，失败场景仍清理，SIGKILL、watchdog、10秒重启、锁释放与状态断言全部保留。业务 `job_worker.py`未修改。
+- Ubuntu单独worker试验曾误导入早期同步遗留的根目录测试副本，缺file_name/MIME导致6项授权拒绝；定位实际模块路径/字段后，把17个旧根目录副本移入隔离归档，当前src/tests未删除。正确集合12项通过（9.85s），纯worker6项通过（5.27s）；这些环境失败不伪造为产品回归通过。
+- 最终冻结锁完整回归：Ubuntu **107 passed / 25.32s**、exit0；Intel Mac **101 passed、6 skipped / 169.36s**、exit0。本机只在测试进程设BLAS线程数1和假模型配置，不修改系统或现役env。证据：[Ubuntu](implementation/merged-tests-ubuntu-20261013.log)、[macOS](implementation/merged-tests-macos-20261013.log)、[首轮失败](implementation/merged-macos-startup-failure-20261013.log)。
+- Ruff F/E9、compileall、冻结锁与diff空白检查通过。主工作区原有3份未跟踪百炼专项文档已保存SHA-256并核对原样；本轮不提交或删除它们。Git收尾使用具名升级分支、正常合并/推送，不force push或重写主线历史。

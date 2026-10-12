@@ -1,0 +1,88 @@
+........................................................................ [ 67%]
+.....................F.......ssssss                                      [100%]
+=================================== FAILURES ===================================
+__________ test_actual_supervisor_sigkill_stdin_watchdog_and_restart ___________
+
+online_services = namespace(config=KnowledgeServiceConfig(root_dir=PosixPath('/private/var/folders/q6/4nvs05t90rg041hyp3_kws640000gn/T/p...rvice object at 0x10dc2e0f0>, generations=<src.knowledge.generations.KnowledgeGenerationService object at 0x10dc54c50>)
+tmp_path = PosixPath('/private/var/folders/q6/4nvs05t90rg041hyp3_kws640000gn/T/pytest-of-lijiaxin/pytest-180/test_actual_supervisor_sigkill0')
+
+    def test_actual_supervisor_sigkill_stdin_watchdog_and_restart(
+        online_services, tmp_path
+    ):
+        from test_knowledge_generations import upload
+
+        s = online_services
+        receipt = asyncio.run(upload(s, "parent death", "a"))
+        marker = tmp_path / "builder-pid"
+        child_code = """
+    import asyncio, os, sys
+    from pathlib import Path
+    from src.knowledge.job_worker import _build_child, KnowledgeGenerationService
+    async def paused(self, job_id):
+        Path(sys.argv[4]).write_text(str(os.getpid()))
+        await asyncio.Event().wait()
+    KnowledgeGenerationService.build = paused
+    asyncio.run(_build_child(*sys.argv[1:4]))
+    """
+        parent_code = """
+    import asyncio, sys
+    from pathlib import Path
+    from types import SimpleNamespace
+    from src.knowledge.config import KnowledgeServiceConfig
+    from src.knowledge.jobs import KnowledgeJobStore
+    from src.knowledge.job_worker import KnowledgeJobSupervisor
+    config = KnowledgeServiceConfig(root_dir=Path(sys.argv[1]), online_enabled=True)
+    store = KnowledgeJobStore(config)
+    class Allow:
+        async def authorize(self, *args):
+            return None
+    generations = SimpleNamespace(scope=lambda kb: None, authorizer=Allow())
+    supervisor = KnowledgeJobSupervisor(store, generations)
+    original = asyncio.create_subprocess_exec
+    async def spawn(*args, **kwargs):
+        child = await original(sys.executable, '-c', sys.argv[4], args[3], args[4], args[5], sys.argv[3], **kwargs)
+        Path(sys.argv[3] + '.spawned').write_text(str(child.pid))
+        return child
+    asyncio.create_subprocess_exec = spawn
+    async def run():
+        assert await supervisor.start()
+        await supervisor._task
+    asyncio.run(run())
+    """
+        parent_log = tmp_path / "supervisor.log"
+        log = parent_log.open("w")
+        parent = subprocess.Popen(
+            [
+                sys.executable,
+                "-c",
+                parent_code,
+                str(s.config.root_dir),
+                receipt["job_id"],
+                str(marker),
+                child_code,
+            ],
+            stdout=log,
+            stderr=log,
+        )
+        child_pid = None
+        supervisor = KnowledgeJobSupervisor(s.store, s.generations)
+        try:
+            deadline = time.monotonic() + 30
+            while not marker.exists() and time.monotonic() < deadline:
+                assert parent.poll() is None, parent_log.read_text()
+                assert s.store.get_job(receipt["job_id"])["status"] != "failed", (
+                    s.store.path.parent / "builder.log"
+                ).read_text()
+                time.sleep(0.05)
+>           assert marker.exists(), (
+                parent_log.read_text() + (s.store.path.parent / "builder.log").read_text()
+            )
+E           AssertionError:
+E           assert False
+E            +  where False = exists()
+E            +    where exists = PosixPath('/private/var/folders/q6/4nvs05t90rg041hyp3_kws640000gn/T/pytest-of-lijiaxin/pytest-180/test_actual_supervisor_sigkill0/builder-pid').exists
+
+tests/test_knowledge_worker.py:139: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_knowledge_worker.py::test_actual_supervisor_sigkill_stdin_watchdog_and_restart
+1 failed, 100 passed, 6 skipped in 148.23s (0:02:28)

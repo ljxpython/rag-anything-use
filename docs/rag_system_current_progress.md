@@ -6,9 +6,11 @@
 
 本轮已升级RAG-Anything 1.4.2 / MinerU 3.4.5，保留LightRAG 1.4.12 / Docling 2.84.0；修复同正文多来源chunk覆盖、解析tuple/参数/页码、真实chunk计数、紧凑表格表示、首解析缓存、多模态workspace绑定、batch/fallback资产路径脱敏和CLI失败退出码。旧在线文本签名精确兼容已核验v1组合，不重写冻结快照。
 
-最终测试：Ubuntu候选完整环境96项通过（24.92秒）；Intel Mac90项通过、6项documents跳过（27.79秒），日志见[专项证据](projects/20261012-rag-optimization/implementation/README.md)。
+最终测试：2026-10-13合并主线授权/失ACK修复后，Ubuntu107项通过（25.32秒）；Intel Mac101项通过、6项documents跳过（169.36秒）。合并前升级分支的96/90项日志保留为历史证据，见[专项证据](projects/20261012-rag-optimization/implementation/README.md)。
 
 真实通过：sshmy2隔离DeepSeek + 百炼text-embedding-v4/1024维的HTTP/MCP/worker链，重复零新增usage、回退可查、旧checksum不变。19题公开通用资料评测16道有答案题Recall@8/证据完整率100%，跨项目来源0；3道无答案题仍返回资料。100小文档确定性快照观测与关闭共享键归零通过；生产IAM/Runtime、前端、真实业务质量/负载未联合验收。
+
+实际平台授权追加验收：完整后台请求start/activate200；签名篡改/过期/撤权拒绝；受理后Thread删除任务仍完成；同key GET在新写暂停后仍返回同安全回执且不增attempt/usage。采用实际Platform API源码＋隔离SQL主体，非Runtime Agent/浏览器完整验收；见 [证据](projects/20261012-rag-provider-contract-alignment/verification.md)。
 
 模型配置：miaomiaoai DeepSeek抽取使用 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`、本地8192输出预算，新版本入库复验成功；其他供应商默认 `{}`。此配置不改消费平台的默认模型或锁文件。
 

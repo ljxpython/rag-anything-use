@@ -8,6 +8,7 @@
 2. Runtime 从当前 Thread 的可信附件记录核对六字段及实际 hash，取得平台 `upload` grant，再传原字节。
 3. `PUT /internal/knowledge/uploads/{request_id}`：`Authorization: Bearer <project-token>`、`Content-Type` 等于 FileRef 的 MIME，`X-Knowledge-File-Ref` 为该六字段 JSON，`X-Knowledge-Operation-Grant` 为 grant JSON。正文是原字节，不能用 URL/base64 或宿主路径。成功仅返回 `{"upload_id":"ku_…"}`，此时尚无 job。
 4. 官方 MCP interceptor 向 `mcp_submit_project_knowledge_document(file_ref)` 注入 `X-Knowledge-Upload-ID`、`X-Knowledge-Operation-Grant`；模型参数只有 `file_ref`。票据5分钟，grant最长30秒；传输超过窗口时，提交前按**同一 identity/request/hash/size**重新取 grant。响应为单 JSON 文本块和同值 structuredContent，最多4KiB；queued 持久后返回，不等模型。
+   失 ACK/提交超时后不再次 submit 或换 key。Runtime 重新取得同原请求的 upload grant，以固定项目 Bearer 和 `X-Knowledge-Operation-Grant` 请求 `GET /internal/knowledge/uploads/{request_id}`。未确认受理返回 `{"request_id":"kr_…","receipt":null}`；已受理返回原安全回执且 `reused=true`。GET 比对持久原主体、graph/Thread/Run/tool/request 与四文件字段，不 enqueue、不消费 attempt、不调用模型；RAG 全局/项目新写关闭后仍可查询，仍须有效 grant。
 5. RAG supervisor 在 start、activate 调平台当前授权；子进程只构建。授权不可用或被撤销时不激活新增资料，旧视图可查。30秒窗口不是跨服务数据库的即时原子撤权。
 6. API 用项目 Bearer 转发内部 GET：`/internal/knowledge/capabilities`、`/documents?limit=20&offset=0`、`/jobs?limit=20&offset=0`、`/jobs/{job_id}`。无 scope query 参数，列表为 `{"items":[],"total":0}`；失败为既定 `ErrorResponse`。MCP 状态工具为 `mcp_get_project_knowledge_ingest_job(job_id)`。
 
@@ -19,23 +20,27 @@ FileRef `path=/workspace/uploads/{sha256}.{md|txt}` 仅作可信附件身份，R
 
 专用 `KNOWLEDGE_AUTHORIZATION_KEY_ID/SECRET`，secret至少32字符；与 JWT、MCP Bearer、其他回调密钥分开。RAG 的 `KNOWLEDGE_AUTHORIZE_URL` 指向平台约定的 `POST /api/runtime/internal/knowledge/authorize`，不跟随重定向，10秒网络超时。
 
-请求及响应 envelope：`{"version":1,"key_id":"<id>","values":{…},"signature":"<lowercase-hex-sha256>"}`。签名为 HMAC-SHA256：UTF-8 `domain + "\n" + canonical(values)`。canonical 等价 Python `json.dumps(values,sort_keys=True,separators=(",",":"),ensure_ascii=True)`；跨语言必须保持键排序、JSON布尔/null、数字与 Unicode 转义一致。
+请求及响应 envelope：`{"version":1,"key_id":"<id>","values":{…},"signature":"<lowercase-hex-sha256>"}`。签名为 HMAC-SHA256：UTF-8 `domain + "\n" + canonical(values)`。canonical 等价 Python `json.dumps(values,sort_keys=True,separators=(",",":"),ensure_ascii=True,allow_nan=False)`；跨语言必须保持键排序、JSON布尔/null、数字与 Unicode 转义一致。version 为整数1，envelope 额外字段拒绝。
 
 | 方向 | domain | values |
 |---|---|---|
-| RAG→平台复核 | `knowledge-operation-request` | 下表的 scope/identity 与 operation 专属字段 |
-| 平台→Runtime/RAG grant | `knowledge-operation-grant` | 原值逐字段一致，加 issuer/audience/iat/exp/nonce |
+| RAG→平台复核 | `knowledge-operation-request` | 下表完整 scope/identity/file 与 operation 字段；每次重新生成请求租约 |
+| 平台→Runtime/RAG grant | `knowledge-operation-grant` | 原绑定字段逐项一致，平台重新签发 grant 租约 |
 
 | 字段组 | 内容 |
 |---|---|
 | scope | `tenant_id,project_id,knowledge_base_id` |
-| identity | `subject,principal_type,credential_id,resource_id,request_id,thread_id,run_id,tool_call_id`；credential_id可null，其他身份来自可信平台/Runtime |
-| upload | `operation="upload",sha256,size_bytes`；必须当前Thread ACL/六字段附件核验及当前项目upload权限 |
-| start | `operation="start",job_id`；原提交者当前成员/凭据权限与项目生命周期复核，不因Thread删除取消已受理任务 |
-| activate | `operation="activate",job_id,target_revision,base_revision`；target_revision为候选 namespace字符串，base_revision为SQLite整数 |
-| grant固定值 | `issuer="platform-api",audience="rag-knowledge"`；iat/exp为Unix秒数，iat≤当前时刻、exp>当前时刻且exp≤iat+30；nonce长16–128 |
+| identity | `subject,principal_type,credential_id,resource_id,request_id,graph_id,thread_id,run_id,tool_call_id`；graph 为 dearflow_agent/showcase_demo；普通用户 canonical UUID 且 credential_id=""，服务账号 `service-account:<UUID>` 与当前 credential UUID；来自可信平台/Runtime |
+| file（upload/start/activate均必填） | `sha256,size_bytes,file_name,mime_type`；原请求文件事实持久保留，不能从后续模型参数改写 |
+| upload | `operation="upload"`，request issuer=runtime-service；必须当前Thread ACL/六字段附件核验及当前项目upload权限 |
+| start | `operation="start",knowledge_base_id,job_id`；原提交者当前成员/凭据权限与项目生命周期复核，不因Thread删除取消已受理任务 |
+| activate | start全部字段，再 `target_revision,base_revision`；target_revision为候选 namespace字符串，base_revision为非负JSON整数 |
+| 请求租约 | start/activate 的 `issuer="rag-anything-use",audience="platform-api"`；每次新 integer iat/exp、exp=iat+30、nonce=uuid4.hex；不保存或复用 upload grant 的 issuer/租约 |
+| grant租约 | `issuer="platform-api",audience="rag-knowledge"`；integer Unix秒，iat≤当前时刻<exp≤iat+30；nonce为32小写hex |
 
 平台先验请求签名，再回查当前 actor/credential/resource/project，不能因为 values 有 subject 就信任客户端。相同 upload grant 允许同请求受理重放，票据/事务保证幂等；不以 nonce 单次消费破坏 ACK 丢失恢复。不同操作、scope、主体、hash、大小或候选/base 的 grant 都拒绝。
+
+`febe70a` 及之前任务的 identity 未保存 graph/四文件完整绑定。升级不猜测/补写可信来源，缺字段的旧 queued 任务会拒绝后台授权；旧请求回查也拒绝身份不完整记录。保留原失败记录/原件，重新明确提交产生新合法请求；ready 索引及原只读工具继续可用。修复与真实平台证据见 [本轮对齐](../../20261012-rag-provider-contract-alignment/README.md)。
 
 ## 配置与管理员命令
 

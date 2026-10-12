@@ -6,6 +6,9 @@
 |---|---|
 | [Ubuntu完整回归](final-tests-ubuntu.log) | 96 passed / 24.92s；已安装documents，模型调用由测试替换 |
 | [Intel Mac完整回归](final-tests-macos.log) | 90 passed、6 skipped / 27.79s；documents未安装 |
+| [Ubuntu合并后完整回归](merged-tests-ubuntu-20261013.log) | 107 passed / 25.32s；包含主线授权/失ACK及本轮升级，documents已安装 |
+| [Intel Mac合并后完整回归](merged-tests-macos-20261013.log) | 101 passed、6 skipped / 169.36s；高负载下适配测试准备/成功后清理，业务worker未改 |
+| [macOS首轮启动等待失败](merged-macos-startup-failure-20261013.log) | 100 passed、6 skipped、1 failed / 148.23s；不是最终通过结果，保留失败事实 |
 | [检索基线](evaluation-baseline.json) | 3份资料、19题，真实CLI发布/HTTP MCP；16题Recall@8/证据完整率1.0，3题无答案仍返回资料 |
 | [100文档快照观测](capacity-100-ubuntu.json) | 确定性模型和模拟DB激活；空间/复制/校验/reader观测，不是生产容量或IAM验收 |
 | [真实在线文本链路](real-online.json) | 真实worker/HTTP MCP、重复零新增usage、回退与旧checksum；授权使用本地签名桩，非生产IAM |

@@ -1,0 +1,16 @@
+{
+  "rag_baseline": "febe70af37ee1df6ad1115c9aebe91c488d3aeb8",
+  "platform_baseline": "7fbf1ba3d7b221c103ed17f06c1e4c836523860e",
+  "platform_branch": "feat/project-knowledge-mcp",
+  "rag_source_sha256": {
+    "src/knowledge/operation_auth.py": "c887dd96d2a1f7a1b0196c24df85b8ca407cea530f650ee39d07f061cdc37d97",
+    "src/knowledge/jobs.py": "e6fbac046a19f84485757ccb7f348b973390ef3aa4c785553a784d083d318b85",
+    "src/knowledge/upload_service.py": "841406da60e0966f66e22ea8fe55d7dc9c9ca48828440ec87c0eef6cddd65ad2",
+    "src/knowledge/http_routes.py": "452fd4cf2c46ef53a59edef03e8ee28f2ff41d77b4cfa17f8fd69db23508a45f",
+    "src/knowledge/job_worker.py": "88e21a2deea4481f7e69e30f94914151215289cfd2a547c014fb119a8518dcdf",
+    "src/knowledge/generations.py": "d884bb5cb35b7e7e1e0a661fb82be0f8346942a7670b524d5a5d4e92e7db4717",
+    "scripts/verify_provider_contract.py": "41db85e9c10f9b507d83a698e8f3701efe8a20722edc7270fa1e5540538c7f0b"
+  },
+  "platform_authorization_sha256": "7604a964cfa1ed15cf66922aafe7ada5f4023b4a459677a6cb47c19d4820feb9",
+  "platform_contract_sha256": "b22a46aa3dd5c5ab2e26083b2b639675e348dc8163877abb8dd1c34d3026cf2e"
+}

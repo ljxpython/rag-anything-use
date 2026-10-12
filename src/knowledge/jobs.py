@@ -308,6 +308,37 @@ class KnowledgeJobStore:
                 )
         return self.receipt(kb, job_id, doc_id, reused=reused)
 
+    def request_receipt(self, kb, request_id, identity):
+        with self.connect() as db:
+            request = db.execute(
+                "SELECT * FROM requests WHERE kb=? AND request_id=?", (kb, request_id)
+            ).fetchone()
+            upload = db.execute(
+                "SELECT identity,file_ref FROM uploads WHERE kb=? AND request_id=?",
+                (kb, request_id),
+            ).fetchone()
+        for saved in (request, upload):
+            if saved is None:
+                continue
+            file = json.loads(saved["file_ref"]) if saved is upload else saved
+            if (
+                json.loads(saved["identity"]) != identity
+                or file["sha256"] != identity["sha256"]
+                or file["size_bytes"] != identity["size_bytes"]
+                or (
+                    saved is upload
+                    and any(
+                        file[key] != identity[key] for key in ("file_name", "mime_type")
+                    )
+                )
+            ):
+                raise ValueError("knowledge_authorization_denied")
+        return (
+            self.receipt(kb, request["job_id"], request["document_id"], reused=True)
+            if request
+            else None
+        )
+
     def get_job(self, job_id):
         with self.connect() as db:
             row = db.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()

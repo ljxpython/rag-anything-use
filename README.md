@@ -51,6 +51,8 @@ uv run --frozen --env-file ".env" python "main.py" activate-knowledge-generation
 
 内部 PUT 只接收 Runtime 传来的实际原字节和六字段 FileRef；MCP 提交工具只接受 `file_ref`，由官方 interceptor 注入短时 grant 与 upload ticket。RAG 使用完整冻结快照恢复到独立候选，只处理新文档，校验后原子激活；不直接改 active namespace，不自动全量重建。详见 [RAG 接线交接](docs/projects/20261012-project-member-knowledge-upload/implementation/rag-handoff.md)。
 
+失 ACK 后使用同 request_id 的内部 GET＋新 upload grant 只读回查，不再次 submit/换 key；后台持久保存原 graph/来源/文件字段并重新申请 start/activate 租约。旧版本任务缺可信字段时不自动补造来源，须重新明确提交合法请求。详见 [平台契约修复与升级](docs/projects/20261012-rag-provider-contract-alignment/README.md)。
+
 ## 离线入库与发布
 
 `--project-id` 是管理员 CLI 的索引 namespace，**不是网络工具参数**。当前文本资料以 UTF-8 保存。
@@ -106,6 +108,10 @@ LLM_BASE_URL=http://127.0.0.1:1 LLM_MODEL=test-llm LLM_API_KEY=test-key EMBEDDIN
 
 2026-10-12最终完整回归：Ubuntu96项通过（24.92秒），Intel Mac90项通过/6项可选documents跳过（27.79秒），日志见[专项证据](docs/projects/20261012-rag-optimization/implementation/README.md)。真实worker/HTTP/MCP、重复零新增用量、回退和旧checksum不变均通过；平台IAM、前端与生产部署未联合验收。
 
+主线后台授权/失ACK回查修复已保留：该专项78项回归（52.28秒）及实际Platform API HTTP＋隔离SQL/IAM/Run＋真实DeepSeek/百炼＋worker/MCP七项检查通过；Runtime Agent、前端、生产IAM和部署仍需联合验收。合并后完整套件单独记录，不用两分支历史测试代替。
+
+2026-10-13合并后最终完整回归：Ubuntu **107 passed / 25.32s**；Intel Mac **101 passed、6 skipped / 169.36s**。本机高负载下两个worker冷启动超出旧测试30秒准备期限，测试调整为60秒，并在已确认恢复后跳过对退出进程组的多余清理；业务worker协议和SIGKILL/watchdog/锁/重启断言保留，详见[合并验收](docs/projects/20261012-rag-optimization/verification.md)。
+
 本轮3份公开合成运维/API/发布资料的19题评测：16题有答案Recall@8与证据完整率100%，跨项目来源0，P50/P95为6.114/15.449秒；3题无答案仍返回相关来源，需要消费方判断证据是否足够。100小文档快照观测使用确定性模型，不能外推生产吞吐或最大容量。旧专项的30题与平台本机联验属于历史证据，均不等于真实业务质量。
 
 可复跑入口（均创建独立临时namespace；前两个使用配置的模型并产生调用费用）：
@@ -123,6 +129,7 @@ PDF/Office脚本要求已安装documents。最新格式轮文本/扫描PDF通过
 - [当前能力与限制](docs/rag_system_current_progress.md)
 - [Docling设计说明](docs/raganything_docling_guide.md)
 - [项目成员 Agent MCP 异步入库](docs/projects/20261012-project-member-knowledge-upload/README.md)（RAG文本范围完成，整专项partial）
+- [平台后台授权与失ACK回查](docs/projects/20261012-rag-provider-contract-alignment/README.md)（done；主线修复保留）
 - [项目优化与 RAG-Anything 升级](docs/projects/20261012-rag-optimization/README.md)（done；2026-10-13用户验收本期范围通过，复杂格式/多模态限制与后置项保留）
 
 `examples/` 为独立多模态实验，需documents extra、视觉模型与对应测试文件；示例历史记录不能代替当前服务验收。

@@ -13,6 +13,7 @@ import numpy as np
 from dotenv import load_dotenv
 from lightrag import LightRAG
 from lightrag.llm.openai import openai_complete_if_cache
+from openai import AsyncOpenAI
 from lightrag.utils import EmbeddingFunc
 
 if TYPE_CHECKING:
@@ -44,6 +45,8 @@ class DemoSettings:
     embedding_model: str
     embedding_dim: int
     embedding_max_tokens: int
+    embedding_provider: str = "ollama"
+    embedding_api_key: str = ""
 
 
 def _require_env(name: str) -> str:
@@ -73,6 +76,8 @@ def load_settings() -> DemoSettings:
         embedding_model=_require_env("EMBEDDING_MODEL"),
         embedding_dim=int(os.getenv("EMBEDDING_DIM", "768")),
         embedding_max_tokens=int(os.getenv("EMBEDDING_MAX_TOKENS", "8192")),
+        embedding_provider=os.getenv("EMBEDDING_PROVIDER", "ollama"),
+        embedding_api_key=os.getenv("EMBEDDING_API_KEY", ""),
     )
 
 
@@ -210,11 +215,44 @@ async def _ollama_embed(texts: list[str], settings: DemoSettings) -> np.ndarray:
     return await asyncio.to_thread(_ollama_embed_sync, texts, settings)
 
 
+async def _openai_embed(texts: list[str], settings: DemoSettings) -> np.ndarray:
+    async with AsyncOpenAI(
+        api_key=settings.embedding_api_key,
+        base_url=settings.embedding_base_url,
+        timeout=60,
+        max_retries=0,
+    ) as client:
+        response = await client.embeddings.create(
+            model=settings.embedding_model,
+            input=texts,
+            dimensions=settings.embedding_dim,
+            encoding_format="float",
+        )
+    items = sorted(response.data, key=lambda item: item.index)
+    if [item.index for item in items] != list(range(len(texts))):
+        raise ValueError("invalid_embedding_indices")
+    vectors = np.array([item.embedding for item in items], dtype=np.float32)
+    if (
+        vectors.shape != (len(texts), settings.embedding_dim)
+        or not np.isfinite(vectors).all()
+    ):
+        raise ValueError("invalid_embedding_dimensions")
+    return vectors
+
+
 def build_embedding_func(settings: DemoSettings) -> EmbeddingFunc:
+    if settings.embedding_provider == "ollama":
+        embed = _ollama_embed
+    elif settings.embedding_provider == "openai":
+        if not settings.embedding_api_key.strip():
+            raise RuntimeError("缺少必需环境变量: EMBEDDING_API_KEY")
+        embed = _openai_embed
+    else:
+        raise ValueError("invalid_embedding_provider")
     return EmbeddingFunc(
         embedding_dim=settings.embedding_dim,
         max_token_size=settings.embedding_max_tokens,
-        func=lambda texts: _ollama_embed(texts, settings),
+        func=lambda texts: embed(texts, settings),
     )
 
 

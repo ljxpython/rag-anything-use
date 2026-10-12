@@ -23,6 +23,8 @@ uv sync --frozen --extra documents --group dev
 
 填写 `LLM_BASE_URL/LLM_MODEL/LLM_API_KEY`、`EMBEDDING_BASE_URL/EMBEDDING_MODEL/EMBEDDING_DIM`、绝对 `KNOWLEDGE_ROOT_DIR`。文本查询不需要 TEST_DOCUMENT_PATH / TEST_IMAGE_PATH / VISION_*。
 
+Embedding 默认使用 Ollama（`EMBEDDING_PROVIDER=ollama`）。外部兼容 `/embeddings` 的 API 设置 `EMBEDDING_PROVIDER=openai`、`EMBEDDING_API_KEY` 和对应的兼容接口根地址；例如百炼 `text-embedding-v4` 使用 1024 维。该调用发送 `dimensions` 参数，供应商需要支持指定维度。切换嵌入模型或维度后必须新建索引。
+
 本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，确保有正文可解析；新版本资料已实测入库成功。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
 
 HTTP 还需服务端 Bearer → scope 映射。token 至少32字符；项目为 UUID，租户为 UUID 或平台已有的 `__default`。namespace 是本地不可变索引版本，允许单段字母、数字、下划线、短横线（最多96字符），不可共享给不同项目。

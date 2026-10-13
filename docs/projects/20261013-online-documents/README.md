@@ -5,7 +5,7 @@
 - **开发目录：** `/home/ubuntu/PyCharmMiscProject/rag-anything-use`
 - **分支：** `feat/online-documents-20261013`，基于 `main@edd7963`。
 - **平台源码：** `/Users/lijiaxin/PyCharmMiscProject/ai-agent-platform`；知识专项尚在同仓 6394 worktree 的未提交改动中，必须保护既有 Token／后台任务等主线功能。
-- **状态：** 实现与验收通过，所属联验服务已停，分支提交推送收尾中。
+- **状态：** 已完成（本期范围）；功能提交 `09ac6a9` 已推送，所属联验服务已停。
 - **范围排除：** 用户明确暂不开发音频／视频；不删除历史索引，不直接更改现役已发布库，不部署生产。
 
 ## 实施约束
@@ -28,3 +28,5 @@
 - 20MiB 双页 PDF、两项目排队且旧库可查、30 次确定性快照观测通过；这不是生产吞吐上限，费用金额未知保留 null。
 
 平台主工作区没有直接合并本次联验代码。动态格式、可信 FileRef 文本投影、root ToolNode 与回执等临时修复见 [补丁](platform-integration.patch) 和 [基线说明](platform-patch-context.json)。补丁依赖原知识专项已接入的 union 基线，不能对当前主工作区盲目套用。平台来源 v2 展示和图片 ImageRef 收据的具体后续方案见 [平台协同](platform-contract.md)；音视频按用户决定延期。
+
+交付记录见 [delivery.json](delivery.json)；Ubuntu 工作分支跟踪同名 origin 分支，现役 main 不擅自合并。

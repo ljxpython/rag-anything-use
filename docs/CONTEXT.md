@@ -23,7 +23,7 @@
 
 ## 活跃项目
 
-- [Ubuntu 在线文档与联合验收](projects/20261013-online-documents/README.md)：本期实现／验收通过，分支交付收尾；临时 union 已真实验证文档链，平台主工作区未合并。PNG／JPEG 为真实模型＋受控授权验证，ImageRef 浏览器可信链后续协同。
+- [Ubuntu 在线文档与联合验收](projects/20261013-online-documents/README.md)：本期 done，功能提交09ac6a9已推送同名远端分支、所属联验服务已停；临时 union 已真实验证文档链，平台主工作区未合并。PNG／JPEG 为真实模型＋受控授权验证，ImageRef 浏览器可信链后续协同。
 - [模型供应商清理](projects/20261013-model-provider-cleanup/README.md) 与 [RAG升级](projects/20261012-rag-optimization/README.md)：原期 done，本次补齐旧后置文档／资产／定位／联合验收；历史失败证据保留。
 - [成员异步入库](projects/20261012-project-member-knowledge-upload/README.md)：RAG与临时平台 V02 文档联验通过，正式平台合并／部署不标已完成；[授权与失ACK](projects/20261012-rag-provider-contract-alignment/README.md)保留。
 - [剩余事项](remaining-work.md)：平台v2展示、图片收据／正式合入、私有业务与生产SLA；音视频用户暂不开发。旧token启服前协调消费方轮换，证据不含凭据。

@@ -66,8 +66,8 @@
 - Web 知识＋Token／后台投影：14 个文件、93 passed /19.15s；typecheck 0 error。主工作区既有功能没有覆盖，本次 union 相关基线通过，不等同正式主线全量回归。
 - .env、私有凭据和 parser 原始日志不入库；交付 JSON／patch／截图扫描 secrets、Bearer、私钥和宿主临时路径，已确认公开 sources 不含原路径；首次失败 JSON 保留，原始日志在 Ubuntu 忽略目录保留。
 
-本次所属服务已停止（Ubuntu 28892／28893、union Web/API/Runtime/Redis 及浏览器），端口关闭和进程退出见 [service-stop.json](evidence/service-stop.json)。分支提交推送与工作区状态待本轮实际推送后记录 delivery.json。
+本次所属服务已停止（Ubuntu 28892／28893、union Web/API/Runtime/Redis 及浏览器），端口关闭和进程退出见 [service-stop.json](evidence/service-stop.json)。功能提交 `09ac6a9e945f0a1eb6a9e3ecdb2a8c35efafb5d3` 已推送到 `origin/feat/online-documents-20261013`，git ls-remote 与 HEAD 一致，功能提交后工作区干净；交付见 [delivery.json](delivery.json)。本记录由随后文档收尾提交携带，最终远端和工作区再次检查。
 
 ## 最终结论
 
-本期实现与验收通过，所属服务已停，等待工作分支推送。平台正式合入／v2 展示／图片 ImageRef 收据／生产部署不记作完成；音视频用户暂不开发。私有业务和生产容量结论需对应语料与指标。
+**done（本期范围）**：实现与验收通过，所属服务已停，Ubuntu 工作分支已推送。平台正式合入／v2 展示／图片 ImageRef 收据／生产部署不记作完成；音视频用户暂不开发。私有业务和生产容量结论需对应语料与指标。

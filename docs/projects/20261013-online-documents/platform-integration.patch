@@ -1,0 +1,425 @@
+diff --git a/apps/platform-api/src/platform_api/modules/knowledge/authorization.py b/apps/platform-api/src/platform_api/modules/knowledge/authorization.py
+index d6832356..a79fd11e 100644
+--- a/apps/platform-api/src/platform_api/modules/knowledge/authorization.py
++++ b/apps/platform-api/src/platform_api/modules/knowledge/authorization.py
+@@ -17,9 +17,6 @@ from platform_api.modules.runtime_gateway.application import thread_access
+ from platform_api.modules.runtime_gateway.infra.sqlalchemy.repository import (
+     RunRequestsRepository,
+ )
+-from platform_api.modules.runtime_policies.application import (
+-    RuntimePolicyOverlayService,
+-)
+ 
+ SUBMIT_TOOL = "mcp_submit_project_knowledge_document"
+ JOB_TOOL = "mcp_get_project_knowledge_ingest_job"
+@@ -176,6 +173,8 @@ def parse_operation(settings, envelope):
+ 
+ 
+ def authorize_operation(factory, settings, operation):
++    from platform_api.modules.runtime_policies.application import RuntimePolicyOverlayService
++
+     values = operation.model_dump(mode="json")
+     actor = ActorContext(
+         user_id=operation.subject if operation.principal_type == "user" else None,
+diff --git a/apps/platform-api/tests/test_knowledge_authorization.py b/apps/platform-api/tests/test_knowledge_authorization.py
+index 6d84591c..d8134b7d 100644
+--- a/apps/platform-api/tests/test_knowledge_authorization.py
++++ b/apps/platform-api/tests/test_knowledge_authorization.py
+@@ -13,9 +13,6 @@ from platform_api.modules.runtime_gateway.infra.sqlalchemy.models import (
+     RunRequestRecord,
+     ThreadAccessRecord,
+ )
+-from platform_api.modules.runtime_policies.infra.sqlalchemy.models import (
+-    RuntimeToolRestrictionRecord,
+-)
+ from platform_api.modules.service_accounts.models import (
+     ServiceAccountProjectGrantRecord,
+     ServiceAccountRecord,
+@@ -185,6 +182,10 @@ class KnowledgeAuthorizationTest(unittest.TestCase):
+         self.assertEqual(self.authorize(self.values("start")).status_code, 403)
+ 
+     def test_current_acl_deny_and_plan_run_sources_reject(self):
++        from platform_api.modules.runtime_policies.infra.sqlalchemy.models import (
++            RuntimeToolRestrictionRecord,
++        )
++
+         with self.factory.begin() as session:
+             session.get(ThreadAccessRecord, self.thread).owner_user_id = self.users[
+                 "admin"
+diff --git a/apps/platform-api/tests/test_knowledge_mcp_bindings.py b/apps/platform-api/tests/test_knowledge_mcp_bindings.py
+index b20b0086..7c49f230 100644
+--- a/apps/platform-api/tests/test_knowledge_mcp_bindings.py
++++ b/apps/platform-api/tests/test_knowledge_mcp_bindings.py
+@@ -140,7 +140,7 @@ class KnowledgeBindingTest(unittest.IsolatedAsyncioTestCase):
+                 )
+ 
+     def test_fresh_database_has_single_migration_head(self):
+-        self.assertEqual(
+-            ScriptDirectory.from_config(Config("alembic.ini")).get_heads(),
+-            ["20261011_0008"],
+-        )
++        migrations = ScriptDirectory.from_config(Config("alembic.ini"))
++        heads = migrations.get_heads()
++        self.assertEqual(len(heads), 1)
++        self.assertIn("20261011_0008", {revision.revision for revision in migrations.walk_revisions()})
+diff --git a/apps/platform-web/src/modules/chat/components/ChatComposer.spec.ts b/apps/platform-web/src/modules/chat/components/ChatComposer.spec.ts
+index daf15408..f70ee7c1 100644
+--- a/apps/platform-web/src/modules/chat/components/ChatComposer.spec.ts
++++ b/apps/platform-web/src/modules/chat/components/ChatComposer.spec.ts
+@@ -1,11 +1,26 @@
+-import { mount } from "@vue/test-utils";
+-import { describe, expect, it, vi } from "vitest";
++import { flushPromises, mount } from "@vue/test-utils";
++import { beforeEach, describe, expect, it, vi } from "vitest";
+ 
+ vi.mock("vue-i18n", () => ({
+   useI18n: () => ({ t: (k: string) => k }),
+ }));
+ 
++const knowledge = vi.hoisted(() => ({ get: vi.fn() }));
++vi.mock("@/services/knowledge/knowledge.service", () => ({
++  getKnowledgeCapabilities: knowledge.get,
++}));
++
++beforeEach(() => {
++  knowledge.get.mockReset();
++  knowledge.get.mockResolvedValue({
++    version: 1, read: true, upload_enabled: true,
++    supported_mime_types: ["text/plain", "text/markdown"],
++    max_file_bytes: 20 * 1024 * 1024, disabled_reason: null,
++  });
++});
++
+ import ChatComposer from "./ChatComposer.vue";
++import ChatAttachmentPreview from "./ChatAttachmentPreview.vue";
+ 
+ type ComposerProps = InstanceType<typeof ChatComposer>["$props"];
+ 
+@@ -396,3 +411,49 @@ describe("ChatComposer", () => {
+     });
+   });
+ });
++
++
++describe("knowledge format capability gate", () => {
++  const document = () => ({
++    type: "file" as const, mimeType: "application/pdf",
++    file: new File(["pdf"], "report.pdf", { type: "application/pdf" }),
++    metadata: { name: "report.pdf" }, shareToKnowledge: false,
++  });
++
++  it("opens a PDF only after the current provider advertises it", async () => {
++    knowledge.get.mockResolvedValueOnce({
++      upload_enabled: true, supported_mime_types: ["application/pdf"],
++      max_file_bytes: 1024,
++    });
++    const block = document();
++    const wrapper = mountComposer({ projectId: "alpha", attachments: [block] });
++    expect(wrapper.getComponent(ChatAttachmentPreview).props("canShareToKnowledge")).toBe(false);
++    await flushPromises();
++    expect(wrapper.getComponent(ChatAttachmentPreview).props("canShareToKnowledge")).toBe(true);
++    await wrapper.getComponent(ChatAttachmentPreview).vm.$emit("update:shareToKnowledge", true);
++    expect(block.shareToKnowledge).toBe(true);
++  });
++
++  it("clears a checked attachment when a project capability or plan mode blocks it", async () => {
++    const block = document();
++    block.shareToKnowledge = true;
++    const wrapper = mountComposer({ projectId: "text-only", attachments: [block] });
++    await flushPromises();
++    expect(block.shareToKnowledge).toBe(false);
++    expect(wrapper.getComponent(ChatAttachmentPreview).props("canShareToKnowledge")).toBe(false);
++    block.shareToKnowledge = true;
++    await wrapper.setProps({ planMode: true });
++    expect(block.shareToKnowledge).toBe(false);
++  });
++
++  it("does not let a slow previous project's capability open the current project", async () => {
++    let resolveOld!: (value: unknown) => void;
++    knowledge.get.mockImplementationOnce(() => new Promise((resolve) => { resolveOld = resolve; }));
++    const wrapper = mountComposer({ projectId: "alpha", attachments: [document()] });
++    await wrapper.setProps({ projectId: "beta" });
++    await flushPromises();
++    resolveOld({ upload_enabled: true, supported_mime_types: ["application/pdf"], max_file_bytes: 1024 });
++    await flushPromises();
++    expect(wrapper.getComponent(ChatAttachmentPreview).props("canShareToKnowledge")).toBe(false);
++  });
++});
+diff --git a/apps/platform-web/src/modules/chat/components/ChatComposer.vue b/apps/platform-web/src/modules/chat/components/ChatComposer.vue
+index 810a785e..1b761598 100644
+--- a/apps/platform-web/src/modules/chat/components/ChatComposer.vue
++++ b/apps/platform-web/src/modules/chat/components/ChatComposer.vue
+@@ -14,6 +14,7 @@ import {
+   type ChatAttachmentBlock,
+ } from "@/utils/chat-content";
+ import { useAuthorization } from "@/composables/useAuthorization";
++import { resolveDocumentMime } from "@/services/threads/files.service";
+ import {
+   getKnowledgeCapabilities,
+   type KnowledgeCapabilities,
+@@ -187,10 +188,12 @@ watch(
+       knowledgeCapabilities.value = null;
+       return;
+     }
++    knowledgeCapabilities.value = null;
+     try {
+-      knowledgeCapabilities.value = await getKnowledgeCapabilities(pId);
++      const capabilities = await getKnowledgeCapabilities(pId);
++      if (props.projectId === pId) knowledgeCapabilities.value = capabilities;
+     } catch {
+-      knowledgeCapabilities.value = null;
++      if (props.projectId === pId) knowledgeCapabilities.value = null;
+     }
+   },
+   { immediate: true },
+@@ -220,30 +223,38 @@ function getKnowledgeGate(attachment: ChatAttachmentBlock): {
+     };
+   }
+   const file = attachment.file;
+-  const fileName = (
+-    file?.name ||
+-    (attachment.metadata?.name as string) ||
+-    ""
+-  ).toLowerCase();
+-  const isSupported =
+-    fileName.endsWith(".md") ||
+-    fileName.endsWith(".markdown") ||
+-    fileName.endsWith(".txt");
+-  if (!isSupported) {
+-    return { canShare: false, reason: "知识库仅支持 TXT 和 Markdown 文档" };
++  const mime = file
++    ? resolveDocumentMime(file)
++    : attachment.runtimeFileRef?.mime_type || attachment.mimeType;
++  if (!knowledgeCapabilities.value.supported_mime_types.includes(mime)) {
++    return { canShare: false, reason: "当前知识库未开放此文档格式" };
+   }
+   const maxBytes =
+     knowledgeCapabilities.value?.max_file_bytes || 20 * 1024 * 1024;
+-  if (file && file.size > maxBytes) {
+-    return { canShare: false, reason: "超出入库文件上限（20MB）" };
++  const size = file?.size ?? attachment.runtimeFileRef?.size_bytes;
++  if (size == null || size <= 0) {
++    return { canShare: false, reason: "无法校验附件大小" };
++  }
++  if (size > maxBytes) {
++    return { canShare: false, reason: "超出当前知识库文件上限" };
+   }
+   return { canShare: true, reason: "" };
+ }
+ 
++watch(
++  () => props.attachments.map((attachment) => getKnowledgeGate(attachment).canShare),
++  (gates) => {
++    props.attachments.forEach((attachment, index) => {
++      if (!gates[index]) attachment.shareToKnowledge = false;
++    });
++  },
++  { immediate: true },
++);
++
+ function handleUpdateShareToKnowledge(index: number, val: boolean) {
+   const block = props.attachments[index];
+   if (block && block.type === "file") {
+-    block.shareToKnowledge = val;
++    block.shareToKnowledge = val && getKnowledgeGate(block).canShare;
+     if (val) {
+       if (!composerModel.value.trim()) {
+         composerModel.value = "请把本条消息的附件加入当前项目知识库";
+diff --git a/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.spec.ts b/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.spec.ts
+index 92674428..0814e801 100644
+--- a/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.spec.ts
++++ b/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.spec.ts
+@@ -74,3 +74,10 @@ describe('KnowledgeSubmissionCard.vue', () => {
+     expect(wrapper.text()).not.toContain('任务编号：')
+   })
+ })
++
++
++it('never claims acceptance before the tool returns a receipt', () => {
++  const wrapper = mount(KnowledgeSubmissionCard)
++  expect(wrapper.text()).toContain('尚未受理')
++  expect(wrapper.text()).not.toContain('任务已受理')
++})
+diff --git a/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.vue b/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.vue
+index b7a60123..60886a21 100644
+--- a/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.vue
++++ b/apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.vue
+@@ -83,9 +83,11 @@ const liveJob = computed<KnowledgeJob | null>(() => {
+ })
+ 
+ // 最终生效的状态与字段
+-const currentStatus = computed<KnowledgeStatus>(() => {
++const currentStatus = computed<KnowledgeStatus | "pending" | "unconfirmed">(() => {
+   if (liveJob.value?.status) return liveJob.value.status
+-  return initialData.value?.status || 'queued'
++  if (initialData.value?.status) return initialData.value.status
++  if (currentErrorCode.value) return 'failed'
++  return props.tool?.output === undefined ? 'pending' : 'unconfirmed'
+ })
+ 
+ const isSearchable = computed<boolean>(() => {
+@@ -97,7 +99,8 @@ const isSearchable = computed<boolean>(() => {
+ 
+ const currentErrorCode = computed<string | null>(() => {
+   if (liveJob.value?.error_code) return liveJob.value.error_code
+-  return initialData.value?.error_code || null
++  const data = initialData.value as (KnowledgeSubmission & { code?: string }) | null
++  return data?.error_code || data?.code || null
+ })
+ 
+ const fileName = computed<string>(() => {
+@@ -115,6 +118,18 @@ const isReused = computed<boolean>(() => {
+ // 状态映射配置
+ const statusMeta = computed(() => {
+   switch (currentStatus.value) {
++    case 'pending':
++    case 'unconfirmed':
++      return {
++        label: currentStatus.value === 'pending' ? '尚未受理' : '受理状态待核实',
++        tone: 'neutral',
++        bgClass: 'bg-slate-50 dark:bg-dark-800 border-border',
++        textClass: 'text-text-sub',
++        icon: 'file' as const,
++        desc: currentStatus.value === 'pending'
++          ? '批准并执行工具后，以正式任务回执为准。'
++          : '尚未收到有效入库回执，请查看项目任务列表。'
++      }
+     case 'queued':
+       return {
+         label: '已受理，等待排队',
+@@ -196,7 +211,7 @@ function getErrorFriendlyMessage(code: string | null): string {
+     return '权限不足：当前角色无权将文件加入该项目知识库。'
+   }
+   if (code.includes('unsupported') || code.includes('format')) {
+-    return '格式不支持：当前知识库仅支持 TXT 和 Markdown 文档。'
++    return '格式不支持：当前知识库未开放此文件格式。'
+   }
+   if (code.includes('too_large')) {
+     return '文件大小超出知识库单文档上限（20MB）。'
+diff --git a/apps/platform-web/src/modules/projects/components/ProjectKnowledgePanel.vue b/apps/platform-web/src/modules/projects/components/ProjectKnowledgePanel.vue
+index 477e9c42..8254bcce 100644
+--- a/apps/platform-web/src/modules/projects/components/ProjectKnowledgePanel.vue
++++ b/apps/platform-web/src/modules/projects/components/ProjectKnowledgePanel.vue
+@@ -288,7 +288,7 @@ onUnmounted(() => {
+             项目知识库管理
+           </h2>
+           <p class="mt-1 text-xs text-text-sub">
+-            所有项目成员均可检索已入库资料；支持 TXT / Markdown 格式，单文档上限 20MB。
++            所有项目成员均可检索已入库资料；文件格式按当前服务能力开放，单文档上限 {{ capabilities ? formatBytes(capabilities.max_file_bytes) : '加载中' }}。
+           </p>
+         </div>
+ 
+diff --git a/apps/platform-web/src/utils/chat-content.ts b/apps/platform-web/src/utils/chat-content.ts
+index cbc967ba..12beb77d 100644
+--- a/apps/platform-web/src/utils/chat-content.ts
++++ b/apps/platform-web/src/utils/chat-content.ts
+@@ -120,7 +120,7 @@ export function createRuntimeFileTextBlock(
+ ): ChatRuntimeFileTextBlock {
+   return {
+     type: "text",
+-    text: `[文档附件] ${filename}\n${ref.path}`,
++    text: `[文档附件] ${filename}\n${ref.path}\nFileRef: ${JSON.stringify(ref)}`,
+     extras: {
+       runtime_file: ref,
+     },
+diff --git a/apps/runtime-service/src/runtime_service/runtime/auth.py b/apps/runtime-service/src/runtime_service/runtime/auth.py
+index c2c814c6..acef1d1d 100644
+--- a/apps/runtime-service/src/runtime_service/runtime/auth.py
++++ b/apps/runtime-service/src/runtime_service/runtime/auth.py
+@@ -53,7 +53,6 @@ _ALLOWED_CLAIMS = frozenset(
+         "credential_id",
+         "callback_context",
+         "run_acceptance",
+-        "credential_id",
+     }
+ )
+ 
+@@ -83,7 +82,6 @@ class VerifiedDelegation:
+     credential_id: str | None = None
+     callback_context: Mapping[str, str] | None = None
+     run_acceptance: dict | None = None
+-    credential_id: str | None = None
+ 
+ 
+ def _invalid(
+@@ -340,7 +338,6 @@ def verify_delegation_claims(
+         run_acceptance=_parse_run_acceptance(
+             claims.get("run_acceptance"), principal, scope, credential_id
+         ),
+-        credential_id,
+     )
+ 
+ 
+diff --git a/apps/runtime-service/src/runtime_service/tools/knowledge_upload.py b/apps/runtime-service/src/runtime_service/tools/knowledge_upload.py
+index 05e919ab..e1585680 100644
+--- a/apps/runtime-service/src/runtime_service/tools/knowledge_upload.py
++++ b/apps/runtime-service/src/runtime_service/tools/knowledge_upload.py
+@@ -50,6 +50,7 @@ def _identity(runtime, binding, name):
+     thread_id = str(UUID(str(info.thread_id)))
+     context = context_from_runtime(runtime)
+     plan = read_plan(runtime.state)
++    namespace = runtime.config.get("configurable", {}).get("checkpoint_ns") or ""
+     if (
+         facts.scope.operation != "run-create"
+         or facts.scope.assistant_id not in {"dearflow_agent", "showcase_demo"}
+@@ -62,7 +63,9 @@ def _identity(runtime, binding, name):
+         or context.offload_conversation
+         or plan is not None
+         and plan.active
+-        or runtime.config.get("configurable", {}).get("checkpoint_ns")
++        # Root ToolNode carries its own task namespace; subgraphs add a parent path.
++        or namespace not in {"", f"tools:{getattr(info, 'task_id', None)}"}
++        or namespace != (getattr(info, "checkpoint_ns", "") or "")
+         or runtime.config.get("configurable", {}).get("thread_id") != thread_id
+     ):
+         raise ToolException("knowledge_upload_denied")
+diff --git a/apps/runtime-service/tests/tools/test_knowledge_upload.py b/apps/runtime-service/tests/tools/test_knowledge_upload.py
+index c40b2cb6..945a36df 100644
+--- a/apps/runtime-service/tests/tools/test_knowledge_upload.py
++++ b/apps/runtime-service/tests/tools/test_knowledge_upload.py
+@@ -106,7 +106,7 @@ def case(monkeypatch, tmp_path):
+         context={},
+         state={},
+         tool_call_id="call-1",
+-        execution_info=SimpleNamespace(thread_id=thread, run_id=run),
++        execution_info=SimpleNamespace(thread_id=thread, run_id=run, checkpoint_ns="", task_id=str(uuid4())),
+         server_info=SimpleNamespace(user=identity),
+     )
+     root = resolve_thread_workspace(tenant, project, thread, "dearflow_agent")
+@@ -373,6 +373,36 @@ def test_execution_boundary_denies_before_transport(case, monkeypatch, mode):
+     assert case.requests == []
+ 
+ 
++def test_real_root_tool_task_namespace_is_allowed(case, monkeypatch):
++    ns = "tools:" + case.runtime.execution_info.task_id
++    case.runtime.execution_info.checkpoint_ns = ns
++    case.cfg["configurable"]["checkpoint_ns"] = ns
++    transport(case, monkeypatch)
++    handler = AsyncMock(return_value=result())
++    response = invoke(case, handler)
++    assert not response.isError
++    handler.assert_awaited_once()
++
++
++@pytest.mark.parametrize("kind", ["child", "untrusted_task", "read_operation"])
++def test_root_namespace_cannot_be_forged(case, monkeypatch, kind):
++    ns = "tools:" + case.runtime.execution_info.task_id
++    case.cfg["configurable"]["checkpoint_ns"] = ns
++    case.runtime.execution_info.checkpoint_ns = ns
++    if kind == "child":
++        case.cfg["configurable"]["checkpoint_ns"] = "child:" + str(uuid4()) + "|" + ns
++        case.runtime.execution_info.checkpoint_ns = case.cfg["configurable"]["checkpoint_ns"]
++    elif kind == "untrusted_task":
++        case.runtime.execution_info.task_id = str(uuid4())
++    else:
++        case.runtime.server_info.user["runtime_scope"]["operation"] = "read"
++    handler = AsyncMock()
++    response = invoke(case, handler)
++    assert response.isError
++    handler.assert_not_awaited()
++    assert case.requests == []
++
++
+ def test_job_read_rechecks_current_project_and_thread_permission(case, monkeypatch):
+     transport(case, monkeypatch)
+     handler = AsyncMock(return_value=result(receipt()))

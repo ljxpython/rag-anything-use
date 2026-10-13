@@ -1,0 +1,15 @@
+{
+  "thread": "940789a8-cda3-47b0-8aaa-928da18ce3bf",
+  "job": {
+    "version": 1,
+    "job_id": "kj_a16c8f1bc2d64c7d9e824fbb5fb28f12",
+    "document_id": "kd_359fbe44f1804fef90865c0c13264fea",
+    "file_name": "fixture-load-beta.md",
+    "status": "ready",
+    "searchable": true,
+    "error_code": null,
+    "created_at": "2026-10-13T03:59:48.746746Z",
+    "updated_at": "2026-10-13T04:00:02.442919Z"
+  },
+  "ready_wait_seconds": 5.366
+}

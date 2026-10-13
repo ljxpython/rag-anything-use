@@ -53,7 +53,11 @@ def test_http_auth_scopes_inputs_and_safe_results(published_config, tmp_path):
                         t for t in tools if t.name == "mcp_query_project_knowledge"
                     )
                     assert query.annotations.readOnlyHint is True
-                    assert set(query.inputSchema["properties"]) == {"query", "top_k"}
+                    assert set(query.inputSchema["properties"]) == {
+                        "query",
+                        "top_k",
+                        "sources_version",
+                    }
                     docs = (
                         await client.call_tool("list_project_knowledge_documents", {})
                     ).data
@@ -67,6 +71,7 @@ def test_http_auth_scopes_inputs_and_safe_results(published_config, tmp_path):
                     for args in (
                         {"query": "scope", "project_id": "other"},
                         {"query": "scope", "top_k": 9},
+                        {"query": "scope", "sources_version": 3},
                         {"query": " "},
                     ):
                         failure = await client.call_tool(

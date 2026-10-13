@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-13",
+  "rag": {
+    "pytest": {
+      "passed": 119,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 27.32
+    },
+    "ruff": {
+      "scoped_python_files": 16,
+      "format": "passed",
+      "check": "passed"
+    },
+    "compileall": "passed",
+    "uv_lock_check": "passed",
+    "uv_pip_check": {
+      "packages": 224,
+      "status": "passed"
+    },
+    "git_diff_check": "passed"
+  },
+  "platform_union": {
+    "head": "06d94130",
+    "api_knowledge": {
+      "passed": 42,
+      "subtests_passed": 269,
+      "seconds": 29.89
+    },
+    "runtime_knowledge": {
+      "passed": 156,
+      "warnings": 5,
+      "seconds": 94.23
+    },
+    "api_token_background": {
+      "passed": 113,
+      "skipped": 1,
+      "seconds": 26.28
+    },
+    "runtime_token_background": {
+      "passed": 196,
+      "skipped": 35,
+      "warnings": 17,
+      "seconds": 53.82
+    },
+    "web": {
+      "test_files": 14,
+      "passed": 93,
+      "seconds": 19.15,
+      "typecheck_errors": 0
+    },
+    "limits": "Additional PG and container opt-in tests explicitly skipped; this is not a production deployment regression"
+  },
+  "authorization_scope": "RAG branch submission and push authorized by user; temporary platform union changes are not committed or merged into platform main"
+}

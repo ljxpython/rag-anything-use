@@ -1,0 +1,18 @@
+{
+  "scope": "Ubuntu hardware and RAG serving process at end of real acceptance; parser child peak not sampled",
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "cpu_cores": 4,
+  "memory": {
+    "MemTotal": "3812564 kB",
+    "MemAvailable": "2709292 kB"
+  },
+  "rag_serving": {
+    "VmHWM": "326340 kB",
+    "VmRSS": "326340 kB",
+    "Threads": "10"
+  },
+  "rag_process_id": 62413,
+  "parser_peak_rss": null,
+  "gpu_required": false,
+  "amount": null
+}

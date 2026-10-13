@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
-from src.knowledge.rag_engine import CHUNK_DOCUMENT, install_document_chunk_ids
 from scripts.verify_incremental_snapshot import Calls
+from src.knowledge.rag_engine import CHUNK_DOCUMENT, install_document_chunk_ids
 
 
 def test_docling_provenance_unknown_and_spanning_pages(tmp_path):
@@ -121,9 +121,10 @@ def test_real_content_list_sources_pages_modal_status_and_close(
 ):
     pytest.importorskip("raganything")
     from lightrag import LightRAG
-    from lightrag.utils import EmbeddingFunc
     from lightrag.kg import shared_storage
+    from lightrag.utils import EmbeddingFunc
     from PIL import Image
+
     from src import demo_support
     from src.knowledge.generations import release_workspace
 
@@ -142,18 +143,27 @@ def test_real_content_list_sources_pages_modal_status_and_close(
             }
         )
 
+    graph_llm = calls.llm
+
+    async def llm(prompt, system_prompt=None, **kwargs):
+        if system_prompt and any(
+            label in system_prompt for label in ("table", "equation")
+        ):
+            return await vision(prompt)
+        return await graph_llm(prompt, system_prompt=system_prompt, **kwargs)
+
     workspace = "compat_" + tmp_path.name
     native = LightRAG(
         working_dir=str(tmp_path),
         workspace=workspace,
-        llm_model_func=calls.llm,
+        llm_model_func=llm,
         embedding_func=EmbeddingFunc(embedding_dim=8, func=calls.embed),
     )
     monkeypatch.setenv("VISION_BASE_URL", "http://127.0.0.1:1")
     monkeypatch.setenv("VISION_MODEL", "test-vision")
     monkeypatch.setenv("VISION_API_KEY", "test-key")
     with (
-        patch.object(demo_support, "build_llm_model_func", return_value=calls.llm),
+        patch.object(demo_support, "build_llm_model_func", return_value=llm),
         patch.object(demo_support, "build_vision_model_func", return_value=vision),
         patch.object(
             demo_support, "build_embedding_func", return_value=native.embedding_func
@@ -202,6 +212,15 @@ def test_real_content_list_sources_pages_modal_status_and_close(
             for document in ("kd-one", "kd-two"):
                 token = CHUNK_DOCUMENT.set(document)
                 try:
+                    if fallback:
+                        with pytest.raises(RuntimeError, match="batch failed"):
+                            await rag.insert_content_list(
+                                content_list=blocks, doc_id=document, file_path=document
+                            )
+                        status = await native.doc_status.get_by_id(document)
+                        assert status["status"] == "failed"
+                        assert not await rag.is_document_fully_processed(document)
+                        break
                     await rag.insert_content_list(
                         content_list=blocks, doc_id=document, file_path=document
                     )
@@ -226,6 +245,8 @@ def test_real_content_list_sources_pages_modal_status_and_close(
                     if row["content"].strip() == "Orion audit A-731."
                 )
                 assert text["page_idx"] == 2
+            if fallback:
+                return
             first = await native.doc_status.get_by_id("kd-one")
             second = await native.doc_status.get_by_id("kd-two")
             assert not set(first["chunks_list"]) & set(second["chunks_list"])

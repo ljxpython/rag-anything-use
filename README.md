@@ -1,6 +1,6 @@
 # RAG-Anything Use
 
-项目资料的离线管理、只读 MCP 查询和平台精确授权的受管附件异步入库服务。在线入库默认关闭，首版能力为 UTF-8 Markdown/TXT；文本索引使用 LightRAG，Docling / RAGAnything 提供可选文档解析与多模态处理。查询服务不生成最终答案，由消费方 Agent 根据返回片段回答。
+项目资料的离线管理、只读 MCP 查询和平台精确授权的受管附件异步入库服务。在线入库默认关闭；基础能力为 UTF-8 Markdown/TXT，启用完整 documents 依赖及多模态配置后支持 PDF／DOCX／PPTX／PNG／JPEG；文本索引使用 LightRAG，Docling / RAGAnything 提供可选文档解析与多模态处理。查询服务不生成最终答案，由消费方 Agent 根据返回片段回答。
 
 ## 安装与边界
 
@@ -17,7 +17,7 @@ PDF/Office 入库或运行多模态 examples 另外安装：
 uv sync --frozen --extra documents --group dev
 ```
 
-锁定 RAG-Anything 1.4.2、MinerU 3.4.5、Docling 2.84.0；FastMCP 3.2.0、LightRAG 1.4.12、httpx 0.28.1、Starlette 0.52.1保留。Intel macOS 无锁定 Torch 2.11 wheel：MD/TXT可用，documents extra 需 ARM Mac 或受支持的 Linux；当前发布锁使用POSIX flock。Ubuntu隔离环境的文本/扫描PDF最新链路通过；混合PDF、Office稳定性与多模态能力仍partial，逐轮结果见[本轮验证](docs/projects/20261012-rag-optimization/verification.md)。真实RAG证据使用 miaomiaoai `deepseek-v4.1-flash`、百炼兼容 `text-embedding-v4` / 1024维；旧Ollama/768索引不可混用。
+锁定 RAG-Anything 1.4.2、MinerU 3.4.5、Docling 2.84.0；FastMCP 3.2.0、LightRAG 1.4.12、httpx 0.28.1、Starlette 0.52.1保留。Intel macOS 无锁定 Torch 2.11 wheel：MD/TXT可用，documents extra 需 ARM Mac 或受支持的 Linux；当前发布锁使用POSIX flock。Ubuntu 隔离环境已通过文本／扫描／混合 PDF、DOCX、PPTX 完整入库→发布→鉴权 HTTP MCP 与图表／公式／图片事实验收；PNG／JPEG 在线入库及恢复已通过，逐轮结果见[本轮验证](docs/projects/20261013-online-documents/verification.md)。真实RAG证据使用 miaomiaoai `deepseek-v4.1-flash`、百炼兼容 `text-embedding-v4` / 1024维；旧Ollama/768索引不可混用。
 
 ## 最少配置
 
@@ -25,11 +25,11 @@ uv sync --frozen --extra documents --group dev
 
 Embedding 默认使用 Ollama（`EMBEDDING_PROVIDER=ollama`）。外部兼容 `/embeddings` 的 API 设置 `EMBEDDING_PROVIDER=openai`、`EMBEDDING_API_KEY` 和对应的兼容接口根地址；例如百炼 `text-embedding-v4` 使用 1024 维。该调用发送 `dimensions` 参数，供应商需要支持指定维度。切换嵌入模型或维度后必须新建索引。
 
-本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，用于减少推理挤占正文预算；新版本资料有成功入库记录。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
+本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON='{"thinking":{"type":"disabled"},"reasoning_effort":"off"}'`，按当前供应商实测减少推理挤占正文预算；`none` 曾在复杂文档节点返回 400，最终五格式用 `off` 复跑通过。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
 
 当前文本／视觉均使用 miaomiaoai `deepseek-v4.1-flash`。视觉三项 `VISION_BASE_URL/MODEL/API_KEY` 在私有 `.env` 中显式填写与对应 LLM 相同的值，`VISION_MAX_TOKENS=8192`；项目示例已删除旧供应商和备用配置。文本模式不调用视觉接口，多模态开关默认关闭。更换视觉配置也会改变 online 处理签名；已有逻辑库不绕过签名校验，正式切换需独立新库／候选验证。
 
-本轮通用资料仍出现输出预算耗尽、空正文和重试；配置这个开关并不保证供应商一定关闭推理或稳定抽取。解析/索引失败需查私有日志并用独立候选复验；旧已发布库不受失败候选影响。
+最终五格式未出现多模态分析失败或 individual fallback；供应商仍可能限流，最终质量基线出现两次 Embedding 429 后按现有策略恢复。解析／索引失败查私有日志并用独立候选复验，旧已发布库不受失败候选影响。
 
 HTTP 还需服务端 Bearer → scope 映射。token 至少32字符；项目为 UUID，租户为 UUID 或平台已有的 `__default`。namespace 是本地不可变索引版本，允许单段字母、数字、下划线、短横线（最多96字符），不可共享给不同项目。
 
@@ -50,6 +50,8 @@ uv run --frozen --env-file ".env" python "main.py" init-project-knowledge --tena
 uv run --frozen --env-file ".env" python "main.py" migrate-project-knowledge --knowledge-base-id <kb_id> --namespace <legacy_namespace> --processing-signature <confirmed_signature>
 uv run --frozen --env-file ".env" python "main.py" activate-knowledge-generation --knowledge-base-id <kb_id> --uploads on
 ```
+
+在线文档能力需 `PARSER=docling`、`ENABLE_IMAGE_PROCESSING/ENABLE_TABLE_PROCESSING/ENABLE_EQUATION_PROCESSING=true` 和已安装 documents extra；依赖或开关缺失时能力只报告 MD/TXT。原件 20MiB，验证真实容器；受管图片与 content-list 完整保存／校验，旧快照恢复不重新解析或调用模型。已下载完整 Docling 模型缓存可设置 `HF_HUB_OFFLINE=1`，缺缓存显式失败。图片平台 ImageRef 可信收据仍待接入，RAG 支持不能直接等同平台浏览器图片入库。详见 [在线文档专项](docs/projects/20261013-online-documents/README.md)。
 
 内部 PUT 只接收 Runtime 传来的实际原字节和六字段 FileRef；MCP 提交工具只接受 `file_ref`，由官方 interceptor 注入短时 grant 与 upload ticket。RAG 使用完整冻结快照恢复到独立候选，只处理新文档，校验后原子激活；不直接改 active namespace，不自动全量重建。详见 [RAG 接线交接](docs/projects/20261012-project-member-knowledge-upload/implementation/rag-handoff.md)。
 
@@ -74,12 +76,14 @@ CLI `query` 和 `debug-retrieve` 是管理员诊断：可生成答案/输出内�
 
 默认 Streamable HTTP `/mcp`，Bearer必需。stdio仅保留显式管理员模式，必须设置有效 `KNOWLEDGE_STDIO_TOKEN`。无匿名、公共库或未知范围回退。
 
-- `mcp_query_project_knowledge(query, top_k=8)`：query去首尾空白后1–2000字符，top_k严格整数1–8，固定hybrid；只调用一次 `aquery_data`，不调用生成式 `aquery`。
+- `mcp_query_project_knowledge(query, top_k=8, sources_version=1)`：query去首尾空白后1–2000字符，top_k严格整数1–8，固定hybrid；只调用一次 `aquery_data`，不调用生成式 `aquery`。
 - `list_project_knowledge_documents(limit=20)`：当前凭据范围的安全名称/状态，limit1–100。
 - `get_project_knowledge_document_status(document_id)`：同一范围，opaque `kd_` ID。
 - online 逻辑库另外提供 `mcp_submit_project_knowledge_document(file_ref)` 和 `mcp_get_project_knowledge_ingest_job(job_id)`；提交立即返回 bounded queued/reused 回执，任务后台执行，旧三工具和来源字段保持不变。迁移旧文档复用允许 `job_id=null`，前端不轮询空ID。
 
-查询返回同值JSON文本与structuredContent：`{"status":"ok","sources":[...]}`，无命中为 `{"status":"no_hit","sources":[]}`；服务失败为 MCP `isError=true`，不是no_hit。来源字段为 source_id / document_id / chunk_id / title / kind=knowledge / preview / truncated。最多8条、每片段800字符、JSON UTF-8最多12KiB；映射精确依据入库时的document_id，支持同名文件；不返回宿主路径、下载URL、页码、raw_data、凭据。供应商取消传播，单次检索60秒deadline。
+查询返回同值JSON文本与structuredContent：`{"status":"ok","sources":[...]}`，无命中为 `{"status":"no_hit","sources":[]}`；服务失败为 MCP `isError=true`，不是no_hit。来源字段为 source_id / document_id / chunk_id / title / kind=knowledge / preview / truncated。最多8条、每片段800字符、JSON UTF-8最多12KiB；映射精确依据入库时的document_id，支持同名文件；v1 不返回页码；两版均不返回宿主路径、下载URL、raw_data、凭据。供应商取消传播，单次检索60秒deadline。
+
+显式 `sources_version=2` 增加顶层版本和每来源 `locator:{unit,start,end,block_type}`；PDF 页、可靠 PPTX 幻灯片从绑定的真实 chunk 读取，均为 1-based 范围；DOCX／图片／未知位置返回 unknown 和 null，不猜页。旧平台保持默认 v1，平台 v2 DTO 与展示合入顺序见 [平台协同方案](docs/projects/20261013-online-documents/platform-contract.md)。
 
 legacy scope 的网络工具为只读，不暴露管理员接口；online 写入只开放上述精确工具并要求平台 grant/ticket，不能用静态 Bearer 提权。LightRAG hybrid可能调用关键词LLM与Embedding，外部调用费用需单独观察，不能把“无答案生成”理解为“无模型请求”。
 
@@ -108,28 +112,25 @@ uv run --frozen --group dev python -m pytest "tests" -q
 LLM_BASE_URL=http://127.0.0.1:1 LLM_MODEL=test-llm LLM_API_KEY=test-key EMBEDDING_BASE_URL=http://127.0.0.1:1 EMBEDDING_MODEL=test-embed uv run --frozen pytest "tests" -q
 ```
 
-2026-10-12最终完整回归：Ubuntu96项通过（24.92秒），Intel Mac90项通过/6项可选documents跳过（27.79秒），日志见[专项证据](docs/projects/20261012-rag-optimization/implementation/README.md)。真实worker/HTTP/MCP、重复零新增用量、回退和旧checksum不变均通过；平台IAM、前端与生产部署未联合验收。
+2026-10-13 本轮最终 Ubuntu **119 passed / 27.32s**；16 个变更 Python 文件 ruff format／check、compileall、frozen lock 与 pip check 均通过。旧授权／失 ACK、增量／迁移／回退测试保留。平台临时 union 的真实成员上传、Worker、浏览器 ready、另一成员新旧查询、撤权／Stop／重启／Fork／重复零新增调用通过；platform-api/runtime/web 相关知识与 Token／后台回归通过，详见 [最终验证](docs/projects/20261013-online-documents/verification.md)。平台主工作区尚未正式合并本期补丁，现役未部署。
 
-主线后台授权/失ACK回查修复已保留：该专项78项回归（52.28秒）及实际Platform API HTTP＋隔离SQL/IAM/Run＋真实DeepSeek/百炼＋worker/MCP七项检查通过；Runtime Agent、前端、生产IAM和部署仍需联合验收。合并后完整套件单独记录，不用两分支历史测试代替。
+最终 3 份公开合成 API／运维／发布资料、19 题评测：16 道有答案 Recall@8／证据完整率 100%，跨项目来源 0，检索 P50／P95 为 **2.948／3.564 秒**。三类无答案问题仍可能返回无关来源，真实 Agent 均拒答；检索服务不自行宣称“找到了答案”。私有业务语料与生产 SLA 尚未提供，不外推。20MiB 双页 PDF、两项目排队期间旧库查询、30 次确定性快照与读恢复／锁回收均有证据，费用金额未知为 null。
 
-2026-10-13合并后最终完整回归：Ubuntu **107 passed / 25.32s**；Intel Mac **101 passed、6 skipped / 169.36s**。本机高负载下两个worker冷启动超出旧测试30秒准备期限，测试调整为60秒，并在已确认恢复后跳过对退出进程组的多余清理；业务worker协议和SIGKILL/watchdog/锁/重启断言保留，详见[合并验收](docs/projects/20261012-rag-optimization/verification.md)。
-
-本轮3份公开合成运维/API/发布资料的19题评测：16题有答案Recall@8与证据完整率100%，跨项目来源0，P50/P95为6.114/15.449秒；3题无答案仍返回相关来源，需要消费方判断证据是否足够。100小文档快照观测使用确定性模型，不能外推生产吞吐或最大容量。旧专项的30题与平台本机联验属于历史证据，均不等于真实业务质量。
-
-可复跑入口（均创建独立临时namespace；前两个使用配置的模型并产生调用费用）：
+可复跑入口（均创建独立临时 namespace；前两个使用配置的模型并产生调用费用）：
 
 ```bash
 uv run --frozen --env-file ".env" python "scripts/evaluate_knowledge.py" --output "/tmp/rag-evaluation.json"
-uv run --frozen --env-file ".env" python "scripts/verify_document_formats.py" --output "/tmp/rag-formats.json"
-uv run --frozen python "scripts/benchmark_knowledge_snapshots.py" --documents 100 --output "/tmp/rag-capacity.json"
+HF_HUB_OFFLINE=1 uv run --frozen --env-file ".env" python "scripts/verify_document_formats.py" --output "/tmp/rag-formats.json"
+uv run --frozen python "scripts/benchmark_knowledge_snapshots.py" --documents 30 --output "/tmp/rag-capacity.json"
 ```
 
-PDF/Office脚本要求已安装documents。最新格式轮文本/扫描PDF通过，混合PDF和DOCX各600秒超时，PPTX实体抽取空正文失败；修正CLI失败退出码与脚本检查后未再运行全格式实模型验证。2026-10-13本机与Ubuntu项目私有视觉配置已改用miaomiaoai `deepseek-v4.1-flash`；更新配置后的既有视觉适配器正确识别合成图片，服务未重启，现役索引未切换。表格/公式/图片的完整文档链仍须各自验收，不能仅凭图片探针或ready状态宣称全部成功。MCP来源预算与字段未扩展，online仍只接收MD/TXT。
+格式脚本需 documents extra、完整 Docling 模型缓存及视觉配置。五格式最终独立复跑 13 事实命中，PNG／JPEG 真模型入库／复用／reader 重启通过；图片测试授权边界为受控 fixture，不冒充平台 ImageRef 浏览器闭环。首次失败和供应商参数修复证据保留在专项，平台正式 v2 展示、图片可信收据及部署计划见 [协同方案](docs/projects/20261013-online-documents/platform-contract.md)，音视频按用户决定延期。
 
 - [消费方接入契约](docs/mcp_receiver_integration_guide.md)
 - [运行与更新](docs/rag_system_usage_guide.md)
 - [当前能力与限制](docs/rag_system_current_progress.md)
 - [剩余开发、验收与 Ubuntu 用途](docs/remaining-work.md)
+- [Ubuntu 在线文档与联合验收](docs/projects/20261013-online-documents/README.md)（本期实现／验收通过，分支交付）
 - [模型供应商配置清理](docs/projects/20261013-model-provider-cleanup/README.md)
 - [Docling设计说明](docs/raganything_docling_guide.md)
 - [项目成员 Agent MCP 异步入库](docs/projects/20261012-project-member-knowledge-upload/README.md)（RAG文本范围完成，整专项partial）

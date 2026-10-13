@@ -1,0 +1,2677 @@
+{
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.13.16",
+  "packages": {
+    "lightrag-hku": "1.4.12"
+  },
+  "models": {
+    "llm": "deepseek-v4.1-flash",
+    "embedding": "text-embedding-v4",
+    "dimensions": 1024
+  },
+  "corpus": [
+    "api.md",
+    "operations.md",
+    "release.md"
+  ],
+  "questions": 19,
+  "queries": [
+    {
+      "id": "q01",
+      "query": "生产备份每天什么时候执行，保留多久？",
+      "status": "ok",
+      "required_documents": [
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.996,
+      "sources": [
+        {
+          "source_id": "055bd7f1a63b4bb083de92e5da5f78c1-1",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[1] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "055bd7f1a63b4bb083de92e5da5f78c1-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "055bd7f1a63b4bb083de92e5da5f78c1-3",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[3] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "query": "备份恢复演练的频率是多少？",
+      "status": "ok",
+      "required_documents": [
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.54,
+      "sources": [
+        {
+          "source_id": "3d09172d72194874ac7a3f60a22356a2-1",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[1] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "3d09172d72194874ac7a3f60a22356a2-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "query": "P1 和 P2 事故分别多久确认响应？",
+      "status": "ok",
+      "required_documents": [
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.06,
+      "sources": [
+        {
+          "source_id": "642891ef5c80443e9bbb59b404da98b3-1",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[1] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "642891ef5c80443e9bbb59b404da98b3-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "642891ef5c80443e9bbb59b404da98b3-3",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[3] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "query": "紧急恢复编号和恢复时间目标是什么？",
+      "status": "ok",
+      "required_documents": [
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.892,
+      "sources": [
+        {
+          "source_id": "f008798489c94986bc45f7e9d525ace5-1",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[1] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "f008798489c94986bc45f7e9d525ace5-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "f008798489c94986bc45f7e9d525ace5-3",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[3] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "query": "分析报表的恢复点目标和恢复时间目标是什么？",
+      "status": "ok",
+      "required_documents": [
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.855,
+      "sources": [
+        {
+          "source_id": "2d1ccfbbeb4e454cb8d204b9e6c374c6-1",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[1] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "2d1ccfbbeb4e454cb8d204b9e6c374c6-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "query": "登录接口使用什么方法和路径？成功后有哪些令牌字段？",
+      "status": "ok",
+      "required_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.775,
+      "sources": [
+        {
+          "source_id": "0f7974e19b7f4c208857d4c664d3d3a9-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "query": "访问令牌和刷新令牌各自的有效期是多少？",
+      "status": "ok",
+      "required_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.033,
+      "sources": [
+        {
+          "source_id": "bae198be8d234b8594db4e1cf0d8e677-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "query": "客户端超出限流额度会收到什么状态码，如何知道等待时间？",
+      "status": "ok",
+      "required_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.169,
+      "sources": [
+        {
+          "source_id": "d8ca2eb42b3348d6aac62c64b5d295fa-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        },
+        {
+          "source_id": "d8ca2eb42b3348d6aac62c64b5d295fa-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "query": "单个客户端每分钟能调用多少次接口？",
+      "status": "ok",
+      "required_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.948,
+      "sources": [
+        {
+          "source_id": "0cd93a99b41b454b88fb3166ba6a207b-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        },
+        {
+          "source_id": "0cd93a99b41b454b88fb3166ba6a207b-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "0cd93a99b41b454b88fb3166ba6a207b-3",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[3] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "query": "订单创建的幂等键用哪个头传递，重放保留多久？",
+      "status": "ok",
+      "required_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.037,
+      "sources": [
+        {
+          "source_id": "9f9f5df41b774dad84c37a0f1441b6dc-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "query": "删除令牌的方法、路径和成功状态码是什么？",
+      "status": "ok",
+      "required_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.645,
+      "sources": [
+        {
+          "source_id": "d42d6b1295574d029eee4b87d0f9a417-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "query": "生产发布窗口和回退窗口是什么？",
+      "status": "ok",
+      "required_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.493,
+      "sources": [
+        {
+          "source_id": "144f19f4929445e38199f2cf9429cf84-1",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[1] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "144f19f4929445e38199f2cf9429cf84-2",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[2] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "144f19f4929445e38199f2cf9429cf84-3",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[3] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "query": "Atlas 和 Boreal 的单日请求能力分别是多少？",
+      "status": "ok",
+      "required_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.667,
+      "sources": [
+        {
+          "source_id": "a7f007a3ec574d9bbc037a4f7e0803eb-1",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[1] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "a7f007a3ec574d9bbc037a4f7e0803eb-2",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[2] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        },
+        {
+          "source_id": "a7f007a3ec574d9bbc037a4f7e0803eb-3",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[3] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "query": "容量储备比例、估算公式和告警条件是什么？",
+      "status": "ok",
+      "required_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.796,
+      "sources": [
+        {
+          "source_id": "f194c8d1abf74375917f8e0f712d3c4c-1",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[1] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "f194c8d1abf74375917f8e0f712d3c4c-2",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[2] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "f194c8d1abf74375917f8e0f712d3c4c-3",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[3] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "query": "刷新令牌有效期与备份保留期分别是多少？不要混淆两者。",
+      "status": "ok",
+      "required_documents": [
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 3.348,
+      "sources": [
+        {
+          "source_id": "c1a3ec0561fa4e3e90c4c76ef6666269-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        },
+        {
+          "source_id": "c1a3ec0561fa4e3e90c4c76ef6666269-2",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[2] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "c1a3ec0561fa4e3e90c4c76ef6666269-3",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[3] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "query": "发布前检查的备份恢复演练多久做一次，回退窗口多久？",
+      "status": "ok",
+      "required_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "document_recall": 1.0,
+      "evidence_complete": true,
+      "first_relevant_rank": 1,
+      "cross_project_sources": 0,
+      "seconds": 2.902,
+      "sources": [
+        {
+          "source_id": "606a2592111e4525863bea9dd3549b5a-1",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[1] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "606a2592111e4525863bea9dd3549b5a-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "query": "客户合同价格是多少？",
+      "status": "ok",
+      "required_documents": [],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": null,
+      "evidence_complete": null,
+      "first_relevant_rank": null,
+      "cross_project_sources": 0,
+      "seconds": 2.69,
+      "sources": [
+        {
+          "source_id": "5d782178a09d40a39bacbac413738f8d-1",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[1] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        },
+        {
+          "source_id": "5d782178a09d40a39bacbac413738f8d-2",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[2] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "5d782178a09d40a39bacbac413738f8d-3",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[3] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "query": "员工薪资金额是多少？",
+      "status": "ok",
+      "required_documents": [],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6"
+      ],
+      "document_recall": null,
+      "evidence_complete": null,
+      "first_relevant_rank": null,
+      "cross_project_sources": 0,
+      "seconds": 2.761,
+      "sources": [
+        {
+          "source_id": "ff8a083e42b34ac2bd6eb4d3352cefe9-1",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[1] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "ff8a083e42b34ac2bd6eb4d3352cefe9-2",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[2] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "query": "GPU 的采购价格是多少？",
+      "status": "ok",
+      "required_documents": [],
+      "matched_documents": [
+        "kd_162083f1c14247139fda09cbb260cb9d",
+        "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+        "kd_6e0a97ee83f74edfbe29a43883dfa24e"
+      ],
+      "document_recall": null,
+      "evidence_complete": null,
+      "first_relevant_rank": null,
+      "cross_project_sources": 0,
+      "seconds": 2.674,
+      "sources": [
+        {
+          "source_id": "9205cd890bfa4c40a13f80ddcd9fcfba-1",
+          "document_id": "kd_162083f1c14247139fda09cbb260cb9d",
+          "chunk_id": "chunk-3649bbc71661c5ad10cf5759160db3b2",
+          "title": "[1] release.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统发布与容量规范\n\n生产发布窗口为每周二 09:30 UTC，回退窗口为 18 分钟。发布负责人是交付组，发布前必须核对备份恢复演练记录。\n\n| 服务 | 单日处理能力 | 负责人 |\n| --- | --- | --- |\n| Atlas | 840 万次请求 | 交付组 |\n| Boreal | 260 万次请求 | 存储组 |\n\n容量储备比例为 27%。容量估算公式为 C = workers × 42，其中 C 表示每秒可处理任务数。容量告警在使用率连续 5 分钟超过 73% 时触发。\n\n备份保留期以运维规范为准，接口限流以接口规范为准。本规范不包含 GPU 采购价格。",
+          "truncated": false
+        },
+        {
+          "source_id": "9205cd890bfa4c40a13f80ddcd9fcfba-2",
+          "document_id": "kd_6e0a97ee83f74edfbe29a43883dfa24e",
+          "chunk_id": "chunk-5da5652883ed15d6ede845a6378da3dd",
+          "title": "[2] api.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统接口规范\n\n登录接口为 POST /v2/auth/login，成功响应字段为 access_token 和 expires_in。访问令牌有效期为 90 分钟；刷新令牌有效期为 10 天。\n\n客户端必须使用 HTTPS。超过限流额度返回 HTTP 429，响应头 Retry-After 给出等待秒数。单个客户端每分钟最多发送 240 次请求。\n\n创建订单使用 POST /v2/orders。创建订单的幂等键通过 Idempotency-Key 头传递，同一幂等键的重放保留时间为 36 小时。\n\n删除令牌使用 DELETE /v2/auth/token，成功返回 HTTP 204。刷新令牌与备份保留时间属于不同概念。本规范没有说明合同价格或员工薪资。",
+          "truncated": false
+        },
+        {
+          "source_id": "9205cd890bfa4c40a13f80ddcd9fcfba-3",
+          "document_id": "kd_5f91520f9dc34bb0a1464ea00af0f2a6",
+          "chunk_id": "chunk-416f01f387cbdae549972abda6971885",
+          "title": "[3] operations.md",
+          "kind": "knowledge",
+          "preview": "# 星河系统运维规范\n\n生产环境备份由存储组负责，每天北京时间 02:15 执行。备份保留 35 天，恢复演练每 14 天进行一次。\n\nP1 事故须在 7 分钟内确认响应，事故负责人是值班工程师；P2 事故确认时限为 25 分钟。紧急恢复编号为 DR-4826，恢复时间目标为 45 分钟。\n\n| 数据分类 | 恢复点目标 | 恢复时间目标 |\n| --- | --- | --- |\n| 订单数据 | 5 分钟 | 45 分钟 |\n| 分析报表 | 24 小时 | 4 小时 |\n\n任何生产配置修改必须记录工单编号。运维规范不规定客户合同价格。",
+          "truncated": false
+        }
+      ]
+    }
+  ],
+  "recall_at_8": 1.0,
+  "evidence_completeness": 1.0,
+  "no_answer": {
+    "count": 3,
+    "no_hit": 0,
+    "returned_sources": 3
+  },
+  "cross_project_sources": 0,
+  "amount": null,
+  "status": "done",
+  "model_calls": [
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 172,
+        "total_tokens": 172
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 3398,
+        "completion_tokens": 1612,
+        "total_tokens": 5010,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3200,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 5415,
+        "completion_tokens": 909,
+        "total_tokens": 6324,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3328,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 14,
+        "total_tokens": 14
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 36,
+        "total_tokens": 36
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 33,
+        "total_tokens": 33
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 24
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 23,
+        "total_tokens": 23
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 19,
+        "total_tokens": 19
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 42,
+        "total_tokens": 42
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 22,
+        "total_tokens": 22
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 37,
+        "total_tokens": 37
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 23,
+        "total_tokens": 23
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 21,
+        "total_tokens": 21
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 19,
+        "total_tokens": 19
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 15,
+        "total_tokens": 15
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 18,
+        "total_tokens": 18
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 18,
+        "total_tokens": 18
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 17,
+        "total_tokens": 17
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 24
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 22,
+        "total_tokens": 22
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 25,
+        "total_tokens": 25
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 35,
+        "total_tokens": 35
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 44,
+        "total_tokens": 44
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": null,
+      "status_code": 429
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": null,
+      "status_code": 429
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 40,
+        "total_tokens": 40
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 35,
+        "total_tokens": 35
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 35,
+        "total_tokens": 35
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 36,
+        "total_tokens": 36
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 23,
+        "total_tokens": 23
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 38,
+        "total_tokens": 38
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 33,
+        "total_tokens": 33
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 40,
+        "total_tokens": 40
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 35,
+        "total_tokens": 35
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 24
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 37,
+        "total_tokens": 37
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 178,
+        "total_tokens": 178
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 3397,
+        "completion_tokens": 1129,
+        "total_tokens": 4526,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3200,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 4931,
+        "completion_tokens": 41,
+        "total_tokens": 4972,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3328,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 19,
+        "total_tokens": 19
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 37,
+        "total_tokens": 37
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 21,
+        "total_tokens": 21
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 33,
+        "total_tokens": 33
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 16,
+        "total_tokens": 16
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 39,
+        "total_tokens": 39
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 17,
+        "total_tokens": 17
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 34,
+        "total_tokens": 34
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 38,
+        "total_tokens": 38
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 40,
+        "total_tokens": 40
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 33,
+        "total_tokens": 33
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 186,
+        "total_tokens": 186
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 3402,
+        "completion_tokens": 1051,
+        "total_tokens": 4453,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3200,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 4858,
+        "completion_tokens": 143,
+        "total_tokens": 5001,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3328,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 39,
+        "total_tokens": 39
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 31,
+        "total_tokens": 31
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 18,
+        "total_tokens": 18
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 56,
+        "total_tokens": 56
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 18,
+        "total_tokens": 18
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 13,
+        "total_tokens": 13
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 13,
+        "total_tokens": 13
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 15,
+        "total_tokens": 15
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 14,
+        "total_tokens": 14
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 39,
+        "total_tokens": 39
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 21,
+        "total_tokens": 21
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 21,
+        "total_tokens": 21
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 21,
+        "total_tokens": 21
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 22,
+        "total_tokens": 22
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 20,
+        "total_tokens": 20
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 35,
+        "total_tokens": 35
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 22,
+        "total_tokens": 22
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 30,
+        "total_tokens": 30
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 22,
+        "total_tokens": 22
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 28,
+        "total_tokens": 28
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 25,
+        "total_tokens": 25
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 3256,
+        "completion_tokens": 129,
+        "total_tokens": 3385,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3200,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 3790,
+        "completion_tokens": 7,
+        "total_tokens": 3797,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3200,
+          "cache_write_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0,
+          "text_tokens": 0,
+          "image_tokens": 0,
+          "video_tokens": 0
+        }
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 32,
+        "total_tokens": 32
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 19,
+        "total_tokens": 19
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "ingest",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 37,
+        "total_tokens": 37
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 734,
+        "completion_tokens": 40,
+        "total_tokens": 774,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 731,
+        "completion_tokens": 27,
+        "total_tokens": 758,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 15,
+        "total_tokens": 15
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 737,
+        "completion_tokens": 45,
+        "total_tokens": 782,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 36,
+        "total_tokens": 36
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 734,
+        "completion_tokens": 39,
+        "total_tokens": 773,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 24
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 736,
+        "completion_tokens": 56,
+        "total_tokens": 792,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 40,
+        "total_tokens": 40
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 737,
+        "completion_tokens": 51,
+        "total_tokens": 788,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 41,
+        "total_tokens": 41
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 735,
+        "completion_tokens": 39,
+        "total_tokens": 774,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 29,
+        "total_tokens": 29
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 741,
+        "completion_tokens": 50,
+        "total_tokens": 791,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 42,
+        "total_tokens": 42
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 733,
+        "completion_tokens": 31,
+        "total_tokens": 764,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 27,
+        "total_tokens": 27
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 740,
+        "completion_tokens": 50,
+        "total_tokens": 790,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 42,
+        "total_tokens": 42
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 736,
+        "completion_tokens": 48,
+        "total_tokens": 784,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 36,
+        "total_tokens": 36
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 734,
+        "completion_tokens": 34,
+        "total_tokens": 768,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 24,
+        "total_tokens": 24
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 737,
+        "completion_tokens": 34,
+        "total_tokens": 771,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 26,
+        "total_tokens": 26
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 737,
+        "completion_tokens": 50,
+        "total_tokens": 787,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 37,
+        "total_tokens": 37
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 739,
+        "completion_tokens": 40,
+        "total_tokens": 779,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 34,
+        "total_tokens": 34
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 741,
+        "completion_tokens": 46,
+        "total_tokens": 787,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 40,
+        "total_tokens": 40
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 730,
+        "completion_tokens": 35,
+        "total_tokens": 765,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 22,
+        "total_tokens": 22
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 731,
+        "completion_tokens": 21,
+        "total_tokens": 752,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 9,
+        "total_tokens": 9
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "llm",
+      "usage": {
+        "prompt_tokens": 731,
+        "completion_tokens": 32,
+        "total_tokens": 763,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0
+        },
+        "cache_creation_input_tokens": 0
+      },
+      "status_code": 200
+    },
+    {
+      "stage": "query",
+      "kind": "embedding",
+      "usage": {
+        "prompt_tokens": 19,
+        "total_tokens": 19
+      },
+      "status_code": 200
+    }
+  ],
+  "ingest_seconds": {
+    "api.md": 22.703,
+    "operations.md": 12.679,
+    "release.md": 14.59
+  },
+  "indexed_bytes": 1172591,
+  "isolated_project_document": "kd_5dbbd4a1cab94cbda4ccf5c70d417b65",
+  "latency_seconds": {
+    "p50": 2.948,
+    "p95": 3.5634999999999994
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "thread": "81481dfc-2730-47e9-a1d6-9be317f8bfee",
+  "job": {
+    "version": 1,
+    "job_id": "kj_34832989f4d447849e4b998ff6713af3",
+    "document_id": "kd_479ba69d395041baae393c023ae556a4",
+    "file_name": "boundary-20MiB.pdf",
+    "status": "ready",
+    "searchable": true,
+    "error_code": null,
+    "created_at": "2026-10-13T03:59:40.689782Z",
+    "updated_at": "2026-10-13T03:59:52.721043Z"
+  },
+  "ready_wait_seconds": 5.288
+}

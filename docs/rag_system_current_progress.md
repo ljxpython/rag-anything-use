@@ -1,19 +1,15 @@
 # 当前知识服务能力
 
-最后更新：2026-10-13；用户验收升级与本期优化范围通过，需求done；项目旧供应商配置已清理，登记的本地知识服务保持停止。剩余开发／验收见[剩余事项](remaining-work.md)。
+最后更新：2026-10-13。Ubuntu 分支 `feat/online-documents-20261013` 的在线文档／多模态、来源 v2、复杂文档与临时平台文档闭环验收通过；正式平台合入和部署待协同。证据以 [本期验证](projects/20261013-online-documents/verification.md) 为准，旧专项结果保留。
 
-已实现：固定Bearer scope与目录防逃逸；一次结构化检索；opaque文档/片段来源、安全DTO；异步engine缓存、明确LightRAG workspace；离线单写者和不可变发布；逻辑项目SQLite任务/幂等；原件流式hash、受管票据和配额；完整快照恢复到独立候选、原生新文档增量、原子激活/读lease/回退；online MCP提交/状态和内部HTTP（默认关闭）；CLI注册/迁移/回退；用量阶段计数与安全错误。
+基础功能：固定 Bearer scope／目录防逃逸、一次结构化检索、安全来源 DTO、不可变发布／单写者；在线 SQLite 任务／hash 原件／幂等／配额／授权租约／失ACK GET；完整冻结候选、原生新增文档增量、CAS 激活、reader lease 和回退。online 默认关闭，不修改现役已发布库。
 
-本轮已升级RAG-Anything 1.4.2 / MinerU 3.4.5，保留LightRAG 1.4.12 / Docling 2.84.0；修复同正文多来源chunk覆盖、解析tuple/参数/页码、真实chunk计数、紧凑表格表示、首解析缓存、多模态workspace绑定、batch/fallback资产路径脱敏和CLI失败退出码。旧在线文本签名精确兼容已核验v1组合，不重写冻结快照。
+本期新增 MD／TXT 之外的 PDF／DOCX／PPTX／PNG／JPEG，按 documents 依赖与 Docling／完整多模态开关声明；真实容器校验、受管图片完整成果 hash／签名／恢复，缺损拒绝，旧快照恢复零新增模型调用；严格多模态描述失败传播、禁用 individual fallback，不标半成品 ready。默认 sources v1 保持七字段，显式 v2 从可信 native chunk 输出 page／slide／unknown，DOCX／图片不猜页。
 
-最终测试：2026-10-13合并主线授权/失ACK修复后，Ubuntu107项通过（25.32秒）；Intel Mac101项通过、6项documents跳过（169.36秒）。合并前升级分支的96/90项日志保留为历史证据，见[专项证据](projects/20261012-rag-optimization/implementation/README.md)。
+Ubuntu 五格式独立 CLI→发布→鉴权 HTTP MCP，13 个正文／表格／公式／图片事实全过；PNG／JPEG 真模型入库／恢复／复用／reader 重启通过。RAG 119 passed，静态／frozen依赖检查通过。Intel Mac 仍缺锁定 Torch wheel，documents 应在受支持 Linux 或 ARM Mac 实测。
 
-真实通过：sshmy2隔离DeepSeek + 百炼text-embedding-v4/1024维的HTTP/MCP/worker链，重复零新增usage、回退可查、旧checksum不变。19题公开通用资料评测16道有答案题Recall@8/证据完整率100%，跨项目来源0；3道无答案题仍返回资料。100小文档确定性快照观测与关闭共享键归零通过；生产IAM/Runtime、前端、真实业务质量/负载未联合验收。
+模型：miaomiaoai `deepseek-v4.1-flash` 文本／视觉与百炼 `text-embedding-v4`／1024；RAG-Anything1.4.2、LightRAG1.4.12、Docling2.84.0、MinerU3.4.5。当前供应商抽取 reasoning_effort:off 实测；none 在复杂节点曾400，失败 JSON 不覆盖。源码／env.example／examples 无旧供应商专用调用。
 
-实际平台授权追加验收：完整后台请求start/activate200；签名篡改/过期/撤权拒绝；受理后Thread删除任务仍完成；同key GET在新写暂停后仍返回同安全回执且不增attempt/usage。采用实际Platform API源码＋隔离SQL主体，非Runtime Agent/浏览器完整验收；见 [证据](projects/20261012-rag-provider-contract-alignment/verification.md)。
+真实临时平台 union：普通成员 PDF 浏览器上传／root审批／Worker ready、另一成员新旧 MD/PDF/DOCX/PPTX 查询、撤权／Stop／Worker 重启／Fork／同hash零新增调用通过；20MiB 双页 PDF、两项目排队且旧库可查。平台主工作区未覆盖；临时补丁及正式来源展示／图片 ImageRef 收据接线见 [协同方案](projects/20261013-online-documents/platform-contract.md)。PNG/JPEG 授权为受控边界，未冒充平台图片闭环。
 
-模型配置：文本／视觉均为miaomiaoai `deepseek-v4.1-flash`，本机与Ubuntu项目VISION三项显式复用对应LLM，输出预算8192；示例及运行源码无旧供应商调用。DeepSeek文本抽取使用 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，其他供应商默认 `{}`。现有视觉适配器无需新增供应商包装，更新配置后合成图片调用通过；此配置不改消费平台的默认模型或锁文件。
-
-格式：Ubuntu文本PDF和扫描PDF最新CLI→发布→MCP通过；DOCX/PPTX初轮正文通过，最新DOCX与混合PDF各600秒超时、PPTX空正文失败。混合PDF紧凑表格修复有确定性回归，真实模型链路未通过；修正后的格式脚本未再全跑。miaomiaoai DeepSeek图片HTTP与项目vision适配器通过，完整文档格式能力仍partial。online保持MD/TXT；Intel Mac仍无法安装锁定Torch2.11，ARM Mac本轮未实测。
-
-前端不属于本工程：平台侧API、Runtime及F01–F03聊天上传／回执／知识面板代码已交付，V02真实Agent／浏览器入库和生命周期仍待联合验收，online部署开关关闭。浏览器不直连MCP。启动和维护见[README](../README.md)。
+通用公开合成资料最终19题：16有答案召回／证据完整率1.0、跨项目来源0，裸检索P50/P95=2.948/3.564秒；三个真实Agent无答案案例拒答，检索仍可能返回无关来源。30次确定性快照锁／恢复验证不能外推生产吞吐；费用金额null，生产 SLA／私有业务门槛未提供。音视频用户暂不开发，见 [剩余事项](remaining-work.md)。

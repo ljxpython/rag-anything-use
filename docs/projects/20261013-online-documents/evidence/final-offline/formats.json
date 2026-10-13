@@ -1,0 +1,414 @@
+{
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.13.16",
+  "packages": {
+    "raganything": "1.4.2",
+    "lightrag-hku": "1.4.12",
+    "docling": "2.84.0",
+    "mineru": "3.4.5"
+  },
+  "models": {
+    "llm": "deepseek-v4.1-flash",
+    "embedding": "text-embedding-v4",
+    "dimensions": 1024,
+    "vision": "deepseek-v4.1-flash"
+  },
+  "corpus": "generated public format fixtures, no business data",
+  "formats": [
+    {
+      "file": "text.pdf",
+      "sha256": "9bfc5f4fb1b3ba86b409331f34c05f417d72358f284953ba8641e33580033ccf",
+      "queries": [
+        {
+          "question": "How long is Orion backup retention?",
+          "expected": "35 days",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.908,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "1f327279dbbd449ba88548c3496c35dc-1",
+                "document_id": "kd_ddd827c006df4e04b7759e6b16f39acf",
+                "chunk_id": "chunk-243bde1c209018f9fb36edfbcc22a404",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "How often are Orion restoration drills held?",
+          "expected": "14 days",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 5.127,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "a1aa43a697d04dceb892c96f37394ecb-1",
+                "document_id": "kd_ddd827c006df4e04b7759e6b16f39acf",
+                "chunk_id": "chunk-243bde1c209018f9fb36edfbcc22a404",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 19.241,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_ddd827c006df4e04b7759e6b16f39acf",
+      "parsed_blocks": {
+        "text": 2
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": 1,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "scan.pdf",
+      "sha256": "cc485fcea0a2c8ccf2509dfbdcbd075582cc3cabf49b50248ac5f2318e85a416",
+      "queries": [
+        {
+          "question": "What is the Orion emergency recovery code?",
+          "expected": "DR-4826",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.215,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "7b1a69bb11b7411292cc42500300ee96-1",
+                "document_id": "kd_457e9ae1c5e94f4592a93b2600f9e91d",
+                "chunk_id": "chunk-ee3a4900023512afd3eb6033bfc220f2",
+                "title": "[1] scan.pdf",
+                "kind": "knowledge",
+                "preview": "Orion emergency recovery\n\nThe recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 23.096,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_457e9ae1c5e94f4592a93b2600f9e91d",
+      "parsed_blocks": {
+        "text": 3
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": null,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "mixed.pdf",
+      "sha256": "12a33546d04ad3ac0e4128dca8bd7d7de4a73cc871866ebd4775e6dd18558fa1",
+      "queries": [
+        {
+          "question": "What is the Orion capacity reserve?",
+          "expected": "27",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.475,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "e98088fb7fb146a8a8f7f2e3ca227394-1",
+                "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+                "chunk_id": "chunk-345e8c15ed112894661573146cffa889",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "e98088fb7fb146a8a8f7f2e3ca227394-2",
+                "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+                "chunk_id": "chunk-9f128dd9d52cd15cea25c2bb82a2f5c2",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Service | Daily capacity |  |\n| --- | --- | --- |\n| Atlas | 840 requests | 840 requests |\n| Boreal | 260 requests | 260 requests |\nFootnotes: None\n\nAnalysis: The table is a compact two-column capacity reference for two named services, Atlas and Boreal. Its structure is minimal: the first column header is 'Service', the second column header is 'Daily capacity', and a third, unlabeled column repeats the identical daily capacity value for each row, effectively duplicating the data as a verification or formatting artifact rather than introducing a new metric. There are two data rows. The first row, Atlas, shows 840 requests in both the 'Daily capacity' column and the unlabeled third column. The second row, Boreal, shows 260 requests in bo",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "How many daily requests does Atlas support?",
+          "expected": "840",
+          "found": true,
+          "required_evidence": "Table Analysis:",
+          "seconds": 2.418,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "18c3f60f692b4f729cca505b5183b69a-1",
+                "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+                "chunk_id": "chunk-9f128dd9d52cd15cea25c2bb82a2f5c2",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Service | Daily capacity |  |\n| --- | --- | --- |\n| Atlas | 840 requests | 840 requests |\n| Boreal | 260 requests | 260 requests |\nFootnotes: None\n\nAnalysis: The table is a compact two-column capacity reference for two named services, Atlas and Boreal. Its structure is minimal: the first column header is 'Service', the second column header is 'Daily capacity', and a third, unlabeled column repeats the identical daily capacity value for each row, effectively duplicating the data as a verification or formatting artifact rather than introducing a new metric. There are two data rows. The first row, Atlas, shows 840 requests in both the 'Daily capacity' column and the unlabeled third column. The second row, Boreal, shows 260 requests in bo",
+                "truncated": true
+              },
+              {
+                "source_id": "18c3f60f692b4f729cca505b5183b69a-2",
+                "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+                "chunk_id": "chunk-345e8c15ed112894661573146cffa889",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the capacity formula?",
+          "expected": "42",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.171,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "8daab798878a41a88ff0fb96b3a095af-1",
+                "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+                "chunk_id": "chunk-345e8c15ed112894661573146cffa889",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "8daab798878a41a88ff0fb96b3a095af-2",
+                "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+                "chunk_id": "chunk-9f128dd9d52cd15cea25c2bb82a2f5c2",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Service | Daily capacity |  |\n| --- | --- | --- |\n| Atlas | 840 requests | 840 requests |\n| Boreal | 260 requests | 260 requests |\nFootnotes: None\n\nAnalysis: The table is a compact two-column capacity reference for two named services, Atlas and Boreal. Its structure is minimal: the first column header is 'Service', the second column header is 'Daily capacity', and a third, unlabeled column repeats the identical daily capacity value for each row, effectively duplicating the data as a verification or formatting artifact rather than introducing a new metric. There are two data rows. The first row, Atlas, shows 840 requests in both the 'Daily capacity' column and the unlabeled third column. The second row, Boreal, shows 260 requests in bo",
+                "truncated": true
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 48.683,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 2,
+      "document_id": "kd_7b12ae00b5f4419d901faae1a97b28b6",
+      "parsed_blocks": {
+        "text": 4,
+        "table": 1
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": null,
+          "original_type": null
+        },
+        {
+          "page_idx": 0,
+          "page_idx_end": 0,
+          "original_type": "table"
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "handbook.docx",
+      "sha256": "f94e803f6cb7db0e337501deb82da974210cc59eaa03fc437c25ac61af116eb1",
+      "queries": [],
+      "ingest_seconds": 108.608,
+      "ingest_exit": 1,
+      "analysis_failures": 2,
+      "individual_fallbacks": 0,
+      "status": "failed"
+    },
+    {
+      "file": "release.pptx",
+      "sha256": "ea885292a9d1e7c0a31738b594f556c155ecc363d25d6cbc7c0a7b926f50453c",
+      "queries": [
+        {
+          "question": "When do Orion production releases happen?",
+          "expected": "Tuesday",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.292,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "caba08d2a89744e28bc4eeb7d1c86f94-1",
+                "document_id": "kd_caa1be77b1434140b581155a5899e438",
+                "chunk_id": "chunk-8f13af1f575f0205af5908bb1bd4c80d",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "caba08d2a89744e28bc4eeb7d1c86f94-2",
+                "document_id": "kd_caa1be77b1434140b581155a5899e438",
+                "chunk_id": "chunk-5e99e0bf2b65b1832e856669395651f7",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:b470acf41e750e1963af9c08\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple text-only slide or document excerpt on a plain white background. The text is left-aligned in a sans-serif black font and occupies the upper-left portion of the frame, leaving the lower half and right side largely blank. There are three distinct lines or short paragraphs:\n\n1. Heading/title: \"Orion emergency recovery\"\n2. Sentence: \"The recovery code is DR-4826.\"\n3. Sentence: \"The recovery time objective is 45 minutes.\"\n\nNo logos, borders, charts, diagrams, axes, legends, or additional annotations are present. The",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "How long is the Orion rollback window?",
+          "expected": "18 minutes",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 4.632,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "3910849036c249efbea77e893c9bbd71-1",
+                "document_id": "kd_caa1be77b1434140b581155a5899e438",
+                "chunk_id": "chunk-8f13af1f575f0205af5908bb1bd4c80d",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "3910849036c249efbea77e893c9bbd71-2",
+                "document_id": "kd_caa1be77b1434140b581155a5899e438",
+                "chunk_id": "chunk-5e99e0bf2b65b1832e856669395651f7",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:b470acf41e750e1963af9c08\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple text-only slide or document excerpt on a plain white background. The text is left-aligned in a sans-serif black font and occupies the upper-left portion of the frame, leaving the lower half and right side largely blank. There are three distinct lines or short paragraphs:\n\n1. Heading/title: \"Orion emergency recovery\"\n2. Sentence: \"The recovery code is DR-4826.\"\n3. Sentence: \"The recovery time objective is 45 minutes.\"\n\nNo logos, borders, charts, diagrams, axes, legends, or additional annotations are present. The",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What recovery code appears in the release slide image?",
+          "expected": "DR-4826",
+          "found": true,
+          "required_evidence": "Image Content Analysis:",
+          "seconds": 7.094,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "2000d60f21594b4b9010c37e150fa5dc-1",
+                "document_id": "kd_caa1be77b1434140b581155a5899e438",
+                "chunk_id": "chunk-5e99e0bf2b65b1832e856669395651f7",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:b470acf41e750e1963af9c08\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple text-only slide or document excerpt on a plain white background. The text is left-aligned in a sans-serif black font and occupies the upper-left portion of the frame, leaving the lower half and right side largely blank. There are three distinct lines or short paragraphs:\n\n1. Heading/title: \"Orion emergency recovery\"\n2. Sentence: \"The recovery code is DR-4826.\"\n3. Sentence: \"The recovery time objective is 45 minutes.\"\n\nNo logos, borders, charts, diagrams, axes, legends, or additional annotations are present. The",
+                "truncated": true
+              },
+              {
+                "source_id": "2000d60f21594b4b9010c37e150fa5dc-2",
+                "document_id": "kd_caa1be77b1434140b581155a5899e438",
+                "chunk_id": "chunk-8f13af1f575f0205af5908bb1bd4c80d",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 40.437,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 2,
+      "document_id": "kd_caa1be77b1434140b581155a5899e438",
+      "parsed_blocks": {
+        "text": 4,
+        "image": 1
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0,
+        1
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": 1,
+          "original_type": null
+        },
+        {
+          "page_idx": 1,
+          "page_idx_end": 1,
+          "original_type": "image"
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    }
+  ],
+  "amount": null
+}

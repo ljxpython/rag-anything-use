@@ -1,0 +1,3 @@
+
+# Preserve the context-line spaces required by the handoff patch format.
+docs/projects/20261013-online-documents/platform-integration.patch -whitespace

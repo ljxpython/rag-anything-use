@@ -1,0 +1,321 @@
+{
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.13.16",
+  "packages": {
+    "raganything": "1.4.2",
+    "lightrag-hku": "1.4.12",
+    "docling": "2.84.0",
+    "mineru": "3.4.5"
+  },
+  "models": {
+    "llm": "deepseek-v4.1-flash",
+    "embedding": "text-embedding-v4",
+    "dimensions": 1024,
+    "vision": "deepseek-v4.1-flash"
+  },
+  "corpus": "generated public format fixtures, no business data",
+  "formats": [
+    {
+      "file": "mixed.pdf",
+      "sha256": "371847918cc819b4245fadd56f2c27dbb0a41a52c78f40d36c29c58e7ecd1c2b",
+      "queries": [],
+      "ingest_seconds": 287.282,
+      "ingest_exit": 1,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "status": "failed"
+    },
+    {
+      "file": "handbook.docx",
+      "sha256": "d5f6878e7ee4cb49d69202d72984697fb44eaf966371178264d1faf278695149",
+      "queries": [
+        {
+          "question": "How quickly must an Orion production incident be acknowledged?",
+          "expected": "7 minutes",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 5.678,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "0d24503547de42a883ab6e8a92f2f34c-1",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-2f5a30309f2e8d2fceb4048223b8e52c",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "0d24503547de42a883ab6e8a92f2f34c-2",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-4cc8aa13bdc2e35c829ba56b7adf4e69",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a two-column incident response matrix from the Orion service handbook. The first column header is 'Severity', representing incident priority classification. The second column header is 'Response', representing the required response or acknowledgment time for that severity. The table contains exactly one data row: Severity 'P1' and Response '7 minutes'. This means that a P1 incident is expected to receive a response or acknowledgment within 7 minutes. The surrounding context states that a production incident must be acknowledged within 7 minutes; the table operationalizes that requirement by explicitly linking the 7-minute threshold to P1 sev",
+                "truncated": true
+              },
+              {
+                "source_id": "0d24503547de42a883ab6e8a92f2f34c-3",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-58cd643d9ed1b3b9b7e660ab8851867b",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a simple two-column reference matrix titled by its headers: 'Severity' and 'Response'. It contains exactly one data row: Severity 'P1' maps to a Response value of '7 minutes'. The 'Severity' column identifies the incident priority level, where 'P1' conventionally represents the highest-priority or most critical production incident classification. The 'Response' column specifies the required response time associated with that severity. In this table, the sole defined service-level requirement is that a P1 incident must receive a response within 7 minutes. There are no other severity levels such as P2, P3, or P4, and no additional response tim",
+                "truncated": true
+              },
+              {
+                "source_id": "0d24503547de42a883ab6e8a92f2f34c-4",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-922aad638b9ae70c21640b0cf834640a",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a4b9928da1845139fda08d10\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a plain, text-only informational panel or slide excerpt on a white background. It contains three left-aligned blocks of black sans-serif text separated by blank lines, with no logos, icons, borders, diagrams, charts, tables, or other visual elements. The first block is a heading-like line: \"Orion emergency recovery\". The second block states: \"The recovery code is DR-4826.\" The third block states: \"The recovery time objective is 45 minutes.\" There are no axis labels, legends, node names, edge labels, footnotes, captions, headers, or page number",
+                "truncated": true
+              },
+              {
+                "source_id": "0d24503547de42a883ab6e8a92f2f34c-5",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-8493d68da0058aa8b0a6748fc3bf4f0e",
+                "title": "[5] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a4b9928da1845139fda08d10\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only informational graphic, likely a cropped slide or documentation panel. It has a plain white background with black sans-serif text positioned in the upper-left area of the canvas. There are no borders, icons, charts, diagrams, axes, legends, nodes, edges, or other visual elements. The text is arranged in three short, left-aligned paragraphs with blank vertical spacing between them. The first line functions as a title/heading and reads exactly: \"Orion emergency recovery\". The second paragraph reads exactly: \"The recovery code is DR-48",
+                "truncated": true
+              },
+              {
+                "source_id": "0d24503547de42a883ab6e8a92f2f34c-6",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-f06de05d789e85598b4b3884599a8890",
+                "title": "[6] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a homogeneous linear proportionality relation. C is the dependent variable, workers is the independent variable, and 42 is a constant coefficient or rate. Mathematically, it defines the linear function C(workers) = 42 workers with zero intercept and slope 42. Its domain is typically nonnegative integers representing headcount, while the codomain depends on the units of 42. The only operation is scalar multiplication. One additional worker increases C by 42 units, so the marginal capacity is 42. Solving for staffing gives workers = C/42, often rounded up to the next integer: workers = ceil(C/42). In the Orion service handbook context, C likely denotes total cap",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the P1 response time in the severity table?",
+          "expected": "7 minutes",
+          "found": true,
+          "required_evidence": "Table Analysis:",
+          "seconds": 6.001,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "6dd18d4fcabf4163a5464f3eaea7d34a-1",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-4cc8aa13bdc2e35c829ba56b7adf4e69",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a two-column incident response matrix from the Orion service handbook. The first column header is 'Severity', representing incident priority classification. The second column header is 'Response', representing the required response or acknowledgment time for that severity. The table contains exactly one data row: Severity 'P1' and Response '7 minutes'. This means that a P1 incident is expected to receive a response or acknowledgment within 7 minutes. The surrounding context states that a production incident must be acknowledged within 7 minutes; the table operationalizes that requirement by explicitly linking the 7-minute threshold to P1 sev",
+                "truncated": true
+              },
+              {
+                "source_id": "6dd18d4fcabf4163a5464f3eaea7d34a-2",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-58cd643d9ed1b3b9b7e660ab8851867b",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a simple two-column reference matrix titled by its headers: 'Severity' and 'Response'. It contains exactly one data row: Severity 'P1' maps to a Response value of '7 minutes'. The 'Severity' column identifies the incident priority level, where 'P1' conventionally represents the highest-priority or most critical production incident classification. The 'Response' column specifies the required response time associated with that severity. In this table, the sole defined service-level requirement is that a P1 incident must receive a response within 7 minutes. There are no other severity levels such as P2, P3, or P4, and no additional response tim",
+                "truncated": true
+              },
+              {
+                "source_id": "6dd18d4fcabf4163a5464f3eaea7d34a-3",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-2f5a30309f2e8d2fceb4048223b8e52c",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "6dd18d4fcabf4163a5464f3eaea7d34a-4",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-8493d68da0058aa8b0a6748fc3bf4f0e",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a4b9928da1845139fda08d10\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only informational graphic, likely a cropped slide or documentation panel. It has a plain white background with black sans-serif text positioned in the upper-left area of the canvas. There are no borders, icons, charts, diagrams, axes, legends, nodes, edges, or other visual elements. The text is arranged in three short, left-aligned paragraphs with blank vertical spacing between them. The first line functions as a title/heading and reads exactly: \"Orion emergency recovery\". The second paragraph reads exactly: \"The recovery code is DR-48",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the capacity equation in the Orion handbook?",
+          "expected": "42",
+          "found": true,
+          "required_evidence": "Mathematical Equation Analysis:",
+          "seconds": 7.373,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "d765e75d0ef34f2d8e32ceef2981d77c-1",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-f06de05d789e85598b4b3884599a8890",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a homogeneous linear proportionality relation. C is the dependent variable, workers is the independent variable, and 42 is a constant coefficient or rate. Mathematically, it defines the linear function C(workers) = 42 workers with zero intercept and slope 42. Its domain is typically nonnegative integers representing headcount, while the codomain depends on the units of 42. The only operation is scalar multiplication. One additional worker increases C by 42 units, so the marginal capacity is 42. Solving for staffing gives workers = C/42, often rounded up to the next integer: workers = ceil(C/42). In the Orion service handbook context, C likely denotes total cap",
+                "truncated": true
+              },
+              {
+                "source_id": "d765e75d0ef34f2d8e32ceef2981d77c-2",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-58cd643d9ed1b3b9b7e660ab8851867b",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a simple two-column reference matrix titled by its headers: 'Severity' and 'Response'. It contains exactly one data row: Severity 'P1' maps to a Response value of '7 minutes'. The 'Severity' column identifies the incident priority level, where 'P1' conventionally represents the highest-priority or most critical production incident classification. The 'Response' column specifies the required response time associated with that severity. In this table, the sole defined service-level requirement is that a P1 incident must receive a response within 7 minutes. There are no other severity levels such as P2, P3, or P4, and no additional response tim",
+                "truncated": true
+              },
+              {
+                "source_id": "d765e75d0ef34f2d8e32ceef2981d77c-3",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-4cc8aa13bdc2e35c829ba56b7adf4e69",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a two-column incident response matrix from the Orion service handbook. The first column header is 'Severity', representing incident priority classification. The second column header is 'Response', representing the required response or acknowledgment time for that severity. The table contains exactly one data row: Severity 'P1' and Response '7 minutes'. This means that a P1 incident is expected to receive a response or acknowledgment within 7 minutes. The surrounding context states that a production incident must be acknowledged within 7 minutes; the table operationalizes that requirement by explicitly linking the 7-minute threshold to P1 sev",
+                "truncated": true
+              },
+              {
+                "source_id": "d765e75d0ef34f2d8e32ceef2981d77c-4",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-8493d68da0058aa8b0a6748fc3bf4f0e",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a4b9928da1845139fda08d10\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only informational graphic, likely a cropped slide or documentation panel. It has a plain white background with black sans-serif text positioned in the upper-left area of the canvas. There are no borders, icons, charts, diagrams, axes, legends, nodes, edges, or other visual elements. The text is arranged in three short, left-aligned paragraphs with blank vertical spacing between them. The first line functions as a title/heading and reads exactly: \"Orion emergency recovery\". The second paragraph reads exactly: \"The recovery code is DR-48",
+                "truncated": true
+              },
+              {
+                "source_id": "d765e75d0ef34f2d8e32ceef2981d77c-5",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-2f5a30309f2e8d2fceb4048223b8e52c",
+                "title": "[5] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "What emergency recovery code appears in the handbook image?",
+          "expected": "DR-4826",
+          "found": true,
+          "required_evidence": "Image Content Analysis:",
+          "seconds": 6.886,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "058ab82a4469493381c6a948dba6a20d-1",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-922aad638b9ae70c21640b0cf834640a",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a4b9928da1845139fda08d10\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a plain, text-only informational panel or slide excerpt on a white background. It contains three left-aligned blocks of black sans-serif text separated by blank lines, with no logos, icons, borders, diagrams, charts, tables, or other visual elements. The first block is a heading-like line: \"Orion emergency recovery\". The second block states: \"The recovery code is DR-4826.\" The third block states: \"The recovery time objective is 45 minutes.\" There are no axis labels, legends, node names, edge labels, footnotes, captions, headers, or page number",
+                "truncated": true
+              },
+              {
+                "source_id": "058ab82a4469493381c6a948dba6a20d-2",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-8493d68da0058aa8b0a6748fc3bf4f0e",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a4b9928da1845139fda08d10\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only informational graphic, likely a cropped slide or documentation panel. It has a plain white background with black sans-serif text positioned in the upper-left area of the canvas. There are no borders, icons, charts, diagrams, axes, legends, nodes, edges, or other visual elements. The text is arranged in three short, left-aligned paragraphs with blank vertical spacing between them. The first line functions as a title/heading and reads exactly: \"Orion emergency recovery\". The second paragraph reads exactly: \"The recovery code is DR-48",
+                "truncated": true
+              },
+              {
+                "source_id": "058ab82a4469493381c6a948dba6a20d-3",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-58cd643d9ed1b3b9b7e660ab8851867b",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a simple two-column reference matrix titled by its headers: 'Severity' and 'Response'. It contains exactly one data row: Severity 'P1' maps to a Response value of '7 minutes'. The 'Severity' column identifies the incident priority level, where 'P1' conventionally represents the highest-priority or most critical production incident classification. The 'Response' column specifies the required response time associated with that severity. In this table, the sole defined service-level requirement is that a P1 incident must receive a response within 7 minutes. There are no other severity levels such as P2, P3, or P4, and no additional response tim",
+                "truncated": true
+              },
+              {
+                "source_id": "058ab82a4469493381c6a948dba6a20d-4",
+                "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+                "chunk_id": "chunk-2f5a30309f2e8d2fceb4048223b8e52c",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 570.741,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 1,
+      "page_count": null,
+      "chunk_count": 3,
+      "document_id": "kd_499f406d4c3a417298b42ab970fb3cd9",
+      "parsed_blocks": {
+        "text": 2,
+        "table": 1,
+        "image": 1,
+        "equation": 1
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [],
+      "page_ranges": [
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": null
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": "table"
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": "image"
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": "equation"
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": null
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": null
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "release.pptx",
+      "sha256": "595c3b5688ecd0521d70c657281d98e7b9a2be51fb1f885f7a1f0af3fad6ab32",
+      "queries": [],
+      "ingest_seconds": 320.622,
+      "ingest_exit": 1,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "status": "failed"
+    }
+  ],
+  "amount": null
+}

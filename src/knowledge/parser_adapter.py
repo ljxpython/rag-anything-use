@@ -61,6 +61,10 @@ def build_docling_parser():
     class ProvenanceParser(DoclingParser):
         def read_from_block(self, block, type, output_dir, cnt, num):
             result = super().read_from_block(block, type, output_dir, cnt, num)
+            if result.get("type") == "text" and str(result.get("text", "")).startswith(
+                ("[Image processing failed:", "[Table processing failed:")
+            ):
+                raise ValueError("knowledge_parser_asset_failed")
             if result.get("type") == "table" and isinstance(result["table_body"], dict):
                 from docling_core.types.doc.document import TableData
                 from raganything.utils import format_table_body

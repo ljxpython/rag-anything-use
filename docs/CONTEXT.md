@@ -2,16 +2,16 @@
 
 ## 最后更新
 
-2026-10-13 | 项目env／示例旧供应商使用已清理；本机和Ubuntu私有视觉配置统一DeepSeek，既有图片适配器通过；本机101 passed／6 skipped，更新配置后的Ubuntu隔离HTTP／worker／MCP六检查通过。新增剩余开发／验收／Ubuntu用途说明；原升级需求done，服务保持停止，online关闭，现役索引未切换
+2026-10-13 | Ubuntu 分支 feat/online-documents-20261013 完成在线 PDF／DOCX／PPTX／PNG／JPEG、受管资产与来源 v2；五格式13事实全过、真实平台 union 文档闭环及生命周期通过；RAG119 passed、19题公开基线有答案召回／证据1.0、P50/P95 2.948/3.564秒、20MiB／两项目队列已验。平台正式合入／v2展示／ImageRef收据待协同，音视频延期；现役索引未切换
 
 ## 系统状态
 
 | 组件 | 状态 | 关键约束 |
 |---|---|---|
-| `src/mcp_server.py` | 旧3只读工具保留；online精确提交/任务状态及内部HTTP含失ACK GET | FileRef/回执/sources不变；GET按当前grant及持久原主体/文件查同请求，新写关闭仍可查 |
+| `src/mcp_server.py` | 原只读／精确提交工具保留；query 显式 sources_version=1或2 | 默认v1来源七字段不变；v2可信locator，不返回宿主路径；失ACK GET按原主体／当前grant回查 |
 | `src/cli.py` | 稳定；注册/迁移/回退3命令；main入口已正确传播失败退出码 | 管理员专用；迁移需冻结旧服务与确认全部处理签名 |
-| `src/knowledge/` | 持久graph/来源/四文件绑定与新start/activate租约；来源/解析/缓存修复与旧文本签名兼容保留 | 12存储完整候选增量、published不可变；旧identity缺字段拒绝，不伪造来源；POSIX单服务进程 |
-| 测试套件 | ✅ 合并后Ubuntu107项通过（25.32s）；本机101项通过/6项documents跳过（169.36s） | 授权/失ACK、增量/迁移/回退与解析升级均保留；冷启动测试仅准备等待/成功后清理适配高负载，业务worker未改 |
+| `src/knowledge/` | 文档容器校验、完整成果与受管资产、严格多模态失败、文档／图片原生增量及可信定位 | 完整候选／CAS／reader lease／回退；旧快照零新增模型；损坏拒绝；旧文本签名精确兼容；POSIX单服务进程 |
+| 测试套件 | ✅ Ubuntu119项通过（27.32s），16文件ruff／compileall／frozen依赖通过 | 原授权／失ACK／增量／迁移／回退保留；API知识42+269子测试、Runtime知识156、Web知识及Token后台93通过，平台可选PG／容器跳过单列 |
 
 ## 环境说明
 
@@ -23,9 +23,10 @@
 
 ## 活跃项目
 
-- [模型供应商配置清理](projects/20261013-model-provider-cleanup/README.md)：done；本机101 passed／6 skipped，Ubuntu相关8项、真实图片及文本链六检查通过；[剩余开发／验收](remaining-work.md)明确Task2.2／4.1后置，平台代码已交付但V02完整联合验收未完成。首次env解析警告曾回显MCP token，启服前需协调消费方轮换，值未写入文档
-- [项目优化与 RAG-Anything 升级](projects/20261012-rag-optimization/README.md)：done（2026-10-13用户验收本期范围）。P0、19题通用检索基线、100次快照观测与逐格式记录完成；miaomiaoai DeepSeek图片HTTP探针/项目适配器通过，完整复杂PDF/Office多模态仍待复验，online多模态/页码、音视频与生产负载后置，现役迁移/新版部署未执行。
-- [项目成员 Agent MCP 异步入库](projects/20261012-project-member-knowledge-upload/README.md)：RAG文本范围done，整专项partial。恢复/重复0新调用、完整候选增量/回退已验；[provider两项对齐](projects/20261012-rag-provider-contract-alignment/README.md)done，实际平台HTTP/真实模型链七检查通过，Thread删除继续/撤权拒绝/失ACK GET已验。10-13只读核对平台tasks：A/R/O/V01与前端F01–F03代码完成，V02真实Agent/生命周期/浏览器入库与部署仍待验收；复杂格式/负载后置。[RAG接线](projects/20261012-project-member-knowledge-upload/implementation/rag-handoff.md)。
+- [Ubuntu 在线文档与联合验收](projects/20261013-online-documents/README.md)：本期实现／验收通过，分支交付收尾；临时 union 已真实验证文档链，平台主工作区未合并。PNG／JPEG 为真实模型＋受控授权验证，ImageRef 浏览器可信链后续协同。
+- [模型供应商清理](projects/20261013-model-provider-cleanup/README.md) 与 [RAG升级](projects/20261012-rag-optimization/README.md)：原期 done，本次补齐旧后置文档／资产／定位／联合验收；历史失败证据保留。
+- [成员异步入库](projects/20261012-project-member-knowledge-upload/README.md)：RAG与临时平台 V02 文档联验通过，正式平台合并／部署不标已完成；[授权与失ACK](projects/20261012-rag-provider-contract-alignment/README.md)保留。
+- [剩余事项](remaining-work.md)：平台v2展示、图片收据／正式合入、私有业务与生产SLA；音视频用户暂不开发。旧token启服前协调消费方轮换，证据不含凭据。
 
 ## 近期关键决策
 
@@ -33,6 +34,6 @@
 - 2026-10-12：在线文本新签名排除未使用的解析包版本；精确兼容已核验v1文本组合，保留旧签名/checksum。离线与在线新增chunk均以document ID隔离；多模态显式绑定本workspace，资产路径在batch/fallback索引模板中隐藏。
 - 2026-10-12：后台identity持久保留graph_id及sha256/size/name/MIME；每次新issuer/audience/整数iat/exp/uuid nonce。新增同key GET不enqueue/不消费attempt，要求当前upload grant；RAG新写关闭不拒回查，平台停签会阻止获取新租约。旧缺字段任务不猜来源。
 - 2026-10-12：实测固定完整快照候选＋新文档原生增量；不全库重组，不base＋delta。原生LLM缓存随快照恢复，不另加Embedding缓存；图更新必要费用单列，未知费率金额null。平台只接入，不持有第二套解析/索引队列。
-- 2026-10-12：online默认false；首版能力只报告UTF-8 MD/TXT。迁移冻结legacy服务、保留旧ID/原件并确认处理签名；回退先禁上传、恢复完整累计版本后才重启上传。新chunk ID含document ID与workspace全局KV/锁回收绑定LightRAG1.4.12，升级需重验。
-- 2026-10-11：DeepSeek 抽取使用 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}` + `LLM_MAX_TOKENS=8192`；本轮仍有空正文/预算耗尽，供应商稳定性需单独复验
+- 2026-10-13：online默认false；依赖及完整多模态开关齐全才报告PDF／DOCX／PPTX／PNG／JPEG，其余只报告MD/TXT。迁移冻结legacy服务、保留旧ID/原件并确认处理签名；回退先禁上传、恢复完整累计版本后才重启上传。新chunk ID含document ID与workspace全局KV/锁回收绑定LightRAG1.4.12，升级需重验。
+- 2026-10-13：当前 miaomiaoai 抽取实测 reasoning_effort:off；none 在复杂文档节点出现400，最终 off 五格式13事实全过。模型配置与多模态成果签名变动采用独立新库，不绕过旧签名。
 - 2026-10-11：CLI `query`/`debug-retrieve` 为管理员诊断工具，不作为平台来源契约

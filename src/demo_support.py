@@ -5,19 +5,19 @@ import base64
 import hashlib
 import json
 from contextvars import ContextVar
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 from urllib import request
 
-import numpy as np
 import httpx
+import numpy as np
 from dotenv import load_dotenv
 from lightrag import LightRAG
 from lightrag.llm.openai import openai_complete_if_cache
-from openai import AsyncOpenAI
 from lightrag.utils import EmbeddingFunc
+from openai import AsyncOpenAI
 
 if TYPE_CHECKING:
     from raganything import RAGAnything, RAGAnythingConfig
@@ -106,8 +106,11 @@ def get_test_image_path() -> Path:
     return path
 
 
-def build_llm_model_func(settings: DemoSettings, *, usage=None):
-    extra_body = json.loads(os.getenv("LLM_EXTRA_BODY_JSON", "{}"))
+def build_llm_model_func(
+    settings: DemoSettings, *, usage=None, usage_kind=None, extra_body=None
+):
+    if extra_body is None:
+        extra_body = json.loads(os.getenv("LLM_EXTRA_BODY_JSON", "{}"))
     if not isinstance(extra_body, dict):
         raise TypeError("invalid_llm_extra_body")
 
@@ -118,17 +121,19 @@ def build_llm_model_func(settings: DemoSettings, *, usage=None):
         **kwargs: Any,
     ) -> str:
         if usage is not None:
-            kind = "graph_extraction" if system_prompt else "affected_graph_merge"
+            kind = usage_kind or (
+                "graph_extraction" if system_prompt else "affected_graph_merge"
+            )
 
             async def measured():
+                from lightrag.llm.openai import InvalidResponseError
+                from openai import APIConnectionError, APITimeoutError, RateLimitError
                 from tenacity import (
                     AsyncRetrying,
                     retry_if_exception_type,
                     stop_after_attempt,
                     wait_exponential,
                 )
-                from openai import APIConnectionError, APITimeoutError, RateLimitError
-                from lightrag.llm.openai import InvalidResponseError
 
                 async for attempt in AsyncRetrying(
                     stop=stop_after_attempt(3),
@@ -186,7 +191,20 @@ def build_llm_model_func(settings: DemoSettings, *, usage=None):
     return llm_model_func
 
 
-def build_vision_model_func(settings: DemoSettings, llm_model_func):
+def build_vision_model_func(settings: DemoSettings, llm_model_func, *, usage=None):
+    vision_complete = build_llm_model_func(
+        replace(
+            settings,
+            llm_model=settings.vision_model,
+            llm_base_url=settings.vision_base_url,
+            llm_api_key=settings.vision_api_key,
+            llm_max_tokens=settings.vision_max_tokens,
+        ),
+        usage=usage,
+        usage_kind="vision_analysis",
+        extra_body={},
+    )
+
     def vision_model_func(
         prompt: str,
         system_prompt: str | None = None,
@@ -196,14 +214,11 @@ def build_vision_model_func(settings: DemoSettings, llm_model_func):
         **kwargs: Any,
     ) -> str:
         if messages:
-            return openai_complete_if_cache(
-                settings.vision_model,
+            return vision_complete(
                 "",
                 system_prompt=None,
                 history_messages=[],
                 messages=messages,
-                api_key=settings.vision_api_key,
-                base_url=settings.vision_base_url,
                 max_tokens=kwargs.pop("max_tokens", settings.vision_max_tokens),
                 **kwargs,
             )
@@ -224,14 +239,11 @@ def build_vision_model_func(settings: DemoSettings, llm_model_func):
                     ],
                 },
             ]
-            return openai_complete_if_cache(
-                settings.vision_model,
+            return vision_complete(
                 "",
                 system_prompt=None,
                 history_messages=[],
                 messages=[item for item in multimodal_messages if item is not None],
-                api_key=settings.vision_api_key,
-                base_url=settings.vision_base_url,
                 max_tokens=kwargs.pop("max_tokens", settings.vision_max_tokens),
                 **kwargs,
             )
@@ -392,10 +404,10 @@ def build_raganything(
     enable_image_processing: bool | None = None,
     enable_table_processing: bool | None = None,
     enable_equation_processing: bool | None = None,
+    usage=None,
 ) -> RAGAnything:
-    from raganything import RAGAnything
-    from raganything import modalprocessors
     from lightrag.kg import shared_storage
+    from raganything import RAGAnything, modalprocessors
 
     # shortcut: private hooks target RAG-Anything 1.4.2/LightRAG 1.4.12; reverify on upgrade.
     if not getattr(shared_storage.get_namespace_data, "_knowledge_workspace", False):
@@ -428,6 +440,9 @@ def build_raganything(
 
     asset_keys = ("img_path", "image_path", "table_img_path")
     asset_paths = ContextVar("knowledge_asset_paths", default=())
+    modal_state = ContextVar("knowledge_modal_state", default=None)
+    caption_state = ContextVar("knowledge_caption_state", default=None)
+    text_page_ends = ContextVar("knowledge_text_page_ends", default=())
 
     def hide_paths(content, extra=()):
         for path in (*asset_paths.get(), *extra):
@@ -438,6 +453,57 @@ def build_raganything(
         return content
 
     class KnowledgeRAGAnything(RAGAnything):
+        async def insert_content_list(self, content_list, *args, **kwargs):
+            token = text_page_ends.set(
+                tuple(
+                    item.get("page_idx_end", item.get("page_idx"))
+                    for item in content_list
+                    if item.get("type", "text") == "text"
+                    and str(item.get("text") or "").strip()
+                )
+            )
+            try:
+                return await super().insert_content_list(content_list, *args, **kwargs)
+            finally:
+                text_page_ends.reset(token)
+
+        async def _text_chunk_page_labels(
+            self, doc_id, text_content, page_intervals, *args
+        ):
+            labels = await super()._text_chunk_page_labels(
+                doc_id, text_content, page_intervals, *args
+            )
+            ends = text_page_ends.get()
+            if len(ends) != len(page_intervals):
+                return labels
+            end_intervals = [
+                (
+                    start,
+                    stop,
+                    end_page
+                    if type(end_page) is int and type(page) is int and end_page >= page
+                    else page,
+                )
+                for (start, stop, page), end_page in zip(
+                    page_intervals, ends, strict=True
+                )
+            ]
+            if end_intervals == page_intervals:
+                return labels
+            end_labels = await super()._text_chunk_page_labels(
+                doc_id, text_content, end_intervals, *args
+            )
+            result = {}
+            for key, (first, _) in labels.items():
+                end_first, end_last = end_labels.get(key, (None, None))
+                last = end_last if end_last is not None else end_first
+                result[key] = (
+                    (first, last)
+                    if first is not None and last is not None
+                    else (None, None)
+                )
+            return result
+
         async def parse_document(self, *args, **kwargs):
             # Parsing must start after its cache exists, including the first document.
             initialized = await self._ensure_lightrag_initialized()
@@ -445,7 +511,9 @@ def build_raganything(
                 raise RuntimeError("knowledge_parser_initialization_failed")
             return await super().parse_document(*args, **kwargs)
 
-        async def _process_multimodal_content(self, multimodal_items, *args, **kwargs):
+        async def _process_multimodal_content(
+            self, multimodal_items, file_path, doc_id, **kwargs
+        ):
             initialized = await self._ensure_lightrag_initialized()
             if not initialized.get("success"):
                 raise RuntimeError("knowledge_multimodal_initialization_failed")
@@ -453,11 +521,30 @@ def build_raganything(
                 tuple(item.get(key) for item in multimodal_items for key in asset_keys)
             )
             workspace_token = _MULTIMODAL_WORKSPACE.set(self.lightrag.workspace)
+            state_token = modal_state.set(
+                {"expected": len(multimodal_items), "validated": False, "errors": []}
+            )
             try:
-                return await super()._process_multimodal_content(
-                    multimodal_items, *args, **kwargs
+                # Upstream silently filters failed items and retries after partial writes.
+                # Only a complete batch may mark this independent candidate ready.
+                await self._process_multimodal_content_batch_type_aware(
+                    multimodal_items, file_path, doc_id
                 )
+                if not modal_state.get()["validated"]:
+                    raise ValueError("knowledge_multimodal_failed")
+                await self._mark_multimodal_processing_complete(doc_id)
+            except BaseException:
+                from lightrag.base import DocStatus
+
+                await self._upsert_doc_status(
+                    doc_id,
+                    file_path,
+                    status=DocStatus.FAILED,
+                    error_msg="knowledge_multimodal_failed",
+                )
+                raise
             finally:
+                modal_state.reset(state_token)
                 _MULTIMODAL_WORKSPACE.reset(workspace_token)
                 asset_paths.reset(token)
 
@@ -465,6 +552,51 @@ def build_raganything(
             super()._initialize_processors()
             # Individual fallback bypasses the batch template; scrub before it hashes/stores.
             for processor in self.modal_processors.values():
+                caption = processor.modal_caption_func
+
+                async def checked_caption(
+                    *args, _caption=caption, _processor=processor, **kwargs
+                ):
+                    try:
+                        response = await _caption(*args, **kwargs)
+                        data = _processor._robust_json_parse(response)
+                        entity = data.get("entity_info", {})
+                        if (
+                            not isinstance(data.get("detailed_description"), str)
+                            or not data["detailed_description"].strip()
+                            or not isinstance(entity, dict)
+                            or any(
+                                not isinstance(entity.get(key), str)
+                                or not entity[key].strip()
+                                for key in ("entity_name", "entity_type", "summary")
+                            )
+                        ):
+                            raise ValueError("knowledge_multimodal_failed")
+                        current = caption_state.get()
+                        if current is not None:
+                            current["validated"] = True
+                        return response
+                    except Exception:
+                        state = modal_state.get()
+                        if state is not None:
+                            state["errors"].append("knowledge_multimodal_failed")
+                        raise
+
+                processor.modal_caption_func = checked_caption
+                sections = processor.generate_chunk_sections
+
+                async def checked_sections(*args, _sections=sections, **kwargs):
+                    token = caption_state.set({"validated": False})
+                    try:
+                        result = await _sections(*args, **kwargs)
+                        # Missing/undecodable assets fail before the caption callback.
+                        if not caption_state.get()["validated"] or not result:
+                            raise ValueError("knowledge_multimodal_failed")
+                        return result
+                    finally:
+                        caption_state.reset(token)
+
+                processor.generate_chunk_sections = checked_sections
                 original = processor._create_entity_and_chunk
 
                 async def create(modal_chunk, *args, _create=original, **kwargs):
@@ -482,16 +614,33 @@ def build_raganything(
         def _convert_to_lightrag_chunks_type_aware(
             self, multimodal_data_list, *args, **kwargs
         ):
-            # Upstream uses page zero for context lookup; stored provenance must remain unknown.
+            state = modal_state.get()
+            if state is not None and (
+                state["errors"] or len(multimodal_data_list) != state["expected"]
+            ):
+                raise ValueError("knowledge_multimodal_failed")
+            if state is not None:
+                state["validated"] = True
+            # Upstream uses page zero for context lookup; stored provenance remains unknown.
             for data in multimodal_data_list:
                 data["item_info"]["page_idx"] = data["original_item"].get("page_idx")
-            return super()._convert_to_lightrag_chunks_type_aware(
+            chunks = super()._convert_to_lightrag_chunks_type_aware(
                 multimodal_data_list, *args, **kwargs
             )
+            for chunk, data in zip(chunks.values(), multimodal_data_list, strict=True):
+                start = data["original_item"].get("page_idx")
+                end = data["original_item"].get("page_idx_end", start)
+                if type(start) is int and type(end) is int and 0 <= start <= end:
+                    chunk["page_idx_end"] = end
+            return chunks
 
     settings = load_settings()
-    llm_model_func = build_llm_model_func(settings)
-    vision_model_func = build_vision_model_func(settings, llm_model_func)
+    llm_model_func = (
+        build_llm_model_func(settings, usage=usage)
+        if usage
+        else build_llm_model_func(settings)
+    )
+    vision_model_func = build_vision_model_func(settings, llm_model_func, usage=usage)
     embedding_func = build_embedding_func(settings)
     config = build_rag_config(settings, working_dir=working_dir)
     if parser_name is not None:

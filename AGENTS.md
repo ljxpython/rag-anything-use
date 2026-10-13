@@ -1,6 +1,6 @@
 # RAG-Anything Use 开发规范
 
-单服务知识库 MCP 系统。离线管理（CLI）+ 只读查询（MCP）+ 平台精确授权的受管附件异步入库（online默认关闭，首版MD/TXT）。
+单服务知识库 MCP 系统。离线管理（CLI）+ 只读查询（MCP）+ 平台精确授权的受管附件异步入库（online默认关闭；MD/TXT基础能力，完整documents配置支持PDF/DOCX/PPTX/PNG/JPEG）。
 
 ## 会话初始化
 
@@ -35,7 +35,7 @@
 | `src/mcp_server.py` | 3个原只读tool；online逻辑库仅新增约定submit/status，写需平台grant＋票据；内部HTTP显式鉴权 |
 | `src/cli.py` | 管理员CLI及注册/迁移/回退；不经MCP暴露 |
 | `src/knowledge/` | 共用引擎、持久任务/受管原件、独立候选构建/原子激活/读lease；不持平台权限副本 |
-| `tests/` | 107项覆盖协议、安全、生命周期、增量/计数、迁移/故障/回退、后台授权/失ACK私有回查与解析升级；Intel Mac的6项documents测试跳过 |
+| `tests/` | 119项覆盖协议、安全、生命周期、增量/计数、迁移/故障/回退、后台授权/失ACK、文档容器/受管资产/多模态失败与可信定位；documents完整回归在Ubuntu执行 |
 
 ## 验证
 

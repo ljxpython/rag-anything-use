@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-import hashlib
 import asyncio
+import hashlib
 import json
+import logging
 import os
 import re
 import tempfile
@@ -14,15 +15,19 @@ from uuid import uuid4
 
 from src.knowledge.artifacts import (
     checksum,
-    fsync_directory,
     compatible_processing_signature,
+    fsync_directory,
+)
+from src.knowledge.document_formats import (
+    MIME_EXT,
+    supported_mime_types,
+    validate_original,
 )
 from src.knowledge.operation_auth import (
     KnowledgeOperationAuthorizer,
     operation_identity,
 )
 
-MIME_EXT = {"text/plain": "txt", "text/markdown": "md"}
 SAFE_ERRORS = {
     "knowledge_not_found",
     "knowledge_upload_disabled",
@@ -52,7 +57,10 @@ SAFE_ERRORS = {
 
 
 def safe_error(exc):
-    return str(exc) if str(exc) in SAFE_ERRORS else "knowledge_processing_failed"
+    code = str(exc)
+    if code in {"knowledge_artifact_invalid", "knowledge_multimodal_failed"}:
+        logging.getLogger(__name__).warning("knowledge_processing_detail: %s", code)
+    return code if code in SAFE_ERRORS else "knowledge_processing_failed"
 
 
 def validate_file_ref(value, max_bytes=20 * 1024**2):
@@ -83,10 +91,9 @@ def validate_file_ref(value, max_bytes=20 * 1024**2):
     if mime not in MIME_EXT:
         raise ValueError("knowledge_unsupported_format")
     ext = MIME_EXT[mime]
-    if (
-        value["path"] != f"/workspace/uploads/{digest}.{ext}"
-        or Path(name).suffix.lower() != "." + ext
-    ):
+    if value["path"] != f"/workspace/uploads/{digest}.{ext}" or Path(
+        name
+    ).suffix.lower() not in ({".jpg", ".jpeg"} if ext == "jpg" else {"." + ext}):
         raise ValueError("invalid_file_ref")
     return value
 
@@ -127,14 +134,14 @@ class KnowledgeUploadService:
             if not signature_ok
             else "knowledge_upload_disabled"
         )
-        return dict(
-            version=1,
-            read=True,
-            upload_enabled=enabled,
-            supported_mime_types=list(MIME_EXT),
-            max_file_bytes=self.config.max_file_bytes,
-            disabled_reason=reason,
-        )
+        return {
+            "version": 1,
+            "read": True,
+            "upload_enabled": enabled,
+            "supported_mime_types": supported_mime_types(self.config),
+            "max_file_bytes": self.config.max_file_bytes,
+            "disabled_reason": reason,
+        }
 
     def directory(self, kb, name):
         if name not in {"originals", "tmp"}:
@@ -253,6 +260,8 @@ class KnowledgeUploadService:
         if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", request_id):
             raise ValueError("invalid_file_ref")
         project = self.scope_project(scope)
+        if ref["mime_type"] not in supported_mime_types(self.config):
+            raise ValueError("knowledge_unsupported_format")
         if not self.capabilities(scope)["upload_enabled"]:
             raise ValueError("knowledge_upload_disabled")
         values = self.authorizer.verify(
@@ -305,14 +314,12 @@ class KnowledgeUploadService:
                     raise ValueError("knowledge_content_conflict")
                 handle.flush()
                 await asyncio.to_thread(os.fsync, handle.fileno())
-                try:
-                    text = await asyncio.to_thread(
-                        temp_path.read_text, encoding="utf-8"
-                    )
-                    if not text.strip() or "\x00" in text:
-                        raise ValueError
-                except (ValueError, UnicodeError):
-                    raise ValueError("knowledge_invalid_content") from None
+                await asyncio.to_thread(
+                    validate_original,
+                    temp_path,
+                    ref["mime_type"],
+                    self.config.max_file_bytes,
+                )
                 with self.store.connect(write=True) as db:
                     if original.is_symlink():
                         raise ValueError("knowledge_path_escape")

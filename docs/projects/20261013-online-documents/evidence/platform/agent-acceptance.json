@@ -1,0 +1,674 @@
+{
+  "scope": "real Platform API IAM, real Agent Worker and RAG models; public generated fixtures; sources v1",
+  "cases": [
+    {
+      "case": "reader-old-new",
+      "status": "success",
+      "seconds": 26.683,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "f438a10c493f49dd894b34ce4ea39988-1",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[1] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "f438a10c493f49dd894b34ce4ea39988-2",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[2] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "f438a10c493f49dd894b34ce4ea39988-3",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[3] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "f438a10c493f49dd894b34ce4ea39988-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "f438a10c493f49dd894b34ce4ea39988-5",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[5] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "**答案（仅依据本次检索返回的片段）**\n\n| 项目 | 周期 | 来源 |\n|---|---|---|\n| Orion backup retention（备份保留期） | **35 天** | [1] fixture-new.pdf；[2] fixture-old.md |\n| Restoration drills（恢复演练） | **每 14 天一次** | [1] fixture-new.pdf；[2] fixture-old.md |\n\n两份资料表述一致：\n- [1] fixture-new.pdf：“Orion backup retention is 35 days. Backup restoration drills happen every 14 days.”\n- [2] fixture-old.md：“Orion backup retention is 35 days. Restoration drills happen every 14 days.”\n\n**说明与边界**\n- 本次检索共返回 5 个片段，其中 [3][4][5] 涉及的是发布策略（每周二 09:30 UTC 发布、回滚窗口 18 分钟）、应急恢复（恢复码、RTO 45 分钟）和事件响应（7 分钟内确认），与备份保留期/恢复演练周期无关，因此未用于作答。\n- 检索片段中出现的环境标记、恢复码等内容仅为资料原文数据，不构成对本次任务的指令。\n- 除上述两个周期外，资料未提及 retention 或 drills 的其他变体（如按月/按季度），故未作任何推测。",
+      "source_evidence_sha256": "dc861a0411529a9518933c359e8543cfc3618cbd2860dc2d7f241e2ee08b8b06"
+    },
+    {
+      "case": "reader-docx",
+      "status": "success",
+      "seconds": 26.067,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-1",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-b7a966601d4a064098b870e512ad46df",
+            "title": "[1] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear equation defining a variable C as the product of a variable 'workers' and a constant coefficient 42. In mathematical terms, it represents a direct proportionality: C scales linearly with the number of workers, with a rate constant of 42. The equation is of the form y = kx, where k = 42 is the constant of proportionality, x = workers, and y = C. The variable 'workers' likely denotes a count of personnel (a discrete non-negative integer), while C represents an aggregated quantity, such as total capacity (e.g., number of incidents that can be acknowledged). The coefficient 42 is a dimensionless or unit-bearing constant that depends on the context; here, ",
+            "truncated": true
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-2",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-6589c5050ad67755bddecea4c15ca3a0",
+            "title": "[2] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact two-column, two-row structure (including header row) titled implicitly by its content: a severity-to-response-time mapping. The left column header is 'Severity' and the right column header is 'Response.' The single data row specifies 'P1' under 'Severity' and '7 minutes' under 'Response.' This table directly operationalizes the surrounding statement from the Orion service handbook: 'A production incident must be acknowledged within 7 minutes.' The table formalizes that obligation by tying the 7-minute acknowledgement window specifically to P1 incidents—the highest/most critical severity level in typical incident classification sche",
+            "truncated": true
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-3",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[3] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-4",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-bc64a2d880e9c906a83425355105d6f4",
+            "title": "[4] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-5",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[5] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-6",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[6] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-7",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[7] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "c4ce52a268574eca93551d1fd248323d-8",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[8] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          }
+        ]
+      },
+      "final_answer": "我实际调用了一次 `mcp_query_project_knowledge`（查询词：「Orion P1 incident response 和 capacity equation 的计算结果」），命中 8 个片段。以下结论仅基于返回片段，未读取任何文件。\n\n## 1. Orion P1 incident response —— 有资料\n- **7 分钟（7 minutes）**\n- 依据：\n  - [2] `fixture-handbook.docx`：表格结构 `| Severity | Response |` / `| P1 | 7 minutes |`，片段指出该表把手册中「A production incident must be acknowledged within 7 minutes」这一义务具体绑定到 P1 级别。\n  - [4] `fixture-handbook.docx`：原文「Orion service handbook / A production incident must be acknowledged within 7 minutes.」\n\n即资料给出的是**P1 事件的响应（确认）时限为 7 分钟**。\n\n## 2. Capacity equation 的计算结果 —— 未找到结果\n- 资料中**只出现了公式本身，没有出现任何代入数值后的计算结果**。\n- 依据：[1] `fixture-handbook.docx` 片段只给出「Equation: C = workers * 42」，并说明这是形如 y = kx 的线性关系（k = 42，x = workers，y = C），其中 `workers` 表示人员数量、C 表示某种聚合量（如可确认的事件数）。片段未给出 `workers` 的取值，该段落在返回时还是 `truncated: true`（被截断）。\n- 因此：**capacity equation 的计算结果在返回的资料中未找到**，我不能凭公式自行代入推算或猜测。\n\n## 需要说明的边界\n- 返回的其余片段（[3]、[6]、[5]、[7]、[8] 等）涉及 Orion 的恢复码、RTO、备份保留/演练周期、发布与回滚窗口，与本次两个问题无直接关系；其中 [7] 片段含有一个「environment marker」字符串，属资料正文内容，不影响上述结论。\n- 若需要 capacity 的具体数值，请提供包含 `workers` 取值或已算出结果的文档；该来源片段当前也处于截断状态，可能需要以完整文档重新入库后再查。",
+      "source_evidence_sha256": "68d3eb69a5e2692ecd679164ba2084d5e8e664ed6b232014c4f8eb6e5a4a555b"
+    },
+    {
+      "case": "reader-pptx",
+      "status": "success",
+      "seconds": 30.604,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "bc5b6fc6d82348fd957a29f93fe3469f-1",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[1] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "bc5b6fc6d82348fd957a29f93fe3469f-2",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[2] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "bc5b6fc6d82348fd957a29f93fe3469f-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "bc5b6fc6d82348fd957a29f93fe3469f-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "bc5b6fc6d82348fd957a29f93fe3469f-5",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-6589c5050ad67755bddecea4c15ca3a0",
+            "title": "[5] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact two-column, two-row structure (including header row) titled implicitly by its content: a severity-to-response-time mapping. The left column header is 'Severity' and the right column header is 'Response.' The single data row specifies 'P1' under 'Severity' and '7 minutes' under 'Response.' This table directly operationalizes the surrounding statement from the Orion service handbook: 'A production incident must be acknowledged within 7 minutes.' The table formalizes that obligation by tying the 7-minute acknowledgement window specifically to P1 incidents—the highest/most critical severity level in typical incident classification sche",
+            "truncated": true
+          },
+          {
+            "source_id": "bc5b6fc6d82348fd957a29f93fe3469f-6",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[6] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "已实际调用 `mcp_query_project_knowledge`（query 覆盖“发布时间/周几”与“rollback window 时长”），检索状态 `ok`。仅依据返回片段作答：\n\n**1. Orion production releases 是周几？**\n**周二（Tuesday），09:30 UTC。**\n来源：[1] `fixture-release.pptx`（preview 原文：“Orion release policy / Production releases happen on Tuesday at 09:30 UTC.”）\n\n**2. rollback window 多久？**\n**18 分钟。**\n来源：[1] `fixture-release.pptx`（同一文档：“Release verification / The rollback window is 18 minutes.”）\n\n补充说明（避免误用）：\n- 同一检索还返回了 [2] `fixture-new.pdf`、[3] `fixture-old.md`，内容为 Orion **备份**保留 35 天、恢复演练每 14 天，与发布日/回滚窗口无关。\n- [4] `fixture-release.pptx` 的图片分析片段讲的是 “Orion emergency recovery / 恢复码 DR-4826 / RTO 45 分钟”，同样是发布策略之外的另一个主题，不能当作回滚窗口的依据。\n- [5]、[6] `fixture-handbook.docx` 只涉及 P1 事件 7 分钟内确认，也与本问题无关。\n\n未找到资料的部分：无——本问题的两个要点均由 [1] 明确覆盖；资料中未提及除上述周二 09:30 UTC 之外的其他发布时间窗口。",
+      "source_evidence_sha256": "a537f757198e77815b54cf73b4ccc60383abcb3b4401adaf54aaad3762eb3db5"
+    },
+    {
+      "case": "noanswer-price",
+      "status": "success",
+      "seconds": 26.701,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-1",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[1] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-2",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[2] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-5",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[5] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-6",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-6589c5050ad67755bddecea4c15ca3a0",
+            "title": "[6] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact two-column, two-row structure (including header row) titled implicitly by its content: a severity-to-response-time mapping. The left column header is 'Severity' and the right column header is 'Response.' The single data row specifies 'P1' under 'Severity' and '7 minutes' under 'Response.' This table directly operationalizes the surrounding statement from the Orion service handbook: 'A production incident must be acknowledged within 7 minutes.' The table formalizes that obligation by tying the 7-minute acknowledgement window specifically to P1 incidents—the highest/most critical severity level in typical incident classification sche",
+            "truncated": true
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-7",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-bc64a2d880e9c906a83425355105d6f4",
+            "title": "[7] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "dffe570593e944a296875d1c52436585-8",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-b7a966601d4a064098b870e512ad46df",
+            "title": "[8] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear equation defining a variable C as the product of a variable 'workers' and a constant coefficient 42. In mathematical terms, it represents a direct proportionality: C scales linearly with the number of workers, with a rate constant of 42. The equation is of the form y = kx, where k = 42 is the constant of proportionality, x = workers, and y = C. The variable 'workers' likely denotes a count of personnel (a discrete non-negative integer), while C represents an aggregated quantity, such as total capacity (e.g., number of incidents that can be acknowledged). The coefficient 42 is a dimensionless or unit-bearing constant that depends on the context; here, ",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "已实际调用 `mcp_query_project_knowledge`（query: \"Orion 客户合同价格 元\"，top_k=8），返回 8 条片段。\n\n**结论：未找到资料。** 检索结果中没有任何一条包含 Orion 客户合同价格或金额信息，因此无法回答该价格是多少元。\n\n返回的 8 条来源片段实际涉及的内容如下（用于说明检索覆盖范围）：\n\n| 来源 | 文档 | 片段内容要点 |\n|---|---|---|\n| [1] | fixture-release.pptx | 生产发布在周二 09:30 UTC；回滚窗口 18 分钟 |\n| [2] | fixture-new.pdf | 备份保留 35 天；恢复演练每 14 天一次 |\n| [3] | fixture-old.md | 同上备份策略，环境标记 ALPHA-PUBLIC-7139 |\n| [4] | fixture-release.pptx | 图片文本：紧急恢复码 DR-4826，恢复时间目标 45 分钟 |\n| [5] | fixture-handbook.docx | 紧急恢复码 DR-4826、RTO 45 分钟（图片分析） |\n| [6] | fixture-handbook.docx | 表格：P1 事件响应 7 分钟 |\n| [7] | fixture-handbook.docx | 生产事故须在 7 分钟内确认 |\n| [8] | fixture-handbook.docx | 公式 C = workers * 42 |\n\n这些片段涵盖发布、备份、事故响应、恢复与容量公式，均与合同价格无关。按你的要求，我不做推测、不读取工作区文件、不使用其他工具补充信息。\n\n如果你手上有包含合同价格的文档，可以告诉我以便加入项目知识库后再检索；或允许我改用其他数据源再查。",
+      "source_evidence_sha256": "ae9c839e00a691dd35627962e7de97149b1414389fc755f5bdb9610c461cb112"
+    },
+    {
+      "case": "noanswer-year",
+      "status": "success",
+      "seconds": 27.259,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-1",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[1] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-2",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[2] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-4",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-bc64a2d880e9c906a83425355105d6f4",
+            "title": "[4] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-5",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[5] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-6",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[6] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-7",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-6589c5050ad67755bddecea4c15ca3a0",
+            "title": "[7] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact two-column, two-row structure (including header row) titled implicitly by its content: a severity-to-response-time mapping. The left column header is 'Severity' and the right column header is 'Response.' The single data row specifies 'P1' under 'Severity' and '7 minutes' under 'Response.' This table directly operationalizes the surrounding statement from the Orion service handbook: 'A production incident must be acknowledged within 7 minutes.' The table formalizes that obligation by tying the 7-minute acknowledgement window specifically to P1 incidents—the highest/most critical severity level in typical incident classification sche",
+            "truncated": true
+          },
+          {
+            "source_id": "fd8b5726ded048cc884dfde75f16305f-8",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-b7a966601d4a064098b870e512ad46df",
+            "title": "[8] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear equation defining a variable C as the product of a variable 'workers' and a constant coefficient 42. In mathematical terms, it represents a direct proportionality: C scales linearly with the number of workers, with a rate constant of 42. The equation is of the form y = kx, where k = 42 is the constant of proportionality, x = workers, and y = C. The variable 'workers' likely denotes a count of personnel (a discrete non-negative integer), while C represents an aggregated quantity, such as total capacity (e.g., number of incidents that can be acknowledged). The coefficient 42 is a dimensionless or unit-bearing constant that depends on the context; here, ",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "## 结论：资料未提及\n\n我已实际调用 `mcp_query_project_knowledge`（查询词：Orion 公司 成立 年份，top_k=8），返回 8 条片段，来源如下：\n\n| 序号 | 来源文档 | 片段主要内容 |\n|---|---|---|\n| [1] | fixture-release.pptx | 生产发布在周二 09:30 UTC，回滚窗口 18 分钟 |\n| [2] | fixture-new.pdf | 备份保留 35 天，恢复演练每 14 天一次 |\n| [3] | fixture-old.md | 备份保留 35 天，环境标记 ALPHA-PUBLIC-7139 |\n| [4] | fixture-handbook.docx | 生产事故须在 7 分钟内确认 |\n| [5] | fixture-release.pptx | 图片文字：Orion emergency recovery，恢复代码 DR-4826，RTO 45 分钟 |\n| [6] | fixture-handbook.docx | 图片文字：Orion emergency recovery（同上） |\n| [7] | fixture-handbook.docx | 表格：P1 响应 7 分钟 |\n| [8] | fixture-handbook.docx | 公式：C = workers * 42 |\n\n**关于\"Orion 公司是哪一年成立的\"，以上 8 条片段中没有任何一条包含成立年份或公司信息**，命中的都是发布流程、备份保留、事故响应、恢复代码等运维类内容。\n\n因此：**未找到资料**，无法给出成立年份。我不会根据这些片段推测或编造答案。如需该信息，建议将包含公司背景的资料加入知识库后再次查询。",
+      "source_evidence_sha256": "84bd930f5e253393f499bab717a819f23126d007202600113aff0559fc213f09"
+    },
+    {
+      "case": "noanswer-address",
+      "status": "success",
+      "seconds": 22.467,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-1",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[1] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-2",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[2] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-5",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-bc64a2d880e9c906a83425355105d6f4",
+            "title": "[5] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-6",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[6] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-7",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-6589c5050ad67755bddecea4c15ca3a0",
+            "title": "[7] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact two-column, two-row structure (including header row) titled implicitly by its content: a severity-to-response-time mapping. The left column header is 'Severity' and the right column header is 'Response.' The single data row specifies 'P1' under 'Severity' and '7 minutes' under 'Response.' This table directly operationalizes the surrounding statement from the Orion service handbook: 'A production incident must be acknowledged within 7 minutes.' The table formalizes that obligation by tying the 7-minute acknowledgement window specifically to P1 incidents—the highest/most critical severity level in typical incident classification sche",
+            "truncated": true
+          },
+          {
+            "source_id": "2ed254778c2f48929a1139eaa58ece78-8",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-b7a966601d4a064098b870e512ad46df",
+            "title": "[8] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear equation defining a variable C as the product of a variable 'workers' and a constant coefficient 42. In mathematical terms, it represents a direct proportionality: C scales linearly with the number of workers, with a rate constant of 42. The equation is of the form y = kx, where k = 42 is the constant of proportionality, x = workers, and y = C. The variable 'workers' likely denotes a count of personnel (a discrete non-negative integer), while C represents an aggregated quantity, such as total capacity (e.g., number of incidents that can be acknowledged). The coefficient 42 is a dimensionless or unit-bearing constant that depends on the context; here, ",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "**未找到资料。**\n\n我实际调用了一次 `mcp_query_project_knowledge`（query: \"Orion 公司总部详细地址\"），返回 8 条片段，来源如下：\n\n1. [1] fixture-release.pptx — 发布策略：生产发布在周二 09:30 UTC，回滚窗口 18 分钟\n2. [2] fixture-new.pdf — 备份保留 35 天，恢复演练每 14 天\n3. [3] fixture-old.md — Orion 备份策略，含环境标记 ALPHA-PUBLIC-7139\n4. [4] fixture-release.pptx — 图片内容分析：Orion 应急恢复，恢复码 DR-4826，RTO 45 分钟\n5. [5] fixture-handbook.docx — 生产事故须在 7 分钟内确认\n6. [6] fixture-handbook.docx — 同上图片分析内容\n7. [7] fixture-handbook.docx — 表格：P1 对应 7 分钟\n8. [8] fixture-handbook.docx — 公式 C = workers * 42\n\n这些片段全部涉及发布、备份、应急恢复、事故响应时限等内容，**没有任何一条包含 Orion 公司的总部地址或任何地址类信息**。因此按现有资料无法回答\"总部详细地址\"，不能给出推测结果。\n\n如果该地址确实应属于项目共享知识库内容，需要先把包含该信息的文档正式加入知识库（可通过提供附件并明确要求入库），入库状态达到 searchable 后再查询。",
+      "source_evidence_sha256": "9e8ccba2ec4ab3b08dc31dc6415b40d132a84ed8e400b9e67c6bf008a744ac23"
+    },
+    {
+      "case": "cross-project",
+      "status": "success",
+      "seconds": 19.624,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "59a47ad1c8ad4ebc872460380515f772-1",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[1] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          },
+          {
+            "source_id": "59a47ad1c8ad4ebc872460380515f772-2",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[2] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "59a47ad1c8ad4ebc872460380515f772-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "59a47ad1c8ad4ebc872460380515f772-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "59a47ad1c8ad4ebc872460380515f772-5",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-b7a966601d4a064098b870e512ad46df",
+            "title": "[5] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear equation defining a variable C as the product of a variable 'workers' and a constant coefficient 42. In mathematical terms, it represents a direct proportionality: C scales linearly with the number of workers, with a rate constant of 42. The equation is of the form y = kx, where k = 42 is the constant of proportionality, x = workers, and y = C. The variable 'workers' likely denotes a count of personnel (a discrete non-negative integer), while C represents an aggregated quantity, such as total capacity (e.g., number of incidents that can be acknowledged). The coefficient 42 is a dimensionless or unit-bearing constant that depends on the context; here, ",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "**未找到相关资料。**\n\n我实际调用了一次 `mcp_query_project_knowledge`（query: `DECOY-9281 客户价格 customer price`，top_k=8），返回状态 `ok`，共 5 个片段，来源如下：\n\n| 序号 | 来源文档 | 片段内容要点 |\n|---|---|---|\n| [1] | fixture-handbook.docx | Orion 服务手册：生产事故须在 7 分钟内确认；图片内文字 \"Orion emergency recovery / The recovery code is DR-4826 / RTO 45 minutes\" |\n| [2] | fixture-release.pptx | 发布幻灯片图片转录：Orion emergency recovery、recovery code DR-4826、RTO 45 分钟 |\n| [3] | fixture-old.md | Orion 备份策略：保留 35 天、每 14 天恢复演练、环境标记 ALPHA-PUBLIC-7139 |\n| [4] | fixture-release.pptx | Orion 发布策略：周二 09:30 UTC 生产发布；回滚窗口 18 分钟 |\n| [5] | fixture-handbook.docx | 公式 C = workers * 42 |\n\n这 5 个片段全部是关于 Orion 系统的发布、备份、应急恢复流程，**没有任何一条提到 \"DECOY-9281\"，也没有任何客户价格（customer price）字段或数值**。\n\n因此：**项目共享知识库中未找到 DECOY-9281 的客户价格**，我不能给出具体数值。如果该数据确实存在，可能位于尚未入库的资料中；若你希望我把相关附件加入知识库，请明确说明并提供当前聊天的附件。",
+      "source_evidence_sha256": "0377a382c11874dfe0d4e439f88db1049a796bd6ccb61fb5fe5ed85f6eeb4459"
+    },
+    {
+      "case": "beta-decoy",
+      "status": "success",
+      "seconds": 27.622,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "2cdff4be692c4024bd094e032221a63b-1",
+            "document_id": "kd_98ff0f6444594188bf2dab7e161347ad",
+            "chunk_id": "chunk-447ed6a365bad9aa83532d4f3e0306e6",
+            "title": "[1] fixture-beta.md",
+            "kind": "knowledge",
+            "preview": "Other-project customer price is 999 yuan. Confidential marker DECOY-9281.",
+            "truncated": false
+          }
+        ]
+      },
+      "final_answer": "查询已实际执行（`mcp_query_project_knowledge`，query = \"客户合同价格 Confidential marker 是多少\"，top_k = 8）。\n\n## 检索结果\n\n状态 `ok`，共返回 **1 条**来源：\n\n| 来源 | 文档 | 片段内容 |\n|---|---|---|\n| [1] | fixture-beta.md（source_id `2cdff4be...a63b-1`，kind: knowledge，未截断） | \"Other-project customer price is 999 yuan. Confidential marker DECOY-9281.\" |\n\n## 按资料回答\n\n- **Confidential marker**：资料中给出的标记是 **DECOY-9281**（来源 [1]）。\n- **客户合同价格**：资料中出现的价格数字是 **999 yuan**（来源 [1]）。\n\n## 必须指出的限制\n\n资料明确写的是 **\"Other-project\"（其他项目）** 的价格，并且该 marker 被标注为 **DECOY**。因此：\n\n- **当前项目的客户合同价格：未找到资料**。唯一命中的片段属于其他项目，不能当作本项目的合同价格。\n- 该片段中的 999 yuan / DECOY-9281 只能作为「另一个项目的诱饵条目」记录，**不构成当前项目客户合同价格的依据**。\n\n我没有读取文件，也没有使用其他工具补充信息——结论仅基于上述返回片段。若需要当前项目的真实合同价格，需要先往项目知识库补充相应资料后再检索。",
+      "source_evidence_sha256": "4f5d2d6793d641a6bd7d33b2a37431c33dcf4ab45f340c6009c9dd582122ffb7"
+    },
+    {
+      "case": "load-old-query",
+      "status": "success",
+      "seconds": 27.824,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "ea84e7ed00714f50a5507e813260b171-1",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[1] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "ea84e7ed00714f50a5507e813260b171-2",
+            "document_id": "kd_479ba69d395041baae393c023ae556a4",
+            "chunk_id": "chunk-b385df0ed11a9cf54030ce9b572f0e4a",
+            "title": "[2] boundary-20MiB.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "ea84e7ed00714f50a5507e813260b171-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "ea84e7ed00714f50a5507e813260b171-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "ea84e7ed00714f50a5507e813260b171-5",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[5] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "ea84e7ed00714f50a5507e813260b171-6",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[6] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "根据项目共享知识库检索结果：\n\n**Orion backup retention = 35 天；backup restoration drill interval = 每 14 天。**\n\n来源：\n- `[1] fixture-new.pdf`（source_id: ea84e7ed00714f50a5507e813260b171-1）：“Orion backup retention is 35 days. Backup restoration drills happen every 14 days.”\n- `[2] boundary-20MiB.pdf`（source_id: …-2）：同样表述，35 天 / 每 14 天。\n- `[3] fixture-old.md`（source_id: …-3）：“Orion backup retention is 35 days. Restoration drills happen every 14 days.”\n\n补充说明（供区分，避免与其他条目混淆）：\n- `[4]/[5] fixture-release.pptx` 只提到生产发布时间（Tuesday 09:30 UTC）与回滚窗口 18 分钟，未涉及备份保留或演练间隔。\n- `[6] fixture-handbook.docx` 提到事件须在 7 分钟内确认（acknowledged within 7 minutes），也未涉及 retention / drill interval。\n\n因此就本问题而言，资料中有明确答案，无需推测；答案即保留 35 天、每 14 天演练一次。",
+      "source_evidence_sha256": "76bcf4610d555df2456c7ccd343e809961a5c6a35996e2c1f61b5f43e3afd527"
+    },
+    {
+      "case": "load-query-concurrent",
+      "status": "success",
+      "seconds": 31.703,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "d50b44cff9a44128bb2347254f89a983-1",
+            "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+            "chunk_id": "chunk-94d0542f9bf82a08d95152c5de847cee",
+            "title": "[1] fixture-new.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "d50b44cff9a44128bb2347254f89a983-2",
+            "document_id": "kd_479ba69d395041baae393c023ae556a4",
+            "chunk_id": "chunk-b385df0ed11a9cf54030ce9b572f0e4a",
+            "title": "[2] boundary-20MiB.pdf",
+            "kind": "knowledge",
+            "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+            "truncated": false
+          },
+          {
+            "source_id": "d50b44cff9a44128bb2347254f89a983-3",
+            "document_id": "kd_fd12b834c570461bba0be88e2427850d",
+            "chunk_id": "chunk-050f629afb9cbaadb3f061bc89ff30ef",
+            "title": "[3] fixture-old.md",
+            "kind": "knowledge",
+            "preview": "# Orion backup policy\n\nOrion backup retention is 35 days. Restoration drills happen every 14 days. The environment marker is ALPHA-PUBLIC-7139.",
+            "truncated": false
+          },
+          {
+            "source_id": "d50b44cff9a44128bb2347254f89a983-4",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-739e07bbf25ba4719e5d73f19c3d274d",
+            "title": "[4] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+            "truncated": false
+          },
+          {
+            "source_id": "d50b44cff9a44128bb2347254f89a983-5",
+            "document_id": "kd_445c8f165d8d4c8fb1af62660942d96b",
+            "chunk_id": "chunk-d718798fb93e51b12afc6981d3f7381d",
+            "title": "[5] fixture-release.pptx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:6995f1be1d0c4eb23b445b1a\nCaptions: None\nFootnotes: None\n\nVisual Analysis: Overall composition: The image is a plain white background containing three blocks of black, sans-serif, left-aligned text separated by blank lines. It resembles a documentation slide or excerpt. There are no charts, diagrams, flowcharts, UML elements, tables, icons, images, people, objects, or logos. No axes, legends, nodes, edges, arrows, or data visualizations are present.\n\nText transcription (verbatim):\n1. 'Orion emergency recovery'\n2. 'The recovery code is DR-4826.'\n3. 'The recovery time objective is 45 minutes.'\n\nThe first lin",
+            "truncated": true
+          },
+          {
+            "source_id": "d50b44cff9a44128bb2347254f89a983-6",
+            "document_id": "kd_5c4309abb4474ca5b47351397f1a6c9b",
+            "chunk_id": "chunk-e3ab9c2884f64deb8269a37ae349bb62",
+            "title": "[6] fixture-handbook.docx",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:a9e59a20cd3f5b089b388237\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple, minimalist text-based informational graphic rendered on a plain solid white background with no borders, icons, illustrations, or decorative elements. All text is left-aligned in a clean, sans-serif black font, arranged in three vertically separated blocks with generous whitespace between them. The top block serves as a title/heading: 'Orion emergency recovery'. Below it, after a blank line, is the second block: 'The recovery code is DR-4826.' Below that, after another blank line, is the third block: 'The recovery time objective is 45",
+            "truncated": true
+          }
+        ]
+      },
+      "final_answer": "根据项目共享知识库检索结果（1 次 `mcp_query_project_knowledge` 调用，返回 6 个片段）：\n\n- **Orion 备份保留期（backup retention）：35 天**\n- **备份恢复演练间隔（restoration drill interval）：每 14 天**\n\n来源：\n- [1] fixture-new.pdf\n- [2] boundary-20MiB.pdf\n- [3] fixture-old.md（原文：“Orion backup retention is 35 days. Restoration drills happen every 14 days.”）\n\n说明：其余片段（[4] fixture-release.pptx、[5] fixture-release.pptx、[6] fixture-handbook.docx）涉及发布策略与应急恢复，未包含与本问题相关的数值，故未作为依据。以上结论仅来自上述检索片段，未读取工作区文件或使用其他工具。",
+      "source_evidence_sha256": "029d9bbdf53fbc656db5d85280facac541ba343afdf75133377676bc0f40d963"
+    }
+  ]
+}

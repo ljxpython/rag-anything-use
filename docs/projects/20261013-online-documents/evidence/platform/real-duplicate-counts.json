@@ -1,0 +1,17 @@
+{
+  "thread": "e579b7f5-7c0a-45b6-93af-2f2eda2252ef",
+  "receipt": {
+    "version": 1,
+    "job_id": "kj_0a6d4cba906346209a87451ba2539e97",
+    "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+    "file_name": "fixture-new.pdf",
+    "status": "ready",
+    "searchable": true,
+    "error_code": null,
+    "created_at": "2026-10-13T03:46:58.873829Z",
+    "updated_at": "2026-10-13T03:47:30.912276Z"
+  },
+  "usage_before": 270,
+  "usage_after": 270,
+  "new_ingest_model_calls": 0
+}

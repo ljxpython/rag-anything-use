@@ -11,8 +11,8 @@ import subprocess
 import sys
 import tempfile
 import time
-from dataclasses import replace
 from collections import Counter
+from dataclasses import replace
 from importlib.metadata import version
 from pathlib import Path
 from unittest.mock import patch
@@ -154,7 +154,17 @@ async def run(output, selected_files=None):
                 result.stdout + result.stderr
             )
             row["analysis_failures"] = sum(
-                line.startswith("ERROR: Error generating")
+                line.startswith("ERROR:")
+                and any(
+                    marker in line
+                    for marker in (
+                        "Error generating",
+                        "Error processing",
+                        "Received empty",
+                        "Error in multimodal",
+                        "Error parsing",
+                    )
+                )
                 for line in result.stderr.splitlines()
             )
             row["individual_fallbacks"] = result.stderr.count(
@@ -217,6 +227,12 @@ async def run(output, selected_files=None):
                 r["full_doc_id"] == r["file_path"] == records[0].document_id
                 for r in chunks.values()
             )
+            status = json.loads(
+                chunks_path.with_name("kv_store_doc_status.json").read_text()
+            )
+            row["all_chunks_registered"] = set(chunks) == set(
+                status[records[0].document_id].get("chunks_list") or []
+            )
             publish = await asyncio.to_thread(
                 subprocess.run,
                 [sys.executable, "main.py", "publish", "--project-id", namespace],
@@ -242,7 +258,7 @@ async def run(output, selected_files=None):
             ):
                 app = create_server(config).http_app()
 
-                def factory(**kwargs):
+                def factory(*, app=app, **kwargs):
                     return httpx.AsyncClient(
                         transport=httpx.ASGITransport(app=app), **kwargs
                     )
@@ -282,6 +298,7 @@ async def run(output, selected_files=None):
                 if all(q["found"] for q in row["queries"])
                 and row["chunk_sources_valid"]
                 and row["local_asset_paths_hidden"]
+                and row["all_chunks_registered"]
                 and not row["analysis_failures"]
                 else "partial"
             )

@@ -1,0 +1,245 @@
+{
+  "mode": "deterministic models, no IAM or real-model load",
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "count": 30,
+  "measurements": [
+    {
+      "documents": 1,
+      "build_seconds": 0.5565313789998072,
+      "reader_seconds": 0.03280765700037591,
+      "snapshot_bytes": 37482,
+      "total_root_bytes": 161412
+    },
+    {
+      "documents": 2,
+      "build_seconds": 0.12624286500022208,
+      "reader_seconds": 0.03576560299961784,
+      "snapshot_bytes": 71664,
+      "total_root_bytes": 271051
+    },
+    {
+      "documents": 3,
+      "build_seconds": 0.1108508739998797,
+      "reader_seconds": 0.03656847900037974,
+      "snapshot_bytes": 105935,
+      "total_root_bytes": 415694
+    },
+    {
+      "documents": 4,
+      "build_seconds": 0.1101746459999049,
+      "reader_seconds": 0.03577282800006287,
+      "snapshot_bytes": 140210,
+      "total_root_bytes": 595260
+    },
+    {
+      "documents": 5,
+      "build_seconds": 0.11593369499996697,
+      "reader_seconds": 0.03620008799998686,
+      "snapshot_bytes": 174485,
+      "total_root_bytes": 809745
+    },
+    {
+      "documents": 6,
+      "build_seconds": 0.11379799999986062,
+      "reader_seconds": 0.03531203300008201,
+      "snapshot_bytes": 208756,
+      "total_root_bytes": 1059141
+    },
+    {
+      "documents": 7,
+      "build_seconds": 0.12134000200012451,
+      "reader_seconds": 0.03723886600027981,
+      "snapshot_bytes": 243031,
+      "total_root_bytes": 1343460
+    },
+    {
+      "documents": 8,
+      "build_seconds": 0.1596289860003708,
+      "reader_seconds": 0.03823939200037785,
+      "snapshot_bytes": 287027,
+      "total_root_bytes": 1682140
+    },
+    {
+      "documents": 9,
+      "build_seconds": 0.12825889499981713,
+      "reader_seconds": 0.03885930499973256,
+      "snapshot_bytes": 321298,
+      "total_root_bytes": 2054202
+    },
+    {
+      "documents": 10,
+      "build_seconds": 0.1289971900000637,
+      "reader_seconds": 0.040755540000191104,
+      "snapshot_bytes": 355583,
+      "total_root_bytes": 2453017
+    },
+    {
+      "documents": 11,
+      "build_seconds": 0.13977858599992032,
+      "reader_seconds": 0.04014132799966319,
+      "snapshot_bytes": 389864,
+      "total_root_bytes": 2903139
+    },
+    {
+      "documents": 12,
+      "build_seconds": 0.13563822300011452,
+      "reader_seconds": 0.04197731100020974,
+      "snapshot_bytes": 424141,
+      "total_root_bytes": 3371795
+    },
+    {
+      "documents": 13,
+      "build_seconds": 0.14037592500017126,
+      "reader_seconds": 0.04165060899958917,
+      "snapshot_bytes": 458422,
+      "total_root_bytes": 3875381
+    },
+    {
+      "documents": 14,
+      "build_seconds": 0.14693455400038147,
+      "reader_seconds": 0.04350032699994699,
+      "snapshot_bytes": 492703,
+      "total_root_bytes": 4422085
+    },
+    {
+      "documents": 15,
+      "build_seconds": 0.19693691199972818,
+      "reader_seconds": 0.045061762999921484,
+      "snapshot_bytes": 535974,
+      "total_root_bytes": 5013503
+    },
+    {
+      "documents": 16,
+      "build_seconds": 0.16271553399974437,
+      "reader_seconds": 0.04701373399984732,
+      "snapshot_bytes": 570255,
+      "total_root_bytes": 5634953
+    },
+    {
+      "documents": 17,
+      "build_seconds": 0.1637247259996002,
+      "reader_seconds": 0.045568974999696366,
+      "snapshot_bytes": 604536,
+      "total_root_bytes": 6287233
+    },
+    {
+      "documents": 18,
+      "build_seconds": 0.17017819600005168,
+      "reader_seconds": 0.05274493999968399,
+      "snapshot_bytes": 638813,
+      "total_root_bytes": 6978527
+    },
+    {
+      "documents": 19,
+      "build_seconds": 0.1717027350000535,
+      "reader_seconds": 0.04896395099967776,
+      "snapshot_bytes": 673094,
+      "total_root_bytes": 7700655
+    },
+    {
+      "documents": 20,
+      "build_seconds": 0.1744072070000584,
+      "reader_seconds": 0.049745107000035205,
+      "snapshot_bytes": 707375,
+      "total_root_bytes": 8461805
+    },
+    {
+      "documents": 21,
+      "build_seconds": 0.18182586700004322,
+      "reader_seconds": 0.050250152999979036,
+      "snapshot_bytes": 741652,
+      "total_root_bytes": 9257873
+    },
+    {
+      "documents": 22,
+      "build_seconds": 0.19623791200001506,
+      "reader_seconds": 0.050739561000227695,
+      "snapshot_bytes": 774771,
+      "total_root_bytes": 10090643
+    },
+    {
+      "documents": 23,
+      "build_seconds": 0.1847336699997868,
+      "reader_seconds": 0.05168868000009752,
+      "snapshot_bytes": 809052,
+      "total_root_bytes": 10951309
+    },
+    {
+      "documents": 24,
+      "build_seconds": 0.18642758500027412,
+      "reader_seconds": 0.049465121000139334,
+      "snapshot_bytes": 843329,
+      "total_root_bytes": 11850989
+    },
+    {
+      "documents": 25,
+      "build_seconds": 0.18984847000001537,
+      "reader_seconds": 0.053836226999919745,
+      "snapshot_bytes": 877610,
+      "total_root_bytes": 12781503
+    },
+    {
+      "documents": 26,
+      "build_seconds": 0.18754801700015378,
+      "reader_seconds": 0.05349945599982675,
+      "snapshot_bytes": 911891,
+      "total_root_bytes": 13746943
+    },
+    {
+      "documents": 27,
+      "build_seconds": 0.19641188600007808,
+      "reader_seconds": 0.05752715700009503,
+      "snapshot_bytes": 946168,
+      "total_root_bytes": 14759589
+    },
+    {
+      "documents": 28,
+      "build_seconds": 0.20870171200022014,
+      "reader_seconds": 0.05365523599994049,
+      "snapshot_bytes": 980449,
+      "total_root_bytes": 15794877
+    },
+    {
+      "documents": 29,
+      "build_seconds": 0.2256482180000603,
+      "reader_seconds": 0.05585391099975823,
+      "snapshot_bytes": 1013568,
+      "total_root_bytes": 16862767
+    },
+    {
+      "documents": 30,
+      "build_seconds": 0.2140672719997383,
+      "reader_seconds": 0.06008905099997719,
+      "snapshot_bytes": 1047845,
+      "total_root_bytes": 17970833
+    }
+  ],
+  "stage_seconds": {
+    "validate": {
+      "p50": 0.002315552999789361,
+      "p95": 0.003131556799962709,
+      "samples": 179
+    },
+    "copy": {
+      "p50": 0.016236444000242045,
+      "p95": 0.019287255099698086,
+      "samples": 59
+    }
+  },
+  "read_restore_zero_model_calls": true,
+  "first_snapshot_unchanged": true,
+  "shared_keys_before_final_close": 9,
+  "shared_keys_after_final_close": 0,
+  "calls": {
+    "baseline": {
+      "requests": {
+        "embedding": 120,
+        "llm": 66
+      },
+      "inputs": 186,
+      "unchanged_prior_inputs": 0,
+      "provider_usage": []
+    }
+  },
+  "amount": null
+}

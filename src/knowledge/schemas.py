@@ -36,6 +36,7 @@ class CitationRecord(BaseModel):
     filename: str | None = None
     chunk_id: str | None = None
     page_index: int | None = None
+    page_index_end: int | None = None
     block_type: str | None = None
     score: float | None = None
     snippet: str | None = None
@@ -62,6 +63,7 @@ class ProjectKnowledgeQueryRequest(BaseModel):
 class KnowledgeRetrievalRequest(BaseModel):
     query: str = Field(min_length=1, max_length=2000)
     top_k: int = Field(default=8, ge=1, le=8, strict=True)
+    sources_version: Literal[1, 2] = 1
 
     @field_validator("query", mode="before")
     @classmethod

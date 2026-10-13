@@ -139,9 +139,10 @@ def validate_snapshot(paths, signature):
                 for key in chunk_ids
             ):
                 raise ValueError
-        import numpy as np
         import networkx as nx
+        import numpy as np
         from nano_vectordb.dbs import load_storage
+
         from src.demo_support import load_settings
 
         for name in ("vdb_chunks.json", "vdb_entities.json", "vdb_relationships.json"):
@@ -209,12 +210,12 @@ def seal_snapshot(paths, signature):
     atomic_json(paths.manifest_dir / "publication.json", model_signature())
     atomic_json(
         paths.manifest_dir / "snapshot.json",
-        dict(
-            version=1,
-            signature=signature,
-            files=files,
-            documents=[r.document_id for r in records],
-        ),
+        {
+            "version": 1,
+            "signature": signature,
+            "files": files,
+            "documents": [r.document_id for r in records],
+        },
     )
     validate_snapshot(paths, signature)
 
@@ -261,6 +262,7 @@ class KnowledgeGenerationService:
                 source = self.engine.get_project_paths(project["active_namespace"])
                 with namespace_lock(source):
                     old_records = validate_snapshot(source, signature)
+                    self.validate_document_artifacts(old_records, signature)
                     uploads.check_disk(
                         job["kb"],
                         uploads.disk_usage(source.project_dir) * 2 + doc["size_bytes"],
@@ -288,24 +290,89 @@ class KnowledgeGenerationService:
             ):
                 raise ValueError("knowledge_content_conflict")
             artifacts = KnowledgeArtifactStore(self.store)
-            parsed = artifacts.load(doc, signature)
-            if parsed is None:
-                usage.stage = "parsing"
-                usage.event("parse")
-                text = original.read_text(encoding="utf-8").strip()
-                if not text or "\x00" in text:
-                    raise ValueError("knowledge_invalid_content")
-                parsed = artifacts.save_text(doc, signature, text)
-            else:
-                usage.event("parse_cache_hit")
-            self.store.update_job(job_id, "indexing")
-            usage.stage = "indexing"
             try:
                 rag = await builder.get_lightrag(namespace)
                 usage.instrument(rag)
-                await builder.ingest_text(
-                    namespace, doc["id"], parsed["text"], document_chunks=True
-                )
+                parsed = artifacts.load(doc, signature)
+                if parsed is None:
+                    usage.stage = "parsing"
+                    usage.event("parse")
+                    from src.knowledge.document_formats import (
+                        MIME_EXT,
+                        TEXT_MIME,
+                        supported_mime_types,
+                        validate_original,
+                    )
+
+                    if doc["mime_type"] not in supported_mime_types(self.config):
+                        raise ValueError("knowledge_unsupported_format")
+                    validate_original(
+                        original, doc["mime_type"], self.config.max_file_bytes
+                    )
+                    if doc["mime_type"] in TEXT_MIME:
+                        parsed = artifacts.save_text(
+                            doc, signature, original.read_text(encoding="utf-8").strip()
+                        )
+                    else:
+                        from src.knowledge.content_normalizer import (
+                            normalize_content_list,
+                        )
+                        from src.knowledge.parser_adapter import DoclingParserAdapter
+
+                        # Originals retain content-addressed names; parser dispatch needs a trusted suffix.
+                        with tempfile.TemporaryDirectory(
+                            prefix="document-", dir=paths.parser_dir
+                        ) as temporary:
+                            input_path = Path(temporary) / (
+                                "original." + MIME_EXT[doc["mime_type"]]
+                            )
+                            shutil.copyfile(original, input_path)
+                            if doc["mime_type"].startswith("image/"):
+                                blocks = [
+                                    {"type": "image", "img_path": str(input_path)}
+                                ]
+                                metadata = {}
+                                parser_name = "image"
+                                trusted = Path(temporary)
+                            else:
+                                multimodal = await builder.get_rag(namespace)
+                                result = await DoclingParserAdapter(
+                                    rag=multimodal,
+                                    parser_name=self.config.parser_name,
+                                ).parse_file(input_path)
+                                blocks, metadata = result.content_list, result.metadata
+                                parser_name = self.config.parser_name
+                                trusted = paths.parser_dir
+                            blocks = normalize_content_list(
+                                blocks,
+                                document_id=doc["id"],
+                                filename=doc["file_name"],
+                            )
+                            parsed = artifacts.save_document(
+                                doc,
+                                signature,
+                                blocks,
+                                parser_name=parser_name,
+                                trusted_dir=trusted,
+                                metadata=metadata,
+                            )
+                else:
+                    usage.event("parse_cache_hit")
+                self.store.update_job(job_id, "indexing")
+                usage.stage = "indexing"
+                if parsed["kind"] == "text":
+                    await builder.ingest_text(
+                        namespace, doc["id"], parsed["text"], document_chunks=True
+                    )
+                    parser_name = "utf8"
+                else:
+                    await builder.ingest_content_list(
+                        project_id=namespace,
+                        document_id=doc["id"],
+                        content_list=parsed["content_list"],
+                    )
+                    parser_name = parsed["parser_name"]
+                indexed = await rag.doc_status.get_by_id(doc["id"])
                 registry.register_document(
                     KnowledgeDocumentRecord(
                         document_id=doc["id"],
@@ -313,10 +380,11 @@ class KnowledgeGenerationService:
                         filename=doc["file_name"],
                         source_type="managed_upload",
                         source_uri=str(original),
-                        parser_name="utf8",
+                        parser_name=parser_name,
                         parse_status="parsed",
                         index_status="ready",
                         overall_status="ready",
+                        chunk_count=len(set(indexed.get("chunks_list") or [])),
                     )
                 )
                 for record in registry.list_documents(limit=10000):
@@ -329,6 +397,20 @@ class KnowledgeGenerationService:
             seal_snapshot(paths, signature)
         self.store.update_job(job_id, "publishing")
         return namespace
+
+    def validate_document_artifacts(self, records, signature):
+        from src.knowledge.document_formats import DOCUMENT_MIME
+
+        artifacts = KnowledgeArtifactStore(self.store)
+        for record in records:
+            if record.source_type != "managed_upload":
+                continue
+            doc = self.store.document(record.document_id)
+            if (
+                doc["mime_type"] in DOCUMENT_MIME
+                and artifacts.load(doc, signature) is None
+            ):
+                raise ValueError("knowledge_artifact_invalid")
 
     async def prepare(self, namespace, signature, *, pin=False):
         async with self._lock:
@@ -362,7 +444,8 @@ class KnowledgeGenerationService:
 
             def restore_reader():
                 with namespace_lock(source):
-                    validate_snapshot(source, signature)
+                    records = validate_snapshot(source, signature)
+                    self.validate_document_artifacts(records, signature)
                     copy_storage(storage_dir(source), storage_dir(paths))
                     paths.manifest_dir.mkdir(parents=True)
                     for name in ("documents.json", "publication.json", "snapshot.json"):
@@ -413,6 +496,7 @@ class KnowledgeGenerationService:
             records = await asyncio.to_thread(
                 validate_snapshot, self.engine.get_project_paths(namespace), signature
             )
+            self.validate_document_artifacts(records, signature)
             grant = await self.authorizer.authorize(
                 self.scope(job["kb"]),
                 "activate",
@@ -537,6 +621,8 @@ class KnowledgeGenerationService:
             raise ValueError("knowledge_rollback_upload_disabled")
         if generation is None or generation["signature"] != signature:
             raise ValueError("knowledge_not_found")
+        records = validate_snapshot(self.engine.get_project_paths(namespace), signature)
+        self.validate_document_artifacts(records, signature)
         prepared = await self.prepare(namespace, signature, pin=True)
         try:
             with self.store.connect(write=True) as db:

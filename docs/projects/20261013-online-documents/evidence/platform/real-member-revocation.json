@@ -1,0 +1,10 @@
+{
+  "thread": "a800d277-4674-4062-8d3c-a8d70973193c",
+  "denials": {
+    "/api/projects/8f66fdd4-3648-4912-9dd5-6ca9425467b6/knowledge/documents": "project_role_missing",
+    "/api/projects/8f66fdd4-3648-4912-9dd5-6ca9425467b6/knowledge/jobs": "project_role_missing",
+    "/api/langgraph/threads/a800d277-4674-4062-8d3c-a8d70973193c/state": "project_role_missing",
+    "run.start": "project_role_missing"
+  },
+  "new_ingest_model_calls": 0
+}

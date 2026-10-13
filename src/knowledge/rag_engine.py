@@ -116,6 +116,7 @@ class ProjectRAGEngine:
                     enable_image_processing=self.config.enable_image_processing,
                     enable_table_processing=self.config.enable_table_processing,
                     enable_equation_processing=self.config.enable_equation_processing,
+                    usage=self.usage,
                 )
             return self._rag_cache[project_id]
 
@@ -183,7 +184,16 @@ class ProjectRAGEngine:
                     enable_rerank=False,
                 ),
             )
-        return build_retrieval_sources(data, documents, request.top_k)
+        chunk_rows = None
+        if request.sources_version == 2:
+            chunk_rows = await self.chunk_rows(rag, data)
+        return build_retrieval_sources(
+            data,
+            documents,
+            request.top_k,
+            sources_version=request.sources_version,
+            chunk_rows=chunk_rows,
+        )
 
     async def ingest_content_list(
         self,
@@ -205,6 +215,18 @@ class ProjectRAGEngine:
             )
         finally:
             CHUNK_DOCUMENT.reset(token)
+        native = await self.get_lightrag(project_id)
+        if await native.full_docs.get_by_id(document_id) is None:
+            status = await native.doc_status.get_by_id(document_id)
+            rows = await native.text_chunks.get_by_ids(status.get("chunks_list", []))
+            await native.full_docs.upsert(
+                {
+                    document_id: {
+                        "content": "\n\n".join(row["content"] for row in rows),
+                        "file_path": document_id,
+                    }
+                }
+            )
         await self.assert_document_ready(project_id, document_id)
         return {
             "project_id": project_id,
@@ -268,6 +290,7 @@ class ProjectRAGEngine:
                 build_query_result_artifacts(
                     retrieval_data,
                     documents=documents,
+                    chunk_rows=await self.chunk_rows(rag, retrieval_data),
                 )
             )
         return ProjectKnowledgeQueryResponse(
@@ -303,6 +326,7 @@ class ProjectRAGEngine:
         citations, matched_document_ids, debug_chunks = build_query_result_artifacts(
             query_data,
             documents=registry.list_documents(limit=10_000),
+            chunk_rows=await self.chunk_rows(rag, query_data),
         )
         return {
             "project_id": request.project_id,
@@ -316,6 +340,15 @@ class ProjectRAGEngine:
             "raw_data": query_data,
             "status": query_data.get("status", "unknown"),
         }
+
+    @staticmethod
+    async def chunk_rows(rag, query_data):
+        ids = [
+            item["chunk_id"]
+            for item in query_data.get("data", {}).get("chunks", [])
+            if isinstance(item, dict) and isinstance(item.get("chunk_id"), str)
+        ]
+        return dict(zip(ids, await rag.text_chunks.get_by_ids(ids), strict=True))
 
     @staticmethod
     def resolve_path(path: str | Path) -> str:

@@ -1,0 +1,4205 @@
+{
+  "scope": "Ubuntu RAG single process and single queue worker; Mac isolated Platform Worker; 2 projects; real models",
+  "upload_limit_bytes": 20971520,
+  "boundary_file_sha256": "2e4d5b8072f7e9cd41a266e2653fda9e6c1d75111134493d9c6ef85a95393411",
+  "sample_count": 120,
+  "sample_interval_seconds": 0.5,
+  "concurrent_alpha_processing_beta_queued_samples": 4,
+  "queue_samples": [
+    {
+      "elapsed": 0.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 0.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 1.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 1.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 2.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 2.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 3.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "queued"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 3.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "queued"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 4.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "queued"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 4.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "queued"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 5.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "publishing"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 5.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 6.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "parsing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 6.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 7.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 7.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 8.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 8.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 9.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 9.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "indexing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 10.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "publishing"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 10.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 11.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 11.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 12.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 12.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 13.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 13.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 14.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 14.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 15.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 15.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 16.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 16.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 17.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 17.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 18.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 18.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 19.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 19.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 20.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 20.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 21.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 21.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 22.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 22.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 23.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 23.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 24.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 24.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 25.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 25.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 26.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 26.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 27.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 27.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 28.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 28.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 29.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 29.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 30.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 30.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 31.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 31.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 32.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 32.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 33.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 33.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 34.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 34.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 35.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 35.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 36.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 36.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 37.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 37.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 38.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 38.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 39.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 39.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 40.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 40.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 41.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 41.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 42.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 42.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 43.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 43.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 44.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 44.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 45.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 45.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 46.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 46.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 47.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 47.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 48.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 48.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 49.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 49.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 50.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 50.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 51.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 51.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 52.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 52.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 53.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 53.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 54.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 54.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 55.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 55.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 56.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 56.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 57.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 57.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 58.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 58.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 59.0,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "elapsed": 59.5,
+      "alpha": [
+        {
+          "file": "boundary-20MiB.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-new.pdf",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-release.pptx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-handbook.docx",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-old.md",
+          "status": "ready"
+        }
+      ],
+      "beta": [
+        {
+          "file": "fixture-load-beta.md",
+          "status": "ready"
+        },
+        {
+          "file": "fixture-beta.md",
+          "status": "ready"
+        }
+      ]
+    }
+  ],
+  "boundary_job_total_seconds": 12.031,
+  "beta_job_total_seconds": 13.696,
+  "queries": [
+    {
+      "case": "load-old-query",
+      "seconds": 27.824,
+      "status": "success"
+    },
+    {
+      "case": "load-query-concurrent",
+      "seconds": 31.703,
+      "status": "success"
+    }
+  ],
+  "amount": null,
+  "limits": [
+    "20 MiB fixture is a valid 2-page PDF, not a 20 MiB dense business document",
+    "This is functional concurrency evidence, not production maximum throughput or a latency SLA"
+  ]
+}

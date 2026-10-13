@@ -1,55 +1,34 @@
 # 剩余开发与验收事项
 
-最后更新：2026-10-13。RAG-Anything 升级及本期优化已经用户验收；以下事项继续保留，不计入已完成范围。
+最后更新：2026-10-13。本次已在 sshmy2 完成 RAG 在线文档、多模态资产、来源 v2、复杂文档稳定性和通用质量／负载验证；临时平台真实闭环已通过。任务与证据见 [本期专项](projects/20261013-online-documents/README.md)，旧升级与供应商清理结果继续保留。
 
-## 当前模型配置
+## 本次已补齐
 
-文本和视觉均使用 miaomiaoai `deepseek-v4.1-flash`；视觉的端点、模型、密钥在项目私有 `.env` 中显式复用文本配置，输出预算为 8192。`env.example` 已移除 iflow、豆包及备用模型配置；源码、脚本和 examples 使用通用 OpenAI 兼容适配器，无这两家供应商专用调用。
+| 事项 | 当前结果 |
+|---|---|
+| online PDF／DOCX／PPTX／PNG／JPEG | RAG 原件校验、受管资产清单／hash、成果签名、完整恢复、候选增量／回退完成；默认不开生产上传 |
+| 复杂文档稳定性 | 文本／扫描／混合 PDF、DOCX、PPTX 五格式最终全通过，13 个正文／表格／公式／图片事实命中；失败严格传播、禁止 half-ready 与 individual fallback |
+| 页码／跨页来源 | RAG 显式 sources_version=2 已实现；PDF page／PPTX slide／其余 unknown，来源仅由可信 native chunk 确定；默认 v1 七字段兼容 |
+| 平台 V02 文档链 | 临时 union 的真实普通成员 PDF 上传／root 审批／Worker ready／浏览器、DOCX／PPTX、另一成员旧新查询、撤权／Stop／重启／Fork／同 hash 零新增调用通过 |
+| 通用检索质量 | 用户选定公开合成资料 19 题最终复跑，16 有答案 Recall@8 和证据完整率 1.0，跨项目来源 0；三个真实 Agent 无答案场景拒答 |
+| 当前资源负载 | 20MiB 合法双页 PDF、两个项目排队且旧库可查、30 次确定性快照与锁／共享键回收通过；当前 Ubuntu 4 核、约 3.6GiB RAM，无本地 GPU 需求 |
 
-本机主工作区、Ubuntu 项目 `.env` 均已清理；共享凭据源及其他工程不属于本次修改范围。更新后 Ubuntu 现有视觉适配器正确识别合成图片的形状、颜色、数量。完整 PDF／Office 图表链仍需单独验收，多模态和 online 开关保持关闭，服务未重启。
+## 仍需实施／协同
 
-早期示例说明及专项 JSON／日志属于历史验收证据，不是运行配置，也不用于建议继续使用旧供应商。
+| 事项 | 具体剩余内容 | 原因与下一步 |
+|---|---|---|
+| 平台正式合入与部署 | 合并已有知识专项基线和本次 12 文件临时修复；保留 Token 看板／后台回执与迁移身份；正式 frozen 回归后部署 | 本轮用户要求平台方案及真实联验，临时 union 未直接合入主工作区；已交付 [补丁](projects/20261013-online-documents/platform-integration.patch) 与 [基线说明](projects/20261013-online-documents/platform-patch-context.json)，不能盲目套用到主线 |
+| 平台来源 v2 展示 | Runtime v2 DTO／预算投影、interceptor 固定版本、Web 页／幻灯片标签、历史／Fork 兼容 | RAG v2 已完成，平台仍用默认 v1；具体文件／契约／灰度回退见 [方案](projects/20261013-online-documents/platform-contract.md) |
+| 平台图片 ImageRef 可信链 | 原始上传的 name／MIME／size／hash 收据、精确知识提交转换、Web 图片共享门禁、真实 PNG／JPEG 浏览器链 | ImageRef 与 FileRef 是不同可信链；不得按 path 伪造 FileRef。RAG 图片已验，平台治理范围需按方案评审后实现 |
+| 私有业务与生产 SLA | 真实业务语料／失败集，目标并发／吞吐／延迟／预算和历史保留策略 | 用户本期选择通用公开样本，当前结论只覆盖选定规模；20MiB 边界文件为双页 PDF，不等于同字节密集文档或生产容量上限 |
+| 音频／视频 | ASR、时间戳／关键帧、资产、费用和失败恢复 | 用户明确暂不开发，deferred；不安装／开放该栈 |
 
-## 尚未实现的开发
+无答案检索仍可能返回无关来源，本次真实 Agent 拒答并保留证据；不能把检索命中等同有足够答案。最终质量复跑观察到两次 Embedding 429，现有策略恢复，供应商并发配额会影响生产负载。费用没有完整可核验费率，金额保留 null。
 
-| 事项 | 需要实现的内容 | 当前状态与后置原因 | 开发／验证环境 |
-|---|---|---|---|
-| online PDF／Office／图表入库（Task 2.2） | 受管图片等资产的清单、校验、保存和恢复；MIME／原件验证与能力声明；纯多模态候选、缺资产拒绝和失败回退 | `deferred`；原计划本期交付升级、来源修复和 CLI 逐格式证据，2.2 明确后置。目前 online 只接受 UTF-8 MD／TXT | 资产／任务／接口代码可在 Mac 开发；实际解析和完整链路在 Ubuntu 验证 |
-| MCP 来源页码／跨页定位（Task 2.2） | 将内部可信页码接到公开 sources；缺失不猜页；与消费平台兼容；Markdown 图片仅允许受管附件引用 | `deferred`；内部解析已有可信页码处理，公开 sources 尚未扩展，需同步平台字段及展示，属于原定第二期 | Mac 可开发和契约测试；PDF 页码质量在 Ubuntu 验证 |
-| 音频／视频（Task 4.1） | ASR、时间戳、关键帧、资产保管、费用和失败恢复 | `deferred`；此前没有选定会议／视频业务需求、时长、语言与资源预算，未安装额外栈或开放格式 | 可在 Mac 写代码；若使用本地 ASR／视频模型，再按方案选择 Linux、CPU／GPU 或外部 API |
+## 环境和配置
 
-图片小样已证明当前 DeepSeek 接口可用，旧视觉凭据问题不再是推迟开发的理由。online 多模态仍需要上述资产和发布链实现；单纯更换模型不能代替这些工作。
+RAG 开发已在 Ubuntu `/home/ubuntu/PyCharmMiscProject/rag-anything-use` 的 `feat/online-documents-20261013` 完成；你无需亲自在 Ubuntu 补代码。Intel Mac 缺锁定 Torch wheel，Ubuntu 用于实际 Docling／PDF／Office 解析；平台代码／契约开发可在 Mac，图片或 Office 端到端联合 Ubuntu 解析服务验证。
 
-## 已有实现，但尚未完成的验收
+文本／视觉统一 miaomiaoai `deepseek-v4.1-flash`，Embedding 为百炼 `text-embedding-v4`／1024；源码、examples 和 env.example 已移除旧供应商。当前供应商抽取用 reasoning_effort:off，none 曾返回 400；更换模型／维度／视觉／处理签名用新库候选验证，不修改旧签名绕过校验。
 
-| 事项 | 已完成／现有证据 | 剩余验证及未完成原因 | 建议环境 |
-|---|---|---|---|
-| 混合 PDF、DOCX、PPTX 与图片／表格／公式稳定性 | CLI／解析适配与紧凑表格修复已实现；最新文本、扫描 PDF 通过；DOCX／PPTX 初轮正文通过；DeepSeek 图片探针通过 | 最新混合 PDF／DOCX 各 600 秒超时、PPTX 抽取空正文失败；修正后的格式脚本尚未全量复跑。需要用当前模型定位解析／抽取阶段并逐项复验 | `sshmy2` Ubuntu 隔离目录 |
-| 平台 V02 真实联合验收及部署 | 平台 A01／A02／R01／R02／O01／V01 与前端 F01–F03 代码已交付；真实 Platform API＋RAG、Runtime Adapter 小语料链通过 | 完整 Agent Worker 上传、ready、另一成员新旧检索、真实浏览器回执、处理中同 hash 计数、Stop／重启／CAS／回退尚未完成；部分前端自测使用模拟知识响应，缺完整目标环境闭环证据 | 平台＋RAG＋模型相互可达的隔离环境；文本链可在 Mac 联验 |
-| 真实业务检索质量 | 19 题公开通用合成样本与跨项目负例基线已实现、已实测 | 有答案题 Recall@8／证据完整率通过；3 道无答案题仍返回相关资料。尚无真实业务语料、业务门槛和对应失败问题集 | 任一可运行文本链的环境；PDF／Office 语料在 Ubuntu 处理 |
-| 大文件、多项目容量／负载及空间策略 | 配额、队列、快照／阶段用量观测已实现；100 小文档确定性基线已验 | 20 MiB 最大文件、多项目真实模型负载与生产吞吐未验；尚未确定目标负载、预算和历史保留策略。182 MB 全历史观测不能外推容量上限，也未授权自动删除历史 | 接近目标部署资源的 Linux 环境；先明确负载，不必先购买 GPU |
-
-平台状态来自 2026-10-13 对 `ai-agent-platform/docs/projects/20261012-project-member-knowledge-upload/tasks.md` 的只读核对。本仓早期交接中的“待开始”不应覆盖平台最新完成记录。V02 未通过前，新增上传部署开关继续关闭；本次不部署或迁移现役索引。
-
-## Ubuntu 的用途与此前未完成的原因
-
-不要求你亲自在 Ubuntu 写代码。接口、授权、资产、队列和文本检索代码可继续在当前 Mac 开发；已提供的 `sshmy2` 可以由开发代理直接用于隔离安装和真实集成验证。
-
-Ubuntu 的作用是补足当前 Intel Mac 的解析依赖限制：锁定的 Torch 2.11 没有兼容 wheel，Mac 上六项 documents 测试因此跳过。换到 Ubuntu 可以验证 PDF／Office，但不会自动补齐 online 资产链、公开页码或音视频，也不会自动消除供应商超时／空正文。
-
-此前未做完的原因分别是：Task 2.2／4.1 原定后置；复杂格式实测仍有失败；平台完整闭环尚未验收；业务质量与容量缺实际门槛。这些原因不能统称为“必须你去 Ubuntu 开发”。本次完成供应商清理和状态说明，后置开发的状态仍如上表。
-
-## 建议实施顺序
-
-1. 用当前 DeepSeek 在 Ubuntu 隔离目录定位、复验混合 PDF／Office 与图表链。
-2. 完成平台文本 V02 的真实 Agent／浏览器及生命周期验收。
-3. 按已通过格式开发 Task 2.2 的受管资产链和来源定位，再联合验收并启用。
-4. 用真实业务资料定义质量／负载门槛；音视频在场景和预算确定后另行开展。
-
-## 启服前配置事项
-
-视觉模型变更会影响 online 处理签名；已有逻辑库必须按独立新库／候选方案验证，不能修改签名来继续复用旧索引。本次未启动现役服务。
-
-本轮首次使用 `uv --env-file` 读取 Ubuntu 旧格式 scopes JSON 时，工具警告回显过一个现有 MCP Bearer token。该行已规范化且授权映射保持原值，后续检查仅输出脱敏结果；凭据未写入仓库。下次启服前应协调消费方轮换该 token，避免单端改动导致已有接入失效。
-
-详细任务与逐轮证据见[升级专项任务](projects/20261012-rag-optimization/tasks.md)及[验证记录](projects/20261012-rag-optimization/verification.md)；本次清理见[供应商清理专项](projects/20261013-model-provider-cleanup/README.md)。
+现役服务／历史索引未迁移或启用新增上传。早前 env 解析警告曾回显一个旧 MCP token，值未写入文档或证据；现役启服前仍需和消费方协调轮换。本次隔离联验使用独立配置，不替换现役凭据。

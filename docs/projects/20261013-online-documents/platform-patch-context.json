@@ -1,0 +1,23 @@
+{
+  "base_head": "06d941300948c17144dc862500e1bb58e92dcf86",
+  "patch_base": "index of the temporary union worktree, which already includes the prior knowledge implementation",
+  "files": [
+    "apps/platform-api/src/platform_api/modules/knowledge/authorization.py",
+    "apps/platform-api/tests/test_knowledge_authorization.py",
+    "apps/platform-api/tests/test_knowledge_mcp_bindings.py",
+    "apps/platform-web/src/modules/chat/components/ChatComposer.spec.ts",
+    "apps/platform-web/src/modules/chat/components/ChatComposer.vue",
+    "apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.spec.ts",
+    "apps/platform-web/src/modules/chat/components/KnowledgeSubmissionCard.vue",
+    "apps/platform-web/src/modules/projects/components/ProjectKnowledgePanel.vue",
+    "apps/platform-web/src/utils/chat-content.ts",
+    "apps/runtime-service/src/runtime_service/runtime/auth.py",
+    "apps/runtime-service/src/runtime_service/tools/knowledge_upload.py",
+    "apps/runtime-service/tests/tools/test_knowledge_upload.py"
+  ],
+  "exclude": [
+    "prior knowledge worktree full staged changes",
+    "union-only migration replacements",
+    "main workspace uncommitted changes"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "authorization": "controlled fixture boundary; not Platform ImageRef E2E",
+  "models": "real configured DeepSeek vision and embedding 1024",
+  "formats": [
+    {
+      "format": "png",
+      "ready": {
+        "version": 1,
+        "job_id": "kj_1fa16c10bfde446c88e4c1ca14104efb",
+        "document_id": "kd_254016e1a9e942f181f33e52eca2280d",
+        "file_name": "recovery.png",
+        "status": "ready",
+        "searchable": true,
+        "error_code": null,
+        "created_at": "2026-10-13T04:00:53.096706Z",
+        "updated_at": "2026-10-13T04:01:12.838094Z"
+      },
+      "seconds": 22.98,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "06965ee2d8784c6f9eb83bfd242a6c90-1",
+            "document_id": "kd_254016e1a9e942f181f33e52eca2280d",
+            "chunk_id": "chunk-96e5b1c7b838360d11dfe50ba39648c8",
+            "title": "[1] recovery.png",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: None\nImage Path: asset:141d01850195482833c01809\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a minimalist informational slide with a plain white background and black, left-aligned sans-serif text. There are no borders, logos, images, charts, or diagrams. The content consists of three short text blocks separated by blank lines. The first line acts as a title and reads exactly: 'Orion emergency recovery'. Below it, the first statement reads exactly: 'The recovery code is DR-4826.' Below that, the second statement reads exactly: 'The recovery time objective is 45 minutes.' The title indicates the subject is the Orion emergency recovery procedure. The two subsequent lines provide specific technical details: a recove",
+            "truncated": true,
+            "locator": {
+              "unit": "unknown",
+              "start": null,
+              "end": null,
+              "block_type": "image"
+            }
+          }
+        ],
+        "sources_version": 2
+      },
+      "duplicate_new_model_calls": 0,
+      "managed_asset": true
+    },
+    {
+      "format": "jpg",
+      "ready": {
+        "version": 1,
+        "job_id": "kj_4cf27a07a20f482c95d971c052b8b31b",
+        "document_id": "kd_62d126c91de14d90a428c019de318ce7",
+        "file_name": "recovery.jpg",
+        "status": "ready",
+        "searchable": true,
+        "error_code": null,
+        "created_at": "2026-10-13T04:01:16.059884Z",
+        "updated_at": "2026-10-13T04:01:32.363556Z"
+      },
+      "seconds": 19.184,
+      "result": {
+        "status": "ok",
+        "sources": [
+          {
+            "source_id": "20c0d8424eb848e994fd684a9e587db5-1",
+            "document_id": "kd_62d126c91de14d90a428c019de318ce7",
+            "chunk_id": "chunk-b0898532de49bcc19d180a83a152b13f",
+            "title": "[1] recovery.jpg",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: None\nImage Path: asset:fd400bb393278359b700ed2b\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a simple text-based informational graphic on a plain white background, with all content left-aligned. It consists of three lines of black sans-serif text separated by blank space. The first line is the title or heading: \"Orion emergency recovery\". Below it, the second line states: \"The recovery code is DR-4826.\" The third line states: \"The recovery time objective is 45 minutes.\" There are no diagrams, charts, arrows, nodes, edges, legends, logos, photographs, or other graphical elements. The layout uses large amounts of white space around the text block, which is positioned in the upper-left area of the image. The text i",
+            "truncated": true,
+            "locator": {
+              "unit": "unknown",
+              "start": null,
+              "end": null,
+              "block_type": "image"
+            }
+          },
+          {
+            "source_id": "20c0d8424eb848e994fd684a9e587db5-2",
+            "document_id": "kd_254016e1a9e942f181f33e52eca2280d",
+            "chunk_id": "chunk-96e5b1c7b838360d11dfe50ba39648c8",
+            "title": "[2] recovery.png",
+            "kind": "knowledge",
+            "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: None\nImage Path: asset:141d01850195482833c01809\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a minimalist informational slide with a plain white background and black, left-aligned sans-serif text. There are no borders, logos, images, charts, or diagrams. The content consists of three short text blocks separated by blank lines. The first line acts as a title and reads exactly: 'Orion emergency recovery'. Below it, the first statement reads exactly: 'The recovery code is DR-4826.' Below that, the second statement reads exactly: 'The recovery time objective is 45 minutes.' The title indicates the subject is the Orion emergency recovery procedure. The two subsequent lines provide specific technical details: a recove",
+            "truncated": true,
+            "locator": {
+              "unit": "unknown",
+              "start": null,
+              "end": null,
+              "block_type": "image"
+            }
+          }
+        ],
+        "sources_version": 2
+      },
+      "duplicate_new_model_calls": 0,
+      "managed_asset": true
+    }
+  ],
+  "amount": null,
+  "reader_restart_new_model_calls": 0,
+  "status": "passed"
+}

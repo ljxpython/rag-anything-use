@@ -1,0 +1,18 @@
+{
+  "ubuntu_ports": {
+    "28892": "closed",
+    "28893": "closed"
+  },
+  "ubuntu_rag_pid": 62413,
+  "ubuntu_rag_process": "stopped",
+  "platform_environment": "wt_2a8670e4435f",
+  "platform_ports": {
+    "24354": "closed",
+    "26124": "closed",
+    "27507": "closed",
+    "23670": "closed"
+  },
+  "browser": "rag_e2e closed",
+  "ssh_tunnel": "stopped",
+  "status": "passed"
+}

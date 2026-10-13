@@ -1,0 +1,635 @@
+{
+  "platform": "Linux-6.8.0-124-generic-x86_64-with-glibc2.39",
+  "python": "3.13.16",
+  "packages": {
+    "raganything": "1.4.2",
+    "lightrag-hku": "1.4.12",
+    "docling": "2.84.0",
+    "mineru": "3.4.5"
+  },
+  "models": {
+    "llm": "deepseek-v4.1-flash",
+    "embedding": "text-embedding-v4",
+    "dimensions": 1024,
+    "vision": "deepseek-v4.1-flash"
+  },
+  "corpus": "generated public format fixtures, no business data",
+  "formats": [
+    {
+      "file": "text.pdf",
+      "sha256": "898b48e086f2a5f75999e72b17ea2fa8c0da0b1a2aa5483cce58a2b56bdcbfb8",
+      "queries": [
+        {
+          "question": "How long is Orion backup retention?",
+          "expected": "35 days",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.841,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "f9c8ff157c0648bda0e24b11dfaf5448-1",
+                "document_id": "kd_08c6f59b52d3481ca8ab2ac277800148",
+                "chunk_id": "chunk-9d49460e9c2981558e14eaf1eaf61974",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        },
+        {
+          "question": "How often are Orion restoration drills held?",
+          "expected": "14 days",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 3.126,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "a66065815cc64b04b6144a5c54c0c504-1",
+                "document_id": "kd_08c6f59b52d3481ca8ab2ac277800148",
+                "chunk_id": "chunk-9d49460e9c2981558e14eaf1eaf61974",
+                "title": "[1] text.pdf",
+                "kind": "knowledge",
+                "preview": "Orion backup retention is 35 days.\n\nBackup restoration drills happen every 14 days.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 20.999,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_08c6f59b52d3481ca8ab2ac277800148",
+      "parsed_blocks": {
+        "text": 2
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": 1,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "scan.pdf",
+      "sha256": "7225bad4f894ad42c26e810b5310e08527b228f6d11a574b31203093c74ca5e5",
+      "queries": [
+        {
+          "question": "What is the Orion emergency recovery code?",
+          "expected": "DR-4826",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.952,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "b46da3b27a0143b682b00daef2975a46-1",
+                "document_id": "kd_da0892f17bac4d4c8cc3a2c1389a3e96",
+                "chunk_id": "chunk-36efd5385332cf3c7cf7a4374f0d3bcd",
+                "title": "[1] scan.pdf",
+                "kind": "knowledge",
+                "preview": "Orion emergency recovery\n\nThe recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 20.952,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 1,
+      "document_id": "kd_da0892f17bac4d4c8cc3a2c1389a3e96",
+      "parsed_blocks": {
+        "text": 3
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": null,
+          "original_type": null
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "mixed.pdf",
+      "sha256": "591ba2a1248481988a48bb209e5e9b433db96f37827ccbba479506ba0b93f64f",
+      "queries": [
+        {
+          "question": "What is the Orion capacity reserve?",
+          "expected": "27",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 3.43,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "e83c8f2f26404048afb6eaeaa0e0d988-1",
+                "document_id": "kd_029726c9ec954ad6b34fdc3fd4cc8a26",
+                "chunk_id": "chunk-4dc3d0dec0dd7a450050b04830d48efe",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "e83c8f2f26404048afb6eaeaa0e0d988-2",
+                "document_id": "kd_029726c9ec954ad6b34fdc3fd4cc8a26",
+                "chunk_id": "chunk-9405ffa8d0ad7308920b1fa0663e88e1",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Service | Daily capacity |  |\n| --- | --- | --- |\n| Atlas | 840 requests | 840 requests |\n| Boreal | 260 requests | 260 requests |\nFootnotes: None\n\nAnalysis: The table presents a two-row capacity planning breakdown for two services, Atlas and Boreal, with three visible columns labeled 'Service', 'Daily capacity', and an untitled third column that duplicates the daily capacity values ('840 requests' for Atlas and '260 requests' for Boreal in both capacity columns).\n\nStructure and organization: The table is organized as a service-by-capacity matrix. The first column, 'Service', identifies each service by name. The second column, 'Daily capacity', states the total daily request capacity for each service. The third, unlabeled column conta",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "How many daily requests does Atlas support?",
+          "expected": "840",
+          "found": true,
+          "required_evidence": "Table Analysis:",
+          "seconds": 2.832,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "756c864d9f2f4b4093e7344548378e3e-1",
+                "document_id": "kd_029726c9ec954ad6b34fdc3fd4cc8a26",
+                "chunk_id": "chunk-9405ffa8d0ad7308920b1fa0663e88e1",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Service | Daily capacity |  |\n| --- | --- | --- |\n| Atlas | 840 requests | 840 requests |\n| Boreal | 260 requests | 260 requests |\nFootnotes: None\n\nAnalysis: The table presents a two-row capacity planning breakdown for two services, Atlas and Boreal, with three visible columns labeled 'Service', 'Daily capacity', and an untitled third column that duplicates the daily capacity values ('840 requests' for Atlas and '260 requests' for Boreal in both capacity columns).\n\nStructure and organization: The table is organized as a service-by-capacity matrix. The first column, 'Service', identifies each service by name. The second column, 'Daily capacity', states the total daily request capacity for each service. The third, unlabeled column conta",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the capacity formula?",
+          "expected": "42",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.867,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "49e497182f8a4de09f09ddf3fb9ace76-1",
+                "document_id": "kd_029726c9ec954ad6b34fdc3fd4cc8a26",
+                "chunk_id": "chunk-4dc3d0dec0dd7a450050b04830d48efe",
+                "title": "[1] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Orion capacity planning: the reserve is 27 percent.\n\nCapacity formula: C = workers * 42.\n\nOrion emergency recovery The recovery code is DR-4826.\n\nThe recovery time objective is 45 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "49e497182f8a4de09f09ddf3fb9ace76-2",
+                "document_id": "kd_029726c9ec954ad6b34fdc3fd4cc8a26",
+                "chunk_id": "chunk-9405ffa8d0ad7308920b1fa0663e88e1",
+                "title": "[2] mixed.pdf",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Service | Daily capacity |  |\n| --- | --- | --- |\n| Atlas | 840 requests | 840 requests |\n| Boreal | 260 requests | 260 requests |\nFootnotes: None\n\nAnalysis: The table presents a two-row capacity planning breakdown for two services, Atlas and Boreal, with three visible columns labeled 'Service', 'Daily capacity', and an untitled third column that duplicates the daily capacity values ('840 requests' for Atlas and '260 requests' for Boreal in both capacity columns).\n\nStructure and organization: The table is organized as a service-by-capacity matrix. The first column, 'Service', identifies each service by name. The second column, 'Daily capacity', states the total daily request capacity for each service. The third, unlabeled column conta",
+                "truncated": true
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 54.87,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 2,
+      "document_id": "kd_029726c9ec954ad6b34fdc3fd4cc8a26",
+      "parsed_blocks": {
+        "text": 4,
+        "table": 1
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": null,
+          "original_type": null
+        },
+        {
+          "page_idx": 0,
+          "page_idx_end": 0,
+          "original_type": "table"
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "handbook.docx",
+      "sha256": "10c2dbbe6bddf26cd7951d58940425518e503e197bed44fba6be12209ca75249",
+      "queries": [
+        {
+          "question": "How quickly must an Orion production incident be acknowledged?",
+          "expected": "7 minutes",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.812,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "a7d20009a924479ca2e3d6ba1f04d382-1",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-24f6c8d25210f51f71287db0934bf505",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "a7d20009a924479ca2e3d6ba1f04d382-2",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-1b47149ecbf10e961c5af09e2fec3873",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact, two-column reference matrix embedded within the 'Orion service handbook'. The left column is headed 'Severity' and the right column is headed 'Response'. It contains a single data row mapping the severity level 'P1' to the response time '7 minutes'. The table structure is minimal, using a header row followed by one body row, with no captions or footnotes. The only data point is P1 = 7 minutes, which directly mirrors the surrounding statement: 'A production incident must be acknowledged within 7 minutes.' This confirms that the 7-minute acknowledgment requirement applies to P1 incidents, the highest-priority severity level. Because",
+                "truncated": true
+              },
+              {
+                "source_id": "a7d20009a924479ca2e3d6ba1f04d382-3",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-784d9acb20d07a745105d6c31de195ea",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:8ee0a3e2d1f5b177979ea710\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a plain white rectangular document snippet with left-aligned black sans-serif text. It contains three text elements separated by blank lines: a heading-like line \"Orion emergency recovery\"; a sentence \"The recovery code is DR-4826.\"; and a sentence \"The recovery time objective is 45 minutes.\" There are no graphical elements, tables, diagrams, flowcharts, logos, or borders. The text appears in the upper-left area, leaving substantial white space below and to the right. The visual style is minimal and document-like. The content relates to the su",
+                "truncated": true
+              },
+              {
+                "source_id": "a7d20009a924479ca2e3d6ba1f04d382-4",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-c74b3fda352ba7a37c3379c87d5447e0",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear scalar product that computes a total quantity C from a single independent variable, 'workers', multiplied by a constant coefficient of 42. From a mathematical perspective, it defines a direct proportionality relationship: C is directly proportional to the number of workers, with 42 serving as the constant of proportionality or a per-worker capacity rate. This is a first-degree polynomial function of the form y = kx, with slope k = 42 and zero intercept, meaning C grows linearly and unboundedly as 'workers' increases. The coefficient 42 is dimensionless unless the units of 'workers' and C are specified; in the surrounding context of a 'production incid",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the P1 response time in the severity table?",
+          "expected": "7 minutes",
+          "found": true,
+          "required_evidence": "Table Analysis:",
+          "seconds": 2.673,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "b73d086d83664bc2ab8b6cb86c3664fd-1",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-1b47149ecbf10e961c5af09e2fec3873",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact, two-column reference matrix embedded within the 'Orion service handbook'. The left column is headed 'Severity' and the right column is headed 'Response'. It contains a single data row mapping the severity level 'P1' to the response time '7 minutes'. The table structure is minimal, using a header row followed by one body row, with no captions or footnotes. The only data point is P1 = 7 minutes, which directly mirrors the surrounding statement: 'A production incident must be acknowledged within 7 minutes.' This confirms that the 7-minute acknowledgment requirement applies to P1 incidents, the highest-priority severity level. Because",
+                "truncated": true
+              },
+              {
+                "source_id": "b73d086d83664bc2ab8b6cb86c3664fd-2",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-24f6c8d25210f51f71287db0934bf505",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "b73d086d83664bc2ab8b6cb86c3664fd-3",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-784d9acb20d07a745105d6c31de195ea",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:8ee0a3e2d1f5b177979ea710\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a plain white rectangular document snippet with left-aligned black sans-serif text. It contains three text elements separated by blank lines: a heading-like line \"Orion emergency recovery\"; a sentence \"The recovery code is DR-4826.\"; and a sentence \"The recovery time objective is 45 minutes.\" There are no graphical elements, tables, diagrams, flowcharts, logos, or borders. The text appears in the upper-left area, leaving substantial white space below and to the right. The visual style is minimal and document-like. The content relates to the su",
+                "truncated": true
+              },
+              {
+                "source_id": "b73d086d83664bc2ab8b6cb86c3664fd-4",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-c74b3fda352ba7a37c3379c87d5447e0",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear scalar product that computes a total quantity C from a single independent variable, 'workers', multiplied by a constant coefficient of 42. From a mathematical perspective, it defines a direct proportionality relationship: C is directly proportional to the number of workers, with 42 serving as the constant of proportionality or a per-worker capacity rate. This is a first-degree polynomial function of the form y = kx, with slope k = 42 and zero intercept, meaning C grows linearly and unboundedly as 'workers' increases. The coefficient 42 is dimensionless unless the units of 'workers' and C are specified; in the surrounding context of a 'production incid",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What is the capacity equation in the Orion handbook?",
+          "expected": "42",
+          "found": true,
+          "required_evidence": "Mathematical Equation Analysis:",
+          "seconds": 2.664,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "5f818301730e47f59f2f9ecce58e6cbe-1",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-784d9acb20d07a745105d6c31de195ea",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:8ee0a3e2d1f5b177979ea710\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a plain white rectangular document snippet with left-aligned black sans-serif text. It contains three text elements separated by blank lines: a heading-like line \"Orion emergency recovery\"; a sentence \"The recovery code is DR-4826.\"; and a sentence \"The recovery time objective is 45 minutes.\" There are no graphical elements, tables, diagrams, flowcharts, logos, or borders. The text appears in the upper-left area, leaving substantial white space below and to the right. The visual style is minimal and document-like. The content relates to the su",
+                "truncated": true
+              },
+              {
+                "source_id": "5f818301730e47f59f2f9ecce58e6cbe-2",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-1b47149ecbf10e961c5af09e2fec3873",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact, two-column reference matrix embedded within the 'Orion service handbook'. The left column is headed 'Severity' and the right column is headed 'Response'. It contains a single data row mapping the severity level 'P1' to the response time '7 minutes'. The table structure is minimal, using a header row followed by one body row, with no captions or footnotes. The only data point is P1 = 7 minutes, which directly mirrors the surrounding statement: 'A production incident must be acknowledged within 7 minutes.' This confirms that the 7-minute acknowledgment requirement applies to P1 incidents, the highest-priority severity level. Because",
+                "truncated": true
+              },
+              {
+                "source_id": "5f818301730e47f59f2f9ecce58e6cbe-3",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-24f6c8d25210f51f71287db0934bf505",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "5f818301730e47f59f2f9ecce58e6cbe-4",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-c74b3fda352ba7a37c3379c87d5447e0",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear scalar product that computes a total quantity C from a single independent variable, 'workers', multiplied by a constant coefficient of 42. From a mathematical perspective, it defines a direct proportionality relationship: C is directly proportional to the number of workers, with 42 serving as the constant of proportionality or a per-worker capacity rate. This is a first-degree polynomial function of the form y = kx, with slope k = 42 and zero intercept, meaning C grows linearly and unboundedly as 'workers' increases. The coefficient 42 is dimensionless unless the units of 'workers' and C are specified; in the surrounding context of a 'production incid",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What emergency recovery code appears in the handbook image?",
+          "expected": "DR-4826",
+          "found": true,
+          "required_evidence": "Image Content Analysis:",
+          "seconds": 2.67,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "a8ddb4cf9d394222a69d0192082099c4-1",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-784d9acb20d07a745105d6c31de195ea",
+                "title": "[1] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Orion service handbook A production incident must be acknowledged within 7 minutes.\nImage Path: asset:8ee0a3e2d1f5b177979ea710\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a plain white rectangular document snippet with left-aligned black sans-serif text. It contains three text elements separated by blank lines: a heading-like line \"Orion emergency recovery\"; a sentence \"The recovery code is DR-4826.\"; and a sentence \"The recovery time objective is 45 minutes.\" There are no graphical elements, tables, diagrams, flowcharts, logos, or borders. The text appears in the upper-left area, leaving substantial white space below and to the right. The visual style is minimal and document-like. The content relates to the su",
+                "truncated": true
+              },
+              {
+                "source_id": "a8ddb4cf9d394222a69d0192082099c4-2",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-1b47149ecbf10e961c5af09e2fec3873",
+                "title": "[2] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Table Analysis:\nImage Path: \nCaption: None\nStructure: | Severity | Response |\n| --- | --- |\n| P1 | 7 minutes |\nFootnotes: None\n\nAnalysis: The table is a compact, two-column reference matrix embedded within the 'Orion service handbook'. The left column is headed 'Severity' and the right column is headed 'Response'. It contains a single data row mapping the severity level 'P1' to the response time '7 minutes'. The table structure is minimal, using a header row followed by one body row, with no captions or footnotes. The only data point is P1 = 7 minutes, which directly mirrors the surrounding statement: 'A production incident must be acknowledged within 7 minutes.' This confirms that the 7-minute acknowledgment requirement applies to P1 incidents, the highest-priority severity level. Because",
+                "truncated": true
+              },
+              {
+                "source_id": "a8ddb4cf9d394222a69d0192082099c4-3",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-24f6c8d25210f51f71287db0934bf505",
+                "title": "[3] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Orion service handbook\n\nA production incident must be acknowledged within 7 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "a8ddb4cf9d394222a69d0192082099c4-4",
+                "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+                "chunk_id": "chunk-c74b3fda352ba7a37c3379c87d5447e0",
+                "title": "[4] handbook.docx",
+                "kind": "knowledge",
+                "preview": "Mathematical Equation Analysis:\nEquation: C = workers * 42\nFormat: unknown\n\nMathematical Analysis: The equation C = workers * 42 is a linear scalar product that computes a total quantity C from a single independent variable, 'workers', multiplied by a constant coefficient of 42. From a mathematical perspective, it defines a direct proportionality relationship: C is directly proportional to the number of workers, with 42 serving as the constant of proportionality or a per-worker capacity rate. This is a first-degree polynomial function of the form y = kx, with slope k = 42 and zero intercept, meaning C grows linearly and unboundedly as 'workers' increases. The coefficient 42 is dimensionless unless the units of 'workers' and C are specified; in the surrounding context of a 'production incid",
+                "truncated": true
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 53.495,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 4,
+      "document_id": "kd_d859a52345494148a41c089c8f5887aa",
+      "parsed_blocks": {
+        "text": 2,
+        "table": 1,
+        "image": 1,
+        "equation": 1
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [],
+      "page_ranges": [
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": null
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": "table"
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": "image"
+        },
+        {
+          "page_idx": null,
+          "page_idx_end": null,
+          "original_type": "equation"
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    },
+    {
+      "file": "release.pptx",
+      "sha256": "90cc93d4d36c8ec5eb3754b8268d76e3cff8a0ebc51c197e7cc1dde6ba6a40c0",
+      "queries": [
+        {
+          "question": "When do Orion production releases happen?",
+          "expected": "Tuesday",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 3.166,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "a45383a2ab914e848c463c87f47c3808-1",
+                "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+                "chunk_id": "chunk-720de0a5e305eed6d8bdf8da632355c4",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "a45383a2ab914e848c463c87f47c3808-2",
+                "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+                "chunk_id": "chunk-1b9cdf93a8f54296bda43f93e729e284",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:4dc8c81bc74de0d35d5dac41\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only excerpt on a plain white background. It contains three left-aligned lines of black sans-serif text with generous spacing. No borders, charts, diagrams, flowcharts, tables, axes, legends, arrows, logos, or other graphical elements are present. The first line, separated from the following text by a blank gap, functions as a heading or title: \"Orion emergency recovery\". The second line states a recovery code: \"The recovery code is DR-4826.\" The third line states a time target: \"The recovery time objective is 45",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "How long is the Orion rollback window?",
+          "expected": "18 minutes",
+          "found": true,
+          "required_evidence": null,
+          "seconds": 2.496,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "44452aa56bb64f2c9e1847e4416a32b9-1",
+                "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+                "chunk_id": "chunk-720de0a5e305eed6d8bdf8da632355c4",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              },
+              {
+                "source_id": "44452aa56bb64f2c9e1847e4416a32b9-2",
+                "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+                "chunk_id": "chunk-1b9cdf93a8f54296bda43f93e729e284",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:4dc8c81bc74de0d35d5dac41\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only excerpt on a plain white background. It contains three left-aligned lines of black sans-serif text with generous spacing. No borders, charts, diagrams, flowcharts, tables, axes, legends, arrows, logos, or other graphical elements are present. The first line, separated from the following text by a blank gap, functions as a heading or title: \"Orion emergency recovery\". The second line states a recovery code: \"The recovery code is DR-4826.\" The third line states a time target: \"The recovery time objective is 45",
+                "truncated": true
+              }
+            ]
+          }
+        },
+        {
+          "question": "What recovery code appears in the release slide image?",
+          "expected": "DR-4826",
+          "found": true,
+          "required_evidence": "Image Content Analysis:",
+          "seconds": 3.602,
+          "payload": {
+            "status": "ok",
+            "sources": [
+              {
+                "source_id": "69093aa68f324b339d9824c552daf258-1",
+                "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+                "chunk_id": "chunk-1b9cdf93a8f54296bda43f93e729e284",
+                "title": "[1] release.pptx",
+                "kind": "knowledge",
+                "preview": "Image Content Analysis:\n- Section Path: None\n- Neighbor Text: Production releases happen on Tuesday at 09:30 UTC. Release verification The rollback window is 18 minutes.\nImage Path: asset:4dc8c81bc74de0d35d5dac41\nCaptions: None\nFootnotes: None\n\nVisual Analysis: The image is a text-only excerpt on a plain white background. It contains three left-aligned lines of black sans-serif text with generous spacing. No borders, charts, diagrams, flowcharts, tables, axes, legends, arrows, logos, or other graphical elements are present. The first line, separated from the following text by a blank gap, functions as a heading or title: \"Orion emergency recovery\". The second line states a recovery code: \"The recovery code is DR-4826.\" The third line states a time target: \"The recovery time objective is 45",
+                "truncated": true
+              },
+              {
+                "source_id": "69093aa68f324b339d9824c552daf258-2",
+                "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+                "chunk_id": "chunk-720de0a5e305eed6d8bdf8da632355c4",
+                "title": "[2] release.pptx",
+                "kind": "knowledge",
+                "preview": "Orion release policy\n\nProduction releases happen on Tuesday at 09:30 UTC.\n\nRelease verification\n\nThe rollback window is 18 minutes.",
+                "truncated": false
+              }
+            ]
+          }
+        }
+      ],
+      "ingest_seconds": 41.734,
+      "ingest_exit": 0,
+      "analysis_failures": 0,
+      "individual_fallbacks": 0,
+      "page_count": null,
+      "chunk_count": 2,
+      "document_id": "kd_af72c1f720f6454a94338a4fa4cc5e69",
+      "parsed_blocks": {
+        "text": 4,
+        "image": 1
+      },
+      "parse_cache_present": true,
+      "local_asset_paths_hidden": true,
+      "pages": [
+        0,
+        1
+      ],
+      "page_ranges": [
+        {
+          "page_idx": 0,
+          "page_idx_end": 1,
+          "original_type": null
+        },
+        {
+          "page_idx": 1,
+          "page_idx_end": 1,
+          "original_type": "image"
+        }
+      ],
+      "chunk_sources_valid": true,
+      "all_chunks_registered": true,
+      "publish_exit": 0,
+      "status": "done"
+    }
+  ],
+  "amount": null
+}

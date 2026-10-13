@@ -1,0 +1,17 @@
+{
+  "thread": "cca17389-2087-40d8-b11e-3c59f44c142d",
+  "submission": {
+    "version": 1,
+    "job_id": "kj_0a6d4cba906346209a87451ba2539e97",
+    "document_id": "kd_d33e4a9975ee455c87511630bbbfc231",
+    "file_name": "fixture-new.pdf",
+    "status": "queued",
+    "searchable": false,
+    "error_code": null,
+    "created_at": "2026-10-13T03:46:58.873829Z",
+    "updated_at": "2026-10-13T03:46:58.873829Z",
+    "reused": false
+  },
+  "routes_mocked": false,
+  "source_evidence_sha256": "71bb6c9e7a988885605d75ac7400cea2a106a969b262aa4c39509f5b268b998e"
+}

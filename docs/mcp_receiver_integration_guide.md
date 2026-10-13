@@ -1,10 +1,10 @@
 # MCP 消费方接入
 
-2026-10-12生效。正式契约为Bearer认证的Streamable HTTP `/mcp`；旧SSE优先与带project_id的query工具说明已被取代。FastMCP 3.2.0，平台锁定langchain-mcp-adapters 0.3.2，不切换beta API。RAG online 写入仍默认关闭，平台接线须按专项交接启用。
+2026-10-13更新。正式契约为Bearer认证的Streamable HTTP `/mcp`；旧SSE优先与带project_id的query工具说明已被取代。FastMCP 3.2.0，平台锁定langchain-mcp-adapters 0.3.2，不切换beta API。RAG online 写入仍默认关闭，平台接线须按专项交接启用。
 
 ## 配置与授权
 
-每个legacy项目配置独立长随机token，知识服务端将其绑定tenant/project/namespace；online逻辑项目绑定 `knowledge_base_id`。消费方只把Bearer放在HTTP headers；查询模型输入只有query/top_k，不能选择scope/namespace/URL。接口参数不作为授权边界。未知/失效token HTTP401，无默认corpus回退。写工具还必须由平台 Runtime 注入 `X-Knowledge-Upload-ID` 与短时 `X-Knowledge-Operation-Grant`，静态 Bearer 不具备写权限。
+每个legacy项目配置独立长随机token，知识服务端将其绑定tenant/project/namespace；online逻辑项目绑定 `knowledge_base_id`。消费方只把Bearer放在HTTP headers；查询输入 query/top_k，默认 sources_version=1；明确 v2 参数仅改变安全来源投影，不能选择scope/namespace/URL。接口参数不作为授权边界。未知/失效token HTTP401，无默认corpus回退。写工具还必须由平台 Runtime 注入 `X-Knowledge-Upload-ID` 与短时 `X-Knowledge-Operation-Grant`，静态 Bearer 不具备写权限。
 
 平台以 `PLATFORM_KNOWLEDGE_MCP_BINDINGS_JSON` 将可信tenant:project映射到resource；Runtime `RUNTIME_MCP_CONNECTIONS_JSON` 保存resource连接、Authorization、scope、allowed_tools。新Thread由平台签发binding，Runtime核对tenant/project/thread和connection.scope后再discovery。MCP配置不能经浏览器Context/metadata/input传入。
 
@@ -26,7 +26,7 @@
 
 返回单JSON文本块与同值structuredContent。status为ok/no_hit，sources字段为source_id、document_id、chunk_id、title、kind、preview、truncated。title是调用内序号+真实文件名，两个同名文件不会误合并。source_id仅标识该次检索快照，不是下载地址。
 
-失败为isError=true，安全code为knowledge_retrieval_failed；传输错误沿消费方既有工具错误分类。取消保持CancelledError，不改写no_hit。不提供页码、正文下载、source_url或provider原始数据。
+失败为isError=true，安全code为knowledge_retrieval_failed；传输错误沿消费方既有工具错误分类。取消保持CancelledError，不改写no_hit。默认 v1 不提供页码；显式 sources_version=2 增加可信 locator，PDF page／PPTX slide／unknown，1-based 范围和 text/image/table/equation 块类型；正文下载、source_url 和 provider 原始数据均不提供。当前平台 DTO 保持 v1，先接入兼容 DTO 和 Web 展示再由 interceptor 固定 v2；[详细方案](projects/20261013-online-documents/platform-contract.md)。
 
 Runtime通过官方interceptor在Adapter转换前校验/投影，最多8条/800字符/12KiB。ToolMessage.artifact为 `{"structured_content": <safe-result>}`，模型正文与artifact一致。F04更小预算按完整字段缩短并同步artifact；不能截断JSON再渲染“完整来源”。后端前端消费同一检索快照，历史不重新查询。
 

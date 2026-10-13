@@ -1,0 +1,86 @@
+[
+  {
+    "case": "current",
+    "http_status": 200,
+    "finish_reason": "stop",
+    "content_length": 1069,
+    "reasoning_length": 3976,
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "completion_tokens": 1460,
+      "completion_tokens_details": {
+        "image_tokens": 0,
+        "reasoning_tokens": 1092
+      },
+      "cost": 0.00089445,
+      "cost_details": null,
+      "gateway_cost": 0.0017889,
+      "is_byok": false,
+      "market_cost": 0.0017889,
+      "prompt_tokens": 123,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 1583
+    },
+    "seconds": 8.86
+  },
+  {
+    "case": "enable_thinking",
+    "http_status": 200,
+    "finish_reason": "stop",
+    "content_length": 783,
+    "reasoning_length": 6238,
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "completion_tokens": 1938,
+      "completion_tokens_details": {
+        "image_tokens": 0,
+        "reasoning_tokens": 1662
+      },
+      "cost": 0.00118125,
+      "cost_details": null,
+      "gateway_cost": 0.0023625,
+      "is_byok": false,
+      "market_cost": 0.0023625,
+      "prompt_tokens": 123,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 2061
+    },
+    "seconds": 11.44
+  },
+  {
+    "case": "reasoning_none",
+    "http_status": 200,
+    "finish_reason": "stop",
+    "content_length": 653,
+    "reasoning_length": 0,
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "completion_tokens": 236,
+      "completion_tokens_details": {
+        "image_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "cost": 0.00015615,
+      "cost_details": null,
+      "gateway_cost": 0.0003123,
+      "is_byok": false,
+      "market_cost": 0.0003123,
+      "prompt_tokens": 97,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 333
+    },
+    "seconds": 2.9
+  }
+]

@@ -1,5 +1,7 @@
 # RAG-Anything 示例联调总结与后续抽象建议
 
+> 历史记录：以下结果对应早期版本和当时的模型组合，不是当前运行配置。2026-10-13 已移除旧供应商的 env 使用；当前文本／视觉均为 miaomiaoai `deepseek-v4.1-flash`。运行以[README](../README.md)及[env.example](../env.example)为准，剩余事项见[说明](remaining-work.md)。保留后文模型名称仅用于追溯当时成功／失败结果，不作为继续使用建议。
+
 ## 1. 目的
 
 这份文档用于记录当前项目对 `RAG-Anything` 示例代码的真实联调结果，并把这些联调工作沉淀成后续业务开发的铺垫。
@@ -11,37 +13,9 @@
 3. 现有免费模型组合是否能支撑联调阶段
 4. 示例代码中哪些能力值得抽象封装，供后续业务开发复用
 
-## 2. 当前联调配置
+## 2. 配置入口
 
-当前示例运行统一从项目根目录的 `.env` 读取配置，核心模型组合如下：
-
-- Parser: `docling`
-- Text LLM: `kimi-k2`
-- Vision LLM: `qwen3-vl-plus`
-- Embedding: `nomic-embed-text`
-
-对应环境变量关键项：
-
-```env
-PARSER=docling
-PARSE_METHOD=auto
-WORKING_DIR=./rag_storage
-OUTPUT_DIR=./output
-TEST_DOCUMENT_PATH=./test_data/接口文档.pdf
-TEST_IMAGE_PATH=./test_data/11a1f536fbf8a56a69ffa6b298b2408d.jpeg
-
-LLM_BASE_URL=https://apis.iflow.cn/v1
-LLM_MODEL=kimi-k2
-LLM_API_KEY=***
-
-VISION_BASE_URL=https://apis.iflow.cn/v1
-VISION_MODEL=qwen3-vl-plus
-VISION_API_KEY=***
-
-EMBEDDING_BASE_URL=http://101.126.90.71:11434
-EMBEDDING_MODEL=nomic-embed-text
-EMBEDDING_DIM=768
-```
+示例仍从项目根目录的私有 `.env` 读取配置。已删除这份历史文档中的过期可复制配置块；当前端点／模型／密钥定义见[env.example](../env.example)，真实凭据不得写入文档。早期 Ollama 768 维索引与当前百炼 1024 维索引不可混用，切换模型需独立新库验证。
 
 ## 3. 这次做了哪些改造
 
@@ -114,7 +88,7 @@ EMBEDDING_DIM=768
 
 结论：
 
-当前这套免费联调组合可以作为后续开发阶段的默认测试配置。
+当时的组合通过了该轮示例联调；它已退出当前配置，不作为后续默认组合。
 
 ## 4.2 `example 1`: `1_end_to_end.py`
 
@@ -297,7 +271,7 @@ RetryError[...InvalidResponseError]
 
 对后续开发的启示：
 
-- 联调阶段可以继续用
+- 该组合已退出当前配置；此处仅保留当时的兼容性问题
 - 但生产化前最好加一层更稳的响应清洗/重试包装
 - 或者把多模态表格说明生成换成更稳定的模型
 
@@ -399,18 +373,9 @@ class KnowledgeQueryService:
 - 屏蔽当前模型兼容性问题
 - 统一封装 query mode、超时、返回格式
 
-## 7.4 模型适配层
+## 7.4 模型适配层（历史建议）
 
-后续最好把当前这三套模型调用再独立封装一层：
-
-- `kimi-k2`
-- `qwen3-vl-plus`
-- `nomic-embed-text`
-
-原因：
-
-- 现在只是联调可用
-- 但后面一定会碰到模型替换、响应清洗、异常重试、速率限制等问题
+现有 `src/demo_support.py` 已提供统一的文本／视觉／Embedding 适配，当前配置复用这一入口。旧供应商专用层不再规划；后续模型兼容问题只按实际失败定位，不重复增加包装层。
 
 ## 8. 推荐的下一步
 

@@ -12,6 +12,7 @@
 - [任务列表](tasks.md)：具体代码入口、实施顺序和完成条件。
 - [验证计划与记录](verification.md)：升级、格式、检索、负载和回退的证据要求。
 - [实施证据与复跑入口](implementation/README.md)：最终测试日志、通用检索/快照基线与逐轮格式结果。
+- [剩余开发／验收与Ubuntu用途](../../remaining-work.md)：10-13清理项目旧供应商配置后的最新说明；后置开发不以旧视觉凭据作阻塞理由。
 - [既有异步入库专项](../20261012-project-member-knowledge-upload/README.md)：继续负责平台权限、可信附件、Runtime、前端和联合部署验收。
 
 ## 方案概述

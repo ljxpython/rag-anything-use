@@ -1,6 +1,6 @@
 # 当前知识服务能力
 
-最后更新：2026-10-13；用户验收升级与本期优化范围通过，需求done，登记的本地知识服务已停。
+最后更新：2026-10-13；用户验收升级与本期优化范围通过，需求done；项目旧供应商配置已清理，登记的本地知识服务保持停止。剩余开发／验收见[剩余事项](remaining-work.md)。
 
 已实现：固定Bearer scope与目录防逃逸；一次结构化检索；opaque文档/片段来源、安全DTO；异步engine缓存、明确LightRAG workspace；离线单写者和不可变发布；逻辑项目SQLite任务/幂等；原件流式hash、受管票据和配额；完整快照恢复到独立候选、原生新文档增量、原子激活/读lease/回退；online MCP提交/状态和内部HTTP（默认关闭）；CLI注册/迁移/回退；用量阶段计数与安全错误。
 
@@ -12,8 +12,8 @@
 
 实际平台授权追加验收：完整后台请求start/activate200；签名篡改/过期/撤权拒绝；受理后Thread删除任务仍完成；同key GET在新写暂停后仍返回同安全回执且不增attempt/usage。采用实际Platform API源码＋隔离SQL主体，非Runtime Agent/浏览器完整验收；见 [证据](projects/20261012-rag-provider-contract-alignment/verification.md)。
 
-模型配置：miaomiaoai DeepSeek抽取使用 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`、本地8192输出预算，新版本入库复验成功；其他供应商默认 `{}`。此配置不改消费平台的默认模型或锁文件。
+模型配置：文本／视觉均为miaomiaoai `deepseek-v4.1-flash`，本机与Ubuntu项目VISION三项显式复用对应LLM，输出预算8192；示例及运行源码无旧供应商调用。DeepSeek文本抽取使用 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，其他供应商默认 `{}`。现有视觉适配器无需新增供应商包装，更新配置后合成图片调用通过；此配置不改消费平台的默认模型或锁文件。
 
-格式：Ubuntu文本PDF和扫描PDF最新CLI→发布→MCP通过；DOCX/PPTX初轮正文通过，最新DOCX与混合PDF各600秒超时、PPTX空正文失败。混合PDF紧凑表格修复有确定性回归，真实模型链路未通过；修正后的格式脚本未再全跑。旧iflow凭据被434拒绝；2026-10-13miaomiaoai DeepSeek两个图片HTTP探针与项目vision适配器通过，可复用LLM端点/模型/凭据配置VISION，未改现役环境。完整文档格式能力仍partial。online保持MD/TXT；Intel Mac仍无法安装锁定Torch2.11，ARM Mac本轮未实测。
+格式：Ubuntu文本PDF和扫描PDF最新CLI→发布→MCP通过；DOCX/PPTX初轮正文通过，最新DOCX与混合PDF各600秒超时、PPTX空正文失败。混合PDF紧凑表格修复有确定性回归，真实模型链路未通过；修正后的格式脚本未再全跑。miaomiaoai DeepSeek图片HTTP与项目vision适配器通过，完整文档格式能力仍partial。online保持MD/TXT；Intel Mac仍无法安装锁定Torch2.11，ARM Mac本轮未实测。
 
-前端不属于本工程：平台同事联验既有来源卡，浏览器不直连MCP、无知识CRUD产品。启动和维护见[README](../README.md)。
+前端不属于本工程：平台侧API、Runtime及F01–F03聊天上传／回执／知识面板代码已交付，V02真实Agent／浏览器入库和生命周期仍待联合验收，online部署开关关闭。浏览器不直连MCP。启动和维护见[README](../README.md)。

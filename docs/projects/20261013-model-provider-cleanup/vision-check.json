@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-13",
+  "configuration_scope": "updated Ubuntu project .env; no service restart",
+  "adapter": "build_vision_model_func",
+  "model": "deepseek-v4.1-flash",
+  "max_tokens": 8192,
+  "extra_body_override": false,
+  "vision_matches_llm": true,
+  "expected": {"shape": "circle", "color": "green", "count": 3},
+  "actual": {"shape": "circle", "color": "green", "count": 3},
+  "passed": true,
+  "harness_preflight": "first attempt did not load appended vision values because the existing scopes JSON had invalid dotenv syntax; normalized JSON encoding without changing the mapping and loaded the env explicitly before the successful request"
+}

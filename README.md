@@ -27,6 +27,8 @@ Embedding 默认使用 Ollama（`EMBEDDING_PROVIDER=ollama`）。外部兼容 `/
 
 本地 miaomiaoai DeepSeek 抽取与关键词任务使用 `LLM_MAX_TOKENS=8192` 和 `LLM_EXTRA_BODY_JSON={"thinking":{"type":"disabled"}}`，用于减少推理挤占正文预算；新版本资料有成功入库记录。该参数只用于支持此配置的供应商，其他供应商默认 `{}`。改变模型/Embedding 配置须重建新索引，不复用旧向量。
 
+当前文本／视觉均使用 miaomiaoai `deepseek-v4.1-flash`。视觉三项 `VISION_BASE_URL/MODEL/API_KEY` 在私有 `.env` 中显式填写与对应 LLM 相同的值，`VISION_MAX_TOKENS=8192`；项目示例已删除旧供应商和备用配置。文本模式不调用视觉接口，多模态开关默认关闭。更换视觉配置也会改变 online 处理签名；已有逻辑库不绕过签名校验，正式切换需独立新库／候选验证。
+
 本轮通用资料仍出现输出预算耗尽、空正文和重试；配置这个开关并不保证供应商一定关闭推理或稳定抽取。解析/索引失败需查私有日志并用独立候选复验；旧已发布库不受失败候选影响。
 
 HTTP 还需服务端 Bearer → scope 映射。token 至少32字符；项目为 UUID，租户为 UUID 或平台已有的 `__default`。namespace 是本地不可变索引版本，允许单段字母、数字、下划线、短横线（最多96字符），不可共享给不同项目。
@@ -122,11 +124,13 @@ uv run --frozen --env-file ".env" python "scripts/verify_document_formats.py" --
 uv run --frozen python "scripts/benchmark_knowledge_snapshots.py" --documents 100 --output "/tmp/rag-capacity.json"
 ```
 
-PDF/Office脚本要求已安装documents。最新格式轮文本/扫描PDF通过，混合PDF和DOCX各600秒超时，PPTX实体抽取空正文失败；修正CLI失败退出码与脚本检查后未再运行全格式实模型验证。旧iflow视觉凭据被434拒绝；2026-10-13改用miaomiaoai `deepseek-v4.1-flash` 的过程级配置，两个图片HTTP探针和项目视觉适配器均通过，未修改现役配置。表格/公式/图片的完整文档链仍须各自验收，不能仅凭图片探针或ready状态宣称全部成功。MCP来源预算与字段未扩展，online仍只接收MD/TXT。
+PDF/Office脚本要求已安装documents。最新格式轮文本/扫描PDF通过，混合PDF和DOCX各600秒超时，PPTX实体抽取空正文失败；修正CLI失败退出码与脚本检查后未再运行全格式实模型验证。2026-10-13本机与Ubuntu项目私有视觉配置已改用miaomiaoai `deepseek-v4.1-flash`；更新配置后的既有视觉适配器正确识别合成图片，服务未重启，现役索引未切换。表格/公式/图片的完整文档链仍须各自验收，不能仅凭图片探针或ready状态宣称全部成功。MCP来源预算与字段未扩展，online仍只接收MD/TXT。
 
 - [消费方接入契约](docs/mcp_receiver_integration_guide.md)
 - [运行与更新](docs/rag_system_usage_guide.md)
 - [当前能力与限制](docs/rag_system_current_progress.md)
+- [剩余开发、验收与 Ubuntu 用途](docs/remaining-work.md)
+- [模型供应商配置清理](docs/projects/20261013-model-provider-cleanup/README.md)
 - [Docling设计说明](docs/raganything_docling_guide.md)
 - [项目成员 Agent MCP 异步入库](docs/projects/20261012-project-member-knowledge-upload/README.md)（RAG文本范围完成，整专项partial）
 - [平台后台授权与失ACK回查](docs/projects/20261012-rag-provider-contract-alignment/README.md)（done；主线修复保留）

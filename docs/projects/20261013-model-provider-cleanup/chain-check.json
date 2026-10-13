@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-13",
+  "environment": "sshmy2 isolated test directory; current Ubuntu project .env",
+  "harness": "scripts/verify_online_knowledge.py::run",
+  "platform": "local signed authorization stub, not production IAM",
+  "models": "current .env, real HTTP providers",
+  "processing_signature": "f8a537f84a48eb63492006d0297da5154d3aaf2b06ca1548ec959ba9d0de895a",
+  "checks": {
+    "http_mcp_queued": true,
+    "real_worker_ready": true,
+    "duplicate_zero_new_usage": true,
+    "mcp_old_and_new_sources": true,
+    "rollback_searchable": true,
+    "published_files_unchanged": true
+  },
+  "amount": null,
+  "full_evidence": "/home/ubuntu/rag-opt-20261012-65sx7w4w/model-provider-cleanup-20261013-chain.json",
+  "limitations": "Text-only isolated chain; does not verify PDF/Office, production IAM, Agent Worker or browser E2E"
+}

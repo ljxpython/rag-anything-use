@@ -27,7 +27,9 @@ offline 更新仍用新namespace导入全部应公开资料，全部ready后发�
 - namespace未发布/签名不匹配/manifest损坏：恢复受控原配置或重建新版本，不生成公共库。
 - knowledge_retrieval_failed：查私有日志，公开响应不提供路径/供应商异常；最多60秒检索deadline。
 - 入库失败：CLI exit1或online job=failed，失败记录不能发布；保留原件/证据，明确新提交才重试，旧key不隐式重试。
-- PDF/Office：需要 `--extra documents`；Ubuntu文本/扫描PDF最新通过，混合PDF/DOCX超时，PPTX抽取空正文失败；Intel Mac锁定Torch无wheel。旧iflow视觉凭据被434拒绝，但miaomiaoai DeepSeek图片探针/vision适配器已通过；可在私有配置中让 `VISION_BASE_URL`、`VISION_MODEL`、`VISION_API_KEY`与对应LLM三项相同，完整文档图表仍需复验，不能从模型名称推断支持度。逐轮结果见[升级专项](projects/20261012-rag-optimization/verification.md)。
+- PDF/Office：需要 `--extra documents`；Ubuntu文本/扫描PDF最新通过，混合PDF/DOCX超时，PPTX抽取空正文失败；Intel Mac锁定Torch无wheel。当前miaomiaoai DeepSeek视觉配置已在本机和Ubuntu项目私有env中复用对应LLM三项，`VISION_MAX_TOKENS=8192`，更新后的既有vision适配器图片检查通过。完整文档图表仍需复验，逐轮结果见[升级专项](projects/20261012-rag-optimization/verification.md)。
+
+视觉配置改变会影响online处理签名，即使文本模式没有调用视觉接口；不得更改签名来继续复用旧库。部署切换需独立新库／候选验证。本次仅清理配置，已停服务保持停止；剩余开发与Ubuntu用途见[剩余事项](remaining-work.md)。
 
 RAG-Anything升级至1.4.2后，online文本签名不再受未使用的解析依赖安装影响；仅精确允许已核验v1文本组合，模型/端点/维度/分块变化仍拒绝旧索引。发布索引不原地改ID或表格内容；需要来源修复/紧凑表格收益的旧离线库必须用原件导入独立新namespace。
 

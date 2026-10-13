@@ -3,9 +3,10 @@
 - **时间：** 2026-10-13
 - **目标：** 在 sshmy2 上补齐在线 PDF／Office／图片资产链，修复复杂格式稳定性，提供平台来源字段／展示协同方案，并验收真实平台闭环、通用业务检索和负载。
 - **开发目录：** `/home/ubuntu/PyCharmMiscProject/rag-anything-use`
-- **分支：** `feat/online-documents-20261013`，基于 `main@edd7963`。
+- **开发分支：** `feat/online-documents-20261013`，基于 `main@edd7963`；验收收尾提交 `2bd5818`。
+- **交接分支：** `main`；2026-10-13 经用户批准快进合入，本地与 Ubuntu 统一跟踪 `origin/main`。
 - **平台源码：** `/Users/lijiaxin/PyCharmMiscProject/ai-agent-platform`；知识专项尚在同仓 6394 worktree 的未提交改动中，必须保护既有 Token／后台任务等主线功能。
-- **状态：** 已完成（本期范围）；功能提交 `09ac6a9` 已推送，所属联验服务已停。
+- **状态：** 已完成（本期范围）；功能提交 `09ac6a9` 与验收收尾 `2bd5818` 已合入 `main`，所属联验服务已停。
 - **范围排除：** 用户明确暂不开发音频／视频；不删除历史索引，不直接更改现役已发布库，不部署生产。
 
 ## 实施约束
@@ -29,4 +30,4 @@
 
 平台主工作区没有直接合并本次联验代码。动态格式、可信 FileRef 文本投影、root ToolNode 与回执等临时修复见 [补丁](platform-integration.patch) 和 [基线说明](platform-patch-context.json)。补丁依赖原知识专项已接入的 union 基线，不能对当前主工作区盲目套用。平台来源 v2 展示和图片 ImageRef 收据的具体后续方案见 [平台协同](platform-contract.md)；音视频按用户决定延期。
 
-交付记录见 [delivery.json](delivery.json)；Ubuntu 工作分支跟踪同名 origin 分支，现役 main 不擅自合并。
+交付记录见 [delivery.json](delivery.json)；RAG 本地 `/Users/lijiaxin/PyCharmMiscProject/rag-anything-use` 与 Ubuntu `/home/ubuntu/PyCharmMiscProject/rag-anything-use` 统一使用 `main`。合入为快进，保留原主线全部历史；Ubuntu 合入后回归119项通过。平台同事从远端 `main` 获取方案与补丁，平台既有工作树按本方案保留；私有配置、知识库和依赖目录按环境管理。

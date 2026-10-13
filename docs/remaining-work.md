@@ -27,7 +27,7 @@
 
 ## 环境和配置
 
-RAG 开发已在 Ubuntu `/home/ubuntu/PyCharmMiscProject/rag-anything-use` 的 `feat/online-documents-20261013` 完成；你无需亲自在 Ubuntu 补代码。Intel Mac 缺锁定 Torch wheel，Ubuntu 用于实际 Docling／PDF／Office 解析；平台代码／契约开发可在 Mac，图片或 Office 端到端联合 Ubuntu 解析服务验证。
+RAG 开发已完成，2026-10-13 经用户批准将验收分支快进合入 `main`；本地 `/Users/lijiaxin/PyCharmMiscProject/rag-anything-use` 和 Ubuntu `/home/ubuntu/PyCharmMiscProject/rag-anything-use` 统一跟踪 `origin/main`，平台同事从 `main` 读取交接文档。合入后 Ubuntu 全套119项通过；你无需亲自在 Ubuntu 补代码。Intel Mac 缺锁定 Torch wheel，Ubuntu 用于实际 Docling／PDF／Office 解析；平台代码／契约开发可在 Mac，图片或 Office 端到端联合 Ubuntu 解析服务验证。私有 `.env`、依赖和知识库按环境保留，不纳入 Git 同步。
 
 文本／视觉统一 miaomiaoai `deepseek-v4.1-flash`，Embedding 为百炼 `text-embedding-v4`／1024；源码、examples 和 env.example 已移除旧供应商。当前供应商抽取用 reasoning_effort:off，none 曾返回 400；更换模型／维度／视觉／处理签名用新库候选验证，不修改旧签名绕过校验。
 

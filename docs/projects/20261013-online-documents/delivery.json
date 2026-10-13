@@ -1,13 +1,29 @@
 {
   "status": "done",
   "verified_at": "2026-10-13T05:09:21.369054+00:00",
-  "branch": "feat/online-documents-20261013",
+  "branch": "main",
+  "development_branch": "feat/online-documents-20261013",
   "base_commit": "edd7963",
   "implementation_commit": "09ac6a9e945f0a1eb6a9e3ecdb2a8c35efafb5d3",
   "implementation_remote_commit": "09ac6a9e945f0a1eb6a9e3ecdb2a8c35efafb5d3",
   "implementation_push": "verified",
   "implementation_working_tree": "clean",
-  "final_documentation_commit": "This delivery record is carried by the follow-up documentation closeout commit on the same branch; its push is checked outside the file.",
+  "final_documentation_commit": "2bd5818e94a3a775951a065af13180fc5224e3db",
+  "main_handoff": {
+    "date": "2026-10-13",
+    "merge_strategy": "fast-forward",
+    "accepted_commit": "2bd5818e94a3a775951a065af13180fc5224e3db",
+    "local_path": "/Users/lijiaxin/PyCharmMiscProject/rag-anything-use",
+    "ubuntu_path": "/home/ubuntu/PyCharmMiscProject/rag-anything-use",
+    "upstream": "origin/main",
+    "ubuntu_regression": {
+      "tested_commit": "2bd5818e94a3a775951a065af13180fc5224e3db",
+      "passed": 119,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 26.07
+    }
+  },
   "services": "All task-owned RAG, tunnel, union Web/API/Runtime/Redis and browser stopped; see evidence/service-stop.json",
   "platform_main_modified": false,
   "platform_patch": "platform-integration.patch",

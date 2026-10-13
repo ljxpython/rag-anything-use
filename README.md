@@ -102,6 +102,8 @@ asyncio.run(main())
 
 ## 验证与交接
 
+RAG 交接统一使用 `main`：2026-10-13 经用户批准，将验收分支 `feat/online-documents-20261013@2bd5818` 快进合入，保留全部原主线提交。本地目录为 `/Users/lijiaxin/PyCharmMiscProject/rag-anything-use`，Ubuntu 为 `/home/ubuntu/PyCharmMiscProject/rag-anything-use`；两处跟踪 `origin/main`。合入后 Ubuntu 全套再次 **119 passed / 26.07s**。平台同事从远端 `main` 获取代码和下列交接文档；平台原知识 worktree 及其未提交改动仍按协同方案保留。私有配置、依赖安装目录和知识库按环境管理，不进入 Git 同步。
+
 ```bash
 uv run --frozen --group dev python -m pytest "tests" -q
 ```
@@ -130,7 +132,7 @@ uv run --frozen python "scripts/benchmark_knowledge_snapshots.py" --documents 30
 - [运行与更新](docs/rag_system_usage_guide.md)
 - [当前能力与限制](docs/rag_system_current_progress.md)
 - [剩余开发、验收与 Ubuntu 用途](docs/remaining-work.md)
-- [Ubuntu 在线文档与联合验收](docs/projects/20261013-online-documents/README.md)（本期实现／验收通过，分支交付）
+- [Ubuntu 在线文档与联合验收](docs/projects/20261013-online-documents/README.md)（本期实现／验收通过，main 交付）
 - [模型供应商配置清理](docs/projects/20261013-model-provider-cleanup/README.md)
 - [Docling设计说明](docs/raganything_docling_guide.md)
 - [项目成员 Agent MCP 异步入库](docs/projects/20261012-project-member-knowledge-upload/README.md)（RAG文本范围完成，整专项partial）

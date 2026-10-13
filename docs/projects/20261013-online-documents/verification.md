@@ -68,6 +68,16 @@
 
 本次所属服务已停止（Ubuntu 28892／28893、union Web/API/Runtime/Redis 及浏览器），端口关闭和进程退出见 [service-stop.json](evidence/service-stop.json)。功能提交 `09ac6a9e945f0a1eb6a9e3ecdb2a8c35efafb5d3` 已推送到 `origin/feat/online-documents-20261013`，git ls-remote 与 HEAD 一致，功能提交后工作区干净；交付见 [delivery.json](delivery.json)。本记录由随后文档收尾提交携带，最终远端和工作区再次检查。
 
+## Main 合入与三处同步
+
+2026-10-13 用户明确批准合入并统一本地／Ubuntu／远端代码。`origin/main@edd7963` 为验收提交 `2bd5818` 的祖先，因此采用 `git merge --ff-only`，保留所有原主线和专项提交，无冲突、无历史重写。
+
+- 本地重新建立 `/Users/lijiaxin/PyCharmMiscProject/rag-anything-use`，使用 `main`；Ubuntu 原目录切换到 `main`，两处均跟踪 `origin/main`。
+- Ubuntu 在 `main@2bd5818` 执行 `uv run --frozen --env-file ".env" pytest tests/ -q`：**119 passed / 26.07s**，0 failed，0 skipped。后续提交仅更新交接文档，源码与测试树不变。
+- Ubuntu 私有 `.env` 与切换前的 hash 一致；没有更换模型配置、知识库或安装依赖，也未启动已停止的服务。
+- 同步交付提交推送后，以远端 `refs/heads/main`、两处 HEAD／tree、工作区状态和跟踪差距核对最终一致性；最终提交 ID 在推送后读取，不嵌入自身文档。
+- 平台主工作区保留 `06d94130` 与已有删除项，6394 原知识工作树及临时 union 保留。平台正式合入、来源 v2 展示与 ImageRef 收据由平台同事继续；私有配置和索引不属于 Git 代码同步范围。
+
 ## 最终结论
 
-**done（本期范围）**：实现与验收通过，所属服务已停，Ubuntu 工作分支已推送。平台正式合入／v2 展示／图片 ImageRef 收据／生产部署不记作完成；音视频用户暂不开发。私有业务和生产容量结论需对应语料与指标。
+**done（本期范围）**：实现与验收通过，所属服务已停，已批准快进合入 `main` 并统一 RAG 交接基线。平台正式合入／v2 展示／图片 ImageRef 收据／生产部署不记作完成；音视频用户暂不开发。私有业务和生产容量结论需对应语料与指标。

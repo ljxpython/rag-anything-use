@@ -120,6 +120,11 @@ class KnowledgeJobSupervisor:
                 cwd=Path(__file__).resolve().parents[2],
                 env={
                     **os.environ,
+                    "OMP_NUM_THREADS": os.getenv("KNOWLEDGE_BUILDER_MAX_THREADS", "2"),
+                    "MKL_NUM_THREADS": os.getenv("KNOWLEDGE_BUILDER_MAX_THREADS", "2"),
+                    "OPENBLAS_NUM_THREADS": os.getenv("KNOWLEDGE_BUILDER_MAX_THREADS", "2"),
+                    "VECLIB_MAXIMUM_THREADS": os.getenv("KNOWLEDGE_BUILDER_MAX_THREADS", "2"),
+                    "NUMEXPR_NUM_THREADS": os.getenv("KNOWLEDGE_BUILDER_MAX_THREADS", "2"),
                     "KNOWLEDGE_ROOT_DIR": str(config.root_dir.expanduser().resolve()),
                     "KNOWLEDGE_BUILDER_ROOT": str(
                         config.root_dir.expanduser().resolve()
@@ -194,6 +199,11 @@ class KnowledgeJobSupervisor:
 
 
 async def _build_child(database_path, job_id, lock_fd):
+    try:
+        os.nice(int(os.getenv("KNOWLEDGE_BUILDER_NICE", "10")))
+    except (AttributeError, OSError, ValueError):
+        pass
+
     from src.knowledge.config import build_knowledge_service_config
 
     config = build_knowledge_service_config()

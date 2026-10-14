@@ -272,6 +272,13 @@ class KnowledgeGenerationService:
                 uploads.check_disk(job["kb"], doc["size_bytes"] * 2)
             registry = KnowledgeDocumentRegistry(paths)
             for record in old_records:
+                if record.source_type == "managed_upload":
+                    try:
+                        self.store.document(record.document_id)
+                    except ValueError as e:
+                        if str(e) == "knowledge_not_found":
+                            continue
+                        raise
                 registry.register_document(
                     record.model_copy(update={"project_id": namespace})
                 )
@@ -405,7 +412,12 @@ class KnowledgeGenerationService:
         for record in records:
             if record.source_type != "managed_upload":
                 continue
-            doc = self.store.document(record.document_id)
+            try:
+                doc = self.store.document(record.document_id)
+            except ValueError as e:
+                if str(e) == "knowledge_not_found":
+                    continue
+                raise
             if (
                 doc["mime_type"] in DOCUMENT_MIME
                 and artifacts.load(doc, signature) is None
@@ -569,10 +581,10 @@ class KnowledgeGenerationService:
     async def acquire(self, kb):
         project = self.store.project(kb)
         namespace = project["active_namespace"]
-        compatible_processing_signature(self.config, project["signature"])
         if namespace is None:
             yield None, None
             return
+        compatible_processing_signature(self.config, project["signature"])
         entry = await self.prepare(namespace, project["signature"], pin=True)
         try:
             yield entry["engine"], namespace

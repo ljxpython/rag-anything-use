@@ -138,8 +138,8 @@ def processing_signature(config):
 
 def compatible_processing_signature(config, expected):
     """Retain a reviewed v1 text signature without rewriting immutable snapshots."""
-    if expected == processing_signature(config):
-        return expected
+    if expected in (None, "dynamic_managed_v1") or expected == processing_signature(config):
+        return processing_signature(config)
     values = _processing_values(config)
     packages = values["packages"]
     if (

@@ -153,13 +153,6 @@ def create_server(config=None, rag_engine=None) -> FastMCP:
         )
 
     @server.tool(annotations=annotations)
-    async def mcp_list_project_knowledge_documents(
-        limit: Annotated[int, Field(ge=1, le=100)] = 20,
-    ) -> dict:
-        """列出凭据所属项目的资料名称与状态。"""
-        return await list_project_knowledge_documents(limit=limit)
-
-    @server.tool(annotations=annotations)
     async def get_project_knowledge_document_status(
         document_id: Annotated[str, Field(pattern=r"^kd_[a-f0-9]{32}$")],
     ) -> dict:
@@ -180,13 +173,6 @@ def create_server(config=None, rag_engine=None) -> FastMCP:
         return admin.get_document_status(
             project_id=scope.namespace, document_id=document_id, public=True
         )
-
-    @server.tool(annotations=annotations)
-    async def mcp_get_project_knowledge_document_status(
-        document_id: Annotated[str, Field(pattern=r"^kd_[a-f0-9]{32}$")],
-    ) -> dict:
-        """查看凭据所属项目的文档状态。"""
-        return await get_project_knowledge_document_status(document_id=document_id)
 
     if logical:
         register_knowledge_routes(server, verifier, uploads)

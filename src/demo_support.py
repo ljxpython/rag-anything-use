@@ -153,52 +153,39 @@ def build_llm_model_func(
                             transport=UsageTransport(usage, kind)
                         ) as client:
                             # The upstream helper closes its supplied HTTP client each attempt.
-                            try:
-                                return await openai_complete_if_cache.__wrapped__(
-                                    settings.llm_model,
-                                    prompt,
-                                    system_prompt=system_prompt,
-                                    history_messages=history_messages or [],
-                                    api_key=settings.llm_api_key,
-                                    base_url=settings.llm_base_url,
-                                    max_tokens=kwargs.get(
-                                        "max_tokens", settings.llm_max_tokens
-                                    ),
-                                    extra_body=kwargs.get("extra_body", extra_body),
-                                    openai_client_configs={
-                                        "http_client": client,
-                                        "max_retries": 0,
-                                    },
-                                    **{
-                                        key: value
-                                        for key, value in kwargs.items()
-                                        if key not in {"max_tokens", "extra_body"}
-                                    },
-                                )
-                            except InvalidResponseError:
-                                return ""
-
+                            return await openai_complete_if_cache.__wrapped__(
+                                settings.llm_model,
+                                prompt,
+                                system_prompt=system_prompt,
+                                history_messages=history_messages or [],
+                                api_key=settings.llm_api_key,
+                                base_url=settings.llm_base_url,
+                                max_tokens=kwargs.get(
+                                    "max_tokens", settings.llm_max_tokens
+                                ),
+                                extra_body=kwargs.get("extra_body", extra_body),
+                                openai_client_configs={
+                                    "http_client": client,
+                                    "max_retries": 0,
+                                },
+                                **{
+                                    key: value
+                                    for key, value in kwargs.items()
+                                    if key not in {"max_tokens", "extra_body"}
+                                },
+                            )
             return measured()
-
-        async def direct():
-            from lightrag.llm.openai import InvalidResponseError
-
-            try:
-                return await openai_complete_if_cache(
-                    settings.llm_model,
-                    prompt,
-                    system_prompt=system_prompt,
-                    history_messages=history_messages or [],
-                    api_key=settings.llm_api_key,
-                    base_url=settings.llm_base_url,
-                    max_tokens=kwargs.pop("max_tokens", settings.llm_max_tokens),
-                    extra_body=kwargs.pop("extra_body", extra_body),
-                    **kwargs,
-                )
-            except InvalidResponseError:
-                return ""
-
-        return direct()
+        return openai_complete_if_cache(
+            settings.llm_model,
+            prompt,
+            system_prompt=system_prompt,
+            history_messages=history_messages or [],
+            api_key=settings.llm_api_key,
+            base_url=settings.llm_base_url,
+            max_tokens=kwargs.pop("max_tokens", settings.llm_max_tokens),
+            extra_body=kwargs.pop("extra_body", extra_body),
+            **kwargs,
+        )
 
     return llm_model_func
 

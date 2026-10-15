@@ -236,7 +236,7 @@ async def _build_child(database_path, job_id, lock_fd):
         await generations.build(job_id)
     except Exception as exc:
         store.update_job(job_id, "failed", safe_error(exc))
-        logger.warning("knowledge_builder_failed: %s", type(exc).__name__)
+        logger.exception("knowledge_builder_failed: %s", exc)
         raise
     finally:
         watcher.cancel()

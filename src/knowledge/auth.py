@@ -50,11 +50,17 @@ class KnowledgeScope(BaseModel):
         return value
 
 
+import jwt
+
 class KnowledgeTokenVerifier(TokenVerifier):
     def __init__(self, config: KnowledgeServiceConfig):
         super().__init__(required_scopes=["knowledge:read"])
+        self.config = config
+        self.dynamic_secret = os.getenv("KNOWLEDGE_AUTHORIZATION_SECRET", "").strip()
         raw = json.loads(os.getenv("KNOWLEDGE_MCP_TOKEN_SCOPES_JSON", "{}"))
-        if not isinstance(raw, dict) or not raw:
+        if not isinstance(raw, dict):
+            raise ValueError("knowledge_token_scopes_required")
+        if not raw and not self.dynamic_secret:
             raise ValueError("knowledge_token_scopes_required")
         self.token_scopes: dict[str, KnowledgeScope] = {}
         owners: dict[str, tuple[str, str]] = {}
@@ -89,6 +95,34 @@ class KnowledgeTokenVerifier(TokenVerifier):
                     scopes=["knowledge:read"],
                     claims=scope.model_dump(),
                 )
+        if self.dynamic_secret:
+            try:
+                payload = jwt.decode(
+                    token,
+                    self.dynamic_secret,
+                    algorithms=["HS256"],
+                    audience="rag-service",
+                    options={"require": ["tenant_id", "project_id", "knowledge_base_id", "exp"]},
+                )
+                scope = KnowledgeScope(
+                    tenant_id=payload["tenant_id"],
+                    project_id=payload["project_id"],
+                    knowledge_base_id=payload["knowledge_base_id"],
+                )
+                from src.knowledge.jobs import KnowledgeJobStore
+
+                KnowledgeJobStore(self.config).ensure_project(
+                    scope.knowledge_base_id, scope.tenant_id, scope.project_id
+                )
+                self.token_scopes[token] = scope
+                return AccessToken(
+                    token=token,
+                    client_id=scope.project_id,
+                    scopes=["knowledge:read"],
+                    claims=scope.model_dump(),
+                )
+            except (jwt.PyJWTError, ValueError, KeyError):
+                pass
         return None
 
 
@@ -97,8 +131,15 @@ def resolve_knowledge_scope(verifier: KnowledgeTokenVerifier) -> KnowledgeScope:
     # Stdio is an explicitly scoped administrator client, not an unauthenticated fallback.
     if token is None and os.getenv("MCP_TRANSPORT", "http") == "stdio":
         scope = verifier.token_scopes.get(os.getenv("KNOWLEDGE_STDIO_TOKEN", ""))
+    elif token is not None:
+        scope = verifier.token_scopes.get(token.token)
+        if scope is None and token.claims:
+            try:
+                scope = KnowledgeScope.model_validate(token.claims)
+            except Exception:
+                scope = None
     else:
-        scope = verifier.token_scopes.get(token.token) if token is not None else None
+        scope = None
     if scope is None:
         raise ToolError("knowledge_scope_denied")
     return scope

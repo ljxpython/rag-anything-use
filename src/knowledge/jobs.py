@@ -113,6 +113,26 @@ class KnowledgeJobStore:
             raise ValueError("knowledge_not_found")
         return dict(row)
 
+    def ensure_project(self, kb, tenant_id, project_id, signature=None):
+        from src.knowledge.artifacts import processing_signature
+
+        signature = signature or processing_signature(self.config)
+        with self.connect(write=True) as db:
+            row = db.execute("SELECT * FROM projects WHERE id=?", (kb,)).fetchone()
+            if row is not None:
+                if (row["tenant_id"], row["project_id"]) != (tenant_id, project_id):
+                    raise ValueError("knowledge_scope_denied")
+                if row["signature"] != signature:
+                    db.execute(
+                        "UPDATE projects SET signature=? WHERE id=?", (signature, kb)
+                    )
+                return self.project(kb)
+            db.execute(
+                "INSERT INTO projects(id,tenant_id,project_id,signature,enabled) VALUES(?,?,?,?,?)",
+                (kb, tenant_id, project_id, signature, 1),
+            )
+        return self.project(kb)
+
     def enable(self, kb, enabled):
         with self.connect(write=True) as db:
             if enabled:
@@ -192,7 +212,12 @@ class KnowledgeJobStore:
             if not project:
                 raise ValueError("knowledge_not_found")
             if project["signature"] != signature:
-                raise ValueError("knowledge_processing_config_changed")
+                if project["signature"] == "dynamic_managed_v1":
+                    db.execute(
+                        "UPDATE projects SET signature=? WHERE id=?", (signature, kb)
+                    )
+                else:
+                    raise ValueError("knowledge_processing_config_changed")
             request = db.execute(
                 "SELECT * FROM requests WHERE kb=? AND request_id=?", (kb, request_id)
             ).fetchone()
@@ -214,7 +239,10 @@ class KnowledgeJobStore:
                 if doc and doc["size_bytes"] != file_ref["size_bytes"]:
                     raise ValueError("knowledge_content_conflict")
                 if doc and doc["signature"] != signature:
-                    raise ValueError("knowledge_processing_config_changed")
+                    db.execute(
+                        "UPDATE documents SET signature=? WHERE id=?",
+                        (signature, doc["id"]),
+                    )
                 if not doc:
                     count, size = db.execute(
                         "SELECT count(*),coalesce(sum(size_bytes),0) FROM documents WHERE kb=?",

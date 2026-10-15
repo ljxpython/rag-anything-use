@@ -15,7 +15,11 @@ from src.knowledge.schemas import KnowledgeDocumentRecord
 from src.mcp_server import build_server_run_settings, create_server
 
 
-def test_build_knowledge_service_config_defaults() -> None:
+def test_build_knowledge_service_config_defaults(monkeypatch) -> None:
+    monkeypatch.delenv("KNOWLEDGE_ROOT_DIR", raising=False)
+    monkeypatch.delenv("PARSER", raising=False)
+    monkeypatch.delenv("KNOWLEDGE_QUERY_MODE", raising=False)
+    monkeypatch.delenv("KNOWLEDGE_TOP_K", raising=False)
     config = build_knowledge_service_config()
     assert config.parser_name == "docling"
     assert config.query_default_mode == "hybrid"

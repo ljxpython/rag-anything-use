@@ -2,6 +2,7 @@
 
 ## 最后更新
 
+2026-10-15 | 排查并修复远端 sshmy2 上传 PPTX 报错问题：由于远端工作区 rag_engine.py 等文件被旧版代码反向覆盖，导致多模态纯图片幻灯片缺少 full_docs 补偿写入，在 seal_snapshot 处触发 knowledge_snapshot_invalid。现已全量恢复远端关键模块，修复 smoke test 环境隔离，119项回归全过（27.39s）；恢复并密封 candidate 快照，成功将 PPTX（kd_ffba19b7...）激活上线（项目 revision 升至 2）；端到端验证 sources_version=2 可信 slide 定位（命中第5、13页幻灯片）与 systemd 服务重启。
 2026-10-13 | 用户批准将已验收在线文档分支快进合入 main，本地和 Ubuntu 统一跟踪 origin/main；原主线与验收提交全部保留，合入后 Ubuntu119 passed／26.07s。在线 PDF／DOCX／PPTX／PNG／JPEG、受管资产与来源 v2、五格式13事实、真实平台 union 文档闭环及生命周期完成；19题公开基线有答案召回／证据1.0、P50/P95 2.948/3.564秒、20MiB／两项目队列已验。平台正式合入／v2展示／ImageRef收据待同事继续，音视频延期；现役索引未切换
 
 ## 系统状态

@@ -137,3 +137,56 @@ def test_cancelled_retrieval_is_control_flow(published_config):
     engine.get_lightrag = AsyncMock(return_value=rag)
     with pytest.raises(asyncio.CancelledError):
         asyncio.run(engine.retrieve("alpha", KnowledgeRetrievalRequest(query="q")))
+
+
+def test_dynamic_jwt_token_verification_and_ensure_project(published_config, monkeypatch):
+    import time
+    import jwt
+    from src.knowledge.auth import resolve_knowledge_scope
+    from src.knowledge.jobs import KnowledgeJobStore
+
+    secret = "test-secret-at-least-32-bytes-long-123456"
+    monkeypatch.setenv("KNOWLEDGE_AUTHORIZATION_SECRET", secret)
+    verifier = KnowledgeTokenVerifier(published_config)
+
+    now = int(time.time())
+    payload = {
+        "tenant_id": "__default",
+        "project_id": "5a5b7239-43e3-40e6-bba3-e64d96057607",
+        "knowledge_base_id": "kb_5a5b723943e340e6bba3e64d96057607",
+        "iat": now,
+        "exp": now + 3600,
+        "iss": "platform-api",
+        "aud": "rag-service",
+    }
+    valid_token = jwt.encode(payload, secret, algorithm="HS256")
+
+    async def run_checks():
+        # 1. 合法动态 Token 验签成功
+        token_info = await verifier.verify_token(valid_token)
+        assert token_info is not None
+        assert token_info.client_id == "5a5b7239-43e3-40e6-bba3-e64d96057607"
+        assert token_info.claims["knowledge_base_id"] == "kb_5a5b723943e340e6bba3e64d96057607"
+
+        # 2. 检查 KnowledgeJobStore 是否被自动懒加载登记
+        store = KnowledgeJobStore(published_config)
+        proj = store.project("kb_5a5b723943e340e6bba3e64d96057607")
+        assert proj["tenant_id"] == "__default"
+        assert proj["project_id"] == "5a5b7239-43e3-40e6-bba3-e64d96057607"
+        assert proj["enabled"] == 1
+
+        # 3. 篡改秘钥的伪造 Token 被拦截
+        tampered_token = jwt.encode(payload, "wrong-secret-at-least-32-bytes-long", algorithm="HS256")
+        assert await verifier.verify_token(tampered_token) is None
+
+        # 4. 过期 Token 被拦截
+        expired_payload = {**payload, "exp": now - 10}
+        expired_token = jwt.encode(expired_payload, secret, algorithm="HS256")
+        assert await verifier.verify_token(expired_token) is None
+
+        # 5. Audience 不匹配被拦截
+        wrong_aud_payload = {**payload, "aud": "other-service"}
+        wrong_aud_token = jwt.encode(wrong_aud_payload, secret, algorithm="HS256")
+        assert await verifier.verify_token(wrong_aud_token) is None
+
+    asyncio.run(run_checks())

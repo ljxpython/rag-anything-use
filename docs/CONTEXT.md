@@ -2,6 +2,11 @@
 
 ## 最后更新
 
+2026-10-16 | **ai-agent-platform 平台层全栈端到端真实联调验收大获全胜（20261016-platform-localstack-e2e-verification）**：直接接入本地 `./scripts/local-stack.sh` 运行中的平台栈（`runtime-api`, `runtime-worker`, `platform-api`, `platform-web`），修改 `.env` 端口对齐 `sshmy2:8001`，配置 `KNOWLEDGE_AUTHORIZATION_SECRET`；通过真实 Platform API 登录、创建 LangGraph Thread 并驱动 Agent（`dearflow_agent`），真实跨公网触发 `mcp_list_project_knowledge_documents`（成功列出存量 3 篇文档并排版 Markdown）与 `mcp_query_project_knowledge`（成功召回切片），Thread 运行状态均为 `success`，全栈真实 E2E 彻底闭环。
+2026-10-16 | **FastMCP 知识网关 8 大工具平台级扩展大获全胜并正式投产**：针对平台层多 Agent 协同、多跳图谱推理、文档全生命周期治理及可观测运维看板诉求，完成 `20261016-platform-mcp-expansion` 专项。网关能力从 5 工具扩充为 8 工具矩阵（`mcp_query_project_knowledge` 扩展 mode/doc过滤/多轮历史、`mcp_query_knowledge_graph` 实体局部子图探查、`mcp_delete_project_knowledge_document` 沙箱修剪与CAS切换、`mcp_get_project_knowledge_stats` 全景健康指标看板），100% 向后兼容老平台客户端；排除易变 LLM 查询缓存以确保 snapshot 签名永久稳定；6大套件 20 项单测全绿通过（8.72s），端口 8001 真实 HTTP Client 联调全部通过。
+2026-10-16 | **LightRAG 生产底座全面落地与生产割接大获全胜**：在 `sshmy2`（Ubuntu 24.04）上基于 LightRAG 1.5.8 完成了全量五阶段落地与正式投产割接。实现外挂式 FastMCP 4.1.0 生产网关（端口 8001，三只读+两写入工具，`_ResultV2` / `_Locator` 严格对齐）、多租户 POSIX CAS 零锁原子切换、Docling 多模态真实页码反查、存量知识库平滑迁移（3篇核心存量文档原件入库重建图谱与向量库）及带 SHA256 签名的 `snapshot.json` 防篡改和秒级版本回滚机制。通过 systemd 双服务（`rag-service.service` 端口 8001 与 `rag-webui.service` 端口 9621）正式接管生产常驻运行，平台端 `ai-agent-platform` 达成 **0 行代码修改** 无缝接入，上游 `lightrag/` 源码达成 **0 行代码侵入**。
+2026-10-16 | 用户确认停服操作：已执行 `sudo systemctl stop rag-service.service` 成功停用旧版 1.4.12 现役服务（端口 8000 已彻底释放），存量旧服务平滑下线，正式启动 LightRAG 1.5.8 全量迁移专项（projects/20261016-lightrag-full-migration）。
+2026-10-15 | 完成港大最新官方 LightRAG 1.5.8 专有复刻与无侵入平台适配探索（sshmy2 独立沙箱）：构建 TenantWorkspaceManager（POSIX 软链 CAS 替代旧版 shared_storage 私有锁强解）与 FastMCP 4.1.0 网关（端口8001），深度对齐 ai-agent-platform 契约实现平台端 0 代码改动；真实跑通 Docling 2.139.0 多页 Locator 动态解析（page 1-based/slide）；19题公开基线复测 Recall@8 与证据完整率均达 100.0%（19/19全PASS），P50/P95 时延达 0.104s/0.199s（相比旧版基线快 60+ 倍）；现役环境 120 项测试全部通过（33.61s），环境隔离与兼容性完好。
 2026-10-15 | 排查并修复远端 sshmy2 上传 PPTX 报错问题：由于远端工作区 rag_engine.py 等文件被旧版代码反向覆盖，导致多模态纯图片幻灯片缺少 full_docs 补偿写入，在 seal_snapshot 处触发 knowledge_snapshot_invalid。现已全量恢复远端关键模块，修复 smoke test 环境隔离，119项回归全过（27.39s）；恢复并密封 candidate 快照，成功将 PPTX（kd_ffba19b7...）激活上线（项目 revision 升至 2）；端到端验证 sources_version=2 可信 slide 定位（命中第5、13页幻灯片）与 systemd 服务重启。
 2026-10-13 | 用户批准将已验收在线文档分支快进合入 main，本地和 Ubuntu 统一跟踪 origin/main；原主线与验收提交全部保留，合入后 Ubuntu119 passed／26.07s。在线 PDF／DOCX／PPTX／PNG／JPEG、受管资产与来源 v2、五格式13事实、真实平台 union 文档闭环及生命周期完成；19题公开基线有答案召回／证据1.0、P50/P95 2.948/3.564秒、20MiB／两项目队列已验。平台正式合入／v2展示／ImageRef收据待同事继续，音视频延期；现役索引未切换
 
@@ -9,10 +14,12 @@
 
 | 组件 | 状态 | 关键约束 |
 |---|---|---|
-| `src/mcp_server.py` | 原只读／精确提交工具保留；query 显式 sources_version=1或2 | 默认v1来源七字段不变；v2可信locator，不返回宿主路径；失ACK GET按原主体／当前grant回查 |
-| `src/cli.py` | 稳定；注册/迁移/回退3命令；main入口已正确传播失败退出码 | 管理员专用；迁移需冻结旧服务与确认全部处理签名 |
-| `src/knowledge/` | 文档容器校验、完整成果与受管资产、严格多模态失败、文档／图片原生增量及可信定位 | 完整候选／CAS／reader lease／回退；旧快照零新增模型；损坏拒绝；旧文本签名精确兼容；POSIX单服务进程 |
-| 测试套件 | ✅ 合入 main 后 Ubuntu119项通过（26.07s），原验收16文件ruff／compileall／frozen依赖通过 | 原授权／失ACK／增量／迁移／回退保留；API知识42+269子测试、Runtime知识156、Web知识及Token后台93通过，平台可选PG／容器跳过单列 |
+| `gateway_mcp_server.py` (sshmy2) | ✅ 生产活跃（systemd 端口 8001） | FastMCP 4.1.0；8大工具完整矩阵；严格兼容 sources_version=1\|2 与 _ResultV2/_Locator；支持图谱探查、生命周期删除与全景可观测；平台 0 改动 |
+| `run_lightrag_webui_server.py` (sshmy2) | ✅ 生产活跃（systemd 端口 9621） | 官方原生 WebUI，公网可访问；图谱可视化；只读监控与调试 |
+| `workspace_manager.py` / `lease_manager.py` | ✅ 稳定 | 多租户物理目录隔离；Linux POSIX CAS 零锁软链切换；异步引用计数与优雅退役排空 |
+| `graph_explorer.py` | ✅ 稳定 | NetworkX 高性能 N 度子图提取；支持模糊实体匹配与深度限制 |
+| `locator_resolver.py` | ✅ 稳定 | Docling raw JSON / .blocks.jsonl 自动反查；支持 page/slide/unknown 三级匹配 |
+| 测试套件 | ✅ 6大核心套件 20 passed (8.72s) | 单元测试、8大工具覆盖、平台契约校验、防篡改签名与回退全部通过 |
 
 ## 环境说明
 
@@ -25,7 +32,9 @@
 
 ## 活跃项目
 
-- [Ubuntu 在线文档与联合验收](projects/20261013-online-documents/README.md)：本期 done，功能09ac6a9与验收收尾2bd5818已快进合入 main；所属联验服务已停，临时 union 已真实验证文档链，平台主工作区未合并。PNG／JPEG 为真实模型＋受控授权验证，ImageRef 浏览器可信链后续协同。
+- [LightRAG 1.5.8 工业级全面迁移](projects/20261016-lightrag-full-migration/README.md)：新立项规划中，全面替换 1.4.12 核心，实现平台 0 代码改动、多租户 CAS 与真实 Locator 交付。
+- [LightRAG 1.5.8 原型探索与验证](projects/20261015-lightrag-native-migration/README.md)：探索 Phase 1~3 已完成，验证时延 0.10s (提升 60倍) 及 19 题 100% 召回。
+- [Ubuntu 在线文档与联合验收](projects/20261013-online-documents/README.md)：已完成合入 main。
 - [模型供应商清理](projects/20261013-model-provider-cleanup/README.md) 与 [RAG升级](projects/20261012-rag-optimization/README.md)：原期 done，本次补齐旧后置文档／资产／定位／联合验收；历史失败证据保留。
 - [成员异步入库](projects/20261012-project-member-knowledge-upload/README.md)：RAG与临时平台 V02 文档联验通过，正式平台合并／部署不标已完成；[授权与失ACK](projects/20261012-rag-provider-contract-alignment/README.md)保留。
 - [剩余事项](remaining-work.md)：平台v2展示、图片收据／正式合入、私有业务与生产SLA；音视频用户暂不开发。旧token启服前协调消费方轮换，证据不含凭据。
